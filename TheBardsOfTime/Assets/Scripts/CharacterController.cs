@@ -6,6 +6,7 @@ public class CharacterController : MonoBehaviour {
     public float inputDelay = 0.1f;
     public float forwardVel = 12;
     public float rotateVel = 100;
+    public Collider[] attackHitBoxes;
 
     Quaternion targetRotation;
     Rigidbody rb;
@@ -37,6 +38,8 @@ public class CharacterController : MonoBehaviour {
 
     void FixedUpdate() {
         Run();
+        if (Input.GetKeyDown(KeyCode.F))
+            Attack(attackHitBoxes[0]);
     }
 
     void Run() {
@@ -56,6 +59,20 @@ public class CharacterController : MonoBehaviour {
             targetRotation *= Quaternion.AngleAxis(rotateVel * turnInput * Time.deltaTime, Vector3.up);
         }
         transform.rotation = targetRotation;
+    }
+
+    void Attack(Collider col)
+    {
+        Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("Hitbox"));
+        foreach (Collider c in cols)
+        {
+            if (c.transform.parent == transform)
+                continue;
+
+            Debug.Log(c.name);
+
+            c.SendMessageUpwards("TakeDamage", 7f);
+        }
     }
 
 
