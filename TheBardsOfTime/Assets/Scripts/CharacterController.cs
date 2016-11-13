@@ -6,11 +6,13 @@ public class CharacterController : MonoBehaviour {
     public float inputDelay = 0.1f;
     public float forwardVel = 12;
     public float rotateVel = 100;
-    public Collider[] attackHitBoxes;
 
     Quaternion targetRotation;
     Rigidbody rb;
     float forwardInput, turnInput;
+
+    public Collider[] attackHitBoxes;
+    private string Instrument = "flute";
 
     public Quaternion TargetRotation
     {
@@ -39,7 +41,8 @@ public class CharacterController : MonoBehaviour {
     void FixedUpdate() {
         Run();
         if (Input.GetKeyDown(KeyCode.F))
-            Attack(attackHitBoxes[0]);
+            //Attack(attackHitBoxes[0]);
+            Shoot(Instrument);
     }
 
     void Run() {
@@ -69,9 +72,21 @@ public class CharacterController : MonoBehaviour {
             if (c.transform.parent == transform)
                 continue;
 
-            Debug.Log(c.name);
-
             c.SendMessageUpwards("TakeDamage", 7f);
+        }
+    }
+
+    void Shoot(string instrument)
+    {
+        switch (instrument)
+        {
+            case "flute":
+                {
+                    GameObject temp = Instantiate(Resources.Load("Prefabs/projectile"), GameObject.Find("Shootpoint").transform.position, Quaternion.identity) as GameObject;
+                    temp.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
+                    break;
+                }
+            default: break;
         }
     }
 
