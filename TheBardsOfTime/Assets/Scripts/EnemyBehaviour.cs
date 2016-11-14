@@ -2,38 +2,39 @@
 using System.Collections;
 
 public class EnemyBehaviour : MonoBehaviour {
-
     public float DetectionDist;
-    public float ChaseSpeed;
-    public float RoamSpeed;
-    public float RoamWaitTime;
-    public float ReturnRoamTime;
-    public bool Chasing;
-    public Transform[] WayPoints;
+    public float ChaseDist;
 
     private GameObject Player;
-    private Rigidbody EnemyRGB;
-    private SphereCollider DetCollider;
     private Transform Target;
+    private EnemyMovement movement;
     private bool Roaming;
+    private bool Chasing;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         Player = GameObject.FindGameObjectWithTag("Player");
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        EnemyRGB = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Rigidbody>();
-        DetCollider = GameObject.FindGameObjectWithTag("Enemy").GetComponent<SphereCollider>();
-        DetCollider.radius = DetectionDist;
-        
+        movement = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyMovement>();
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Chasing)
-            Chase();
-        else
-            Patrol();
-	}
+        Vector3 targetDir = Target.position - transform.position;
+        ChaseDist = Vector3.Distance(transform.position, Target.position);
+        RaycastHit hit;
+        Ray facingRay = new Ray(transform.position, targetDir);
+        Debug.DrawRay(transform.position, targetDir, Color.green);
+        if (Physics.Raycast(facingRay, out hit, DetectionDist))
+        {
+            if(hit.collider.tag == "Player" && Chasing)
+            {
+                movement.Chase();
+                //Debug.Log("Näkyy");
+            }
+        }
+
+    }
 
     void OnTriggerStay(Collider col)
     {
@@ -49,21 +50,4 @@ public class EnemyBehaviour : MonoBehaviour {
             
     }
 
-    void Chase()
-    {
-        Vector3 targetDir = Target.position - transform.position;
-        Physics.Raycast(transform.position, targetDir);
-        //RaycastHit Hit;
-        Debug.DrawRay(transform.position, targetDir, Color.green);
-        float step = 10 * Time.deltaTime;
-        Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0F);
-        Debug.DrawRay(transform.position, newDir, Color.red);
-        transform.rotation = Quaternion.LookRotation(newDir);
-        EnemyRGB.velocity = targetDir * ChaseSpeed;
-    }
-
-    void Patrol()
-    {
-
-    }
 }
