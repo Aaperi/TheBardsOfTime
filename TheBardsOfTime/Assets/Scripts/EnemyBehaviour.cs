@@ -3,17 +3,13 @@ using System.Collections;
 
 public class EnemyBehaviour : MonoBehaviour {
     public float DetectionDist;
-    public float ChaseDist;
 
-    private GameObject Player;
     private Transform Target;
     private EnemyMovement movement;
-    private bool Roaming;
     private bool Chasing;
 
     // Use this for initialization
     void Start () {
-        Player = GameObject.FindGameObjectWithTag("Player");
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         movement = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyMovement>();
     }
@@ -21,16 +17,16 @@ public class EnemyBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Vector3 targetDir = Target.position - transform.position;
-        ChaseDist = Vector3.Distance(transform.position, Target.position);
         RaycastHit hit;
-        Ray facingRay = new Ray(transform.position, targetDir);
+        Ray facingRay = new Ray(transform.position, targetDir); // ray vihollisesta pelaajaan
         Debug.DrawRay(transform.position, targetDir, Color.green);
         if (Physics.Raycast(facingRay, out hit, DetectionDist))
         {
-            if(hit.collider.tag == "Player" && Chasing)
+
+            if(hit.collider.tag == "Player" && Chasing) // jos ray collidee objektiin jolla on Player tag ja se on Detection distancen sisäpuolella
             {
-                movement.Chase();
-                //Debug.Log("Näkyy");
+                    movement.Chase();
+
             }
         }
 
@@ -45,7 +41,6 @@ public class EnemyBehaviour : MonoBehaviour {
         else
         {
             Chasing = false;
-            Roaming = true;
         }
             
     }

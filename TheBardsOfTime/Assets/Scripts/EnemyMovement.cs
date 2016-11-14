@@ -7,12 +7,15 @@ public class EnemyMovement : MonoBehaviour {
     public float RoamSpeed;
     public float RoamWaitTime;
     public float ReturnRoamTime;
+    public float ChaseDist;
     public Transform[] WayPoints;
 
     private Rigidbody EnemyRGB;
+    private NavMeshAgent Agent;
     private SphereCollider DetCollider;
     private Transform Target;
     private EnemyBehaviour behaviour;
+    private int DestPoint = 0;
 
     // Use this for initialization
     void Start () {
@@ -21,12 +24,17 @@ public class EnemyMovement : MonoBehaviour {
         behaviour = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyBehaviour>();
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         DetCollider.radius = behaviour.DetectionDist;
+        Agent = GameObject.FindGameObjectWithTag("Enemy").GetComponent<NavMeshAgent>();
+        GotoNext();
     }
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+        ChaseDist = Vector3.Distance(transform.position, Target.position);
+
+        if (Agent.remainingDistance < 0.5f)
+            GotoNext();
+    }
 
     public void Chase()
     {
@@ -37,10 +45,16 @@ public class EnemyMovement : MonoBehaviour {
         Debug.DrawRay(transform.position, newDir, Color.red);
         transform.rotation = Quaternion.LookRotation(newDir);
         EnemyRGB.velocity = targetDir * ChaseSpeed;
+
+        
     }
 
-    public void Patrol()
+    void GotoNext()
     {
+        if (WayPoints.Length == 0)
+            return;
 
+        Agent.destination = WayPoints[DestPoint].position;
+        DestPoint = (DestPoint + 1) % WayPoints.Length;
     }
 }
