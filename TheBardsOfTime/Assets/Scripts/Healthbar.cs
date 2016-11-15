@@ -7,6 +7,7 @@ public class Healthbar : MonoBehaviour {
     public Image hpSlider;
     public float hitpoints = 150;
     public float maxHitpoints = 150;
+	public GameObject parent;
 
 	// Use this for initialization
 	void Start () {
@@ -15,7 +16,11 @@ public class Healthbar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		UpdateHealthbar ();
+		if (hitpoints < 0) {
+			hitpoints = 0;
+			Destroy (parent);
+		}
 	}
 
     private void UpdateHealthbar()
@@ -27,8 +32,31 @@ public class Healthbar : MonoBehaviour {
     private void TakeDamage(float damage)
     {
         hitpoints -= damage;
-        if (hitpoints < 0)
-            hitpoints = 0;
         UpdateHealthbar();
     }
+
+	private void StartRoot(float duration){
+		StartCoroutine (Root (duration));
+	}
+
+	IEnumerator Root(float duration){
+		GetComponent<Rigidbody> ().isKinematic = true;
+		yield return new WaitForSeconds (duration);
+		GetComponent<Rigidbody> ().isKinematic = false;
+	}
+		
+	private void StartDot(float[] dot){
+		StartCoroutine(DamageOverTime(dot[0], dot[1], dot[2]));
+	}
+
+	IEnumerator DamageOverTime(float damageDuration, float damageCount, float damageAmount)
+	{
+		int currentCount = 0;
+		while(currentCount < damageCount)
+		{
+			hitpoints -= damageAmount;
+			yield return new WaitForSeconds(damageDuration);
+			currentCount++;
+		}
+	}
 }

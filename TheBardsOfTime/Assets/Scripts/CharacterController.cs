@@ -38,8 +38,7 @@ public class CharacterController : MonoBehaviour {
     Rigidbody rb;
     float forwardInput, turnInput, jumpInput;
 
-    public Collider[] attackHitBoxes;
-    private string Instrument = "flute";
+
 
     public Quaternion TargetRotation
     {
@@ -75,9 +74,6 @@ public class CharacterController : MonoBehaviour {
         Jump();
         DoubleJump();
         rb.velocity = transform.TransformDirection(velocity);
-        if (Input.GetKeyDown(KeyCode.F))
-            //Attack(attackHitBoxes[0]);
-            Shoot(Instrument);
     }
 
     void Run() {
@@ -97,32 +93,6 @@ public class CharacterController : MonoBehaviour {
             targetRotation *= Quaternion.AngleAxis(moveSetting.rotateVel * turnInput * Time.deltaTime, Vector3.up);
         }
         transform.rotation = targetRotation;
-    }
-
-    void Attack(Collider col)
-    {
-        Collider[] cols = Physics.OverlapBox(col.bounds.center, col.bounds.extents, col.transform.rotation, LayerMask.GetMask("Hitbox"));
-        foreach (Collider c in cols)
-        {
-            if (c.transform.parent == transform)
-                continue;
-
-            c.SendMessageUpwards("TakeDamage", 7f);
-        }
-    }
-
-    void Shoot(string instrument)
-    {
-        switch (instrument)
-        {
-            case "flute":
-                {
-                    GameObject temp = Instantiate(Resources.Load("Prefabs/projectile"), GameObject.Find("Shootpoint").transform.position, Quaternion.identity) as GameObject;
-                    temp.GetComponent<Rigidbody>().AddForce(transform.forward * 1000);
-                    break;
-                }
-            default: break;
-        }
     }
 
     void DoubleJump() {
