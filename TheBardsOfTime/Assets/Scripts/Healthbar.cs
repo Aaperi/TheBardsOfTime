@@ -5,9 +5,9 @@ using System.Collections;
 public class Healthbar : MonoBehaviour {
 
     public Image hpSlider;
-    public float hitpoints = 150;
+    private float hitpoints = 150;
     public float maxHitpoints = 150;
-	public GameObject parent;
+	public bool iNeedUI;
 
 	// Use this for initialization
 	void Start () {
@@ -16,17 +16,18 @@ public class Healthbar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		UpdateHealthbar ();
 		if (hitpoints < 0) {
 			hitpoints = 0;
-			Destroy (parent);
+			Destroy (gameObject);
 		}
 	}
 
     private void UpdateHealthbar()
     {
-        float ratio = hitpoints / maxHitpoints;
-        hpSlider.rectTransform.localScale = new Vector3(ratio, 1, 1);
+		if (iNeedUI) {
+			float ratio = hitpoints / maxHitpoints;
+			hpSlider.rectTransform.localScale = new Vector3 (ratio, 1, 1);
+		}
     }
 
     private void TakeDamage(float damage)
@@ -55,6 +56,7 @@ public class Healthbar : MonoBehaviour {
 		while(currentCount < damageCount)
 		{
 			hitpoints -= damageAmount;
+			UpdateHealthbar ();
 			yield return new WaitForSeconds(damageDuration);
 			currentCount++;
 		}
