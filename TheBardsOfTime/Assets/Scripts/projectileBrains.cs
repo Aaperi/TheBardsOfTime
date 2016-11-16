@@ -3,8 +3,7 @@ using System.Collections;
 
 public class projectileBrains : MonoBehaviour {
 
-    public GameObject parent;
-    public float lifespan = 6f;
+    public float lifespan = 3f;
 
 	// Use this for initialization
 	void Start () {
@@ -16,7 +15,7 @@ public class projectileBrains : MonoBehaviour {
         lifespan -= Time.deltaTime;
         if (lifespan <= 0)
         {
-            Destroy(parent);
+			Destroy(gameObject);
             Debug.Log("Kaboom!");
         }
 	}
