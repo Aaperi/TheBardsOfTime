@@ -2,15 +2,16 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Healthbar : MonoBehaviour {
+public class HPScript : MonoBehaviour {
 
-    public Image hpSlider;
-    private float hitpoints = 150;
-    public float maxHitpoints = 150;
+    public Image HPSlider;
+    private float hitpoints;
+    public float maxHitpoints;
 	public bool iNeedUI;
 
 	// Use this for initialization
 	void Start () {
+        hitpoints = maxHitpoints;
         UpdateHealthbar();
 	}
 	
@@ -19,6 +20,7 @@ public class Healthbar : MonoBehaviour {
 		if (hitpoints < 0) {
 			hitpoints = 0;
 			Destroy (gameObject);
+            GameObject.Find("Player").SendMessage("iDied", gameObject);
 		}
 	}
 
@@ -26,7 +28,7 @@ public class Healthbar : MonoBehaviour {
     {
 		if (iNeedUI) {
 			float ratio = hitpoints / maxHitpoints;
-			hpSlider.rectTransform.localScale = new Vector3 (ratio, 1, 1);
+            HPSlider.rectTransform.localScale = new Vector3 (ratio, 1, 1);
 		}
     }
 
@@ -46,19 +48,21 @@ public class Healthbar : MonoBehaviour {
 		GetComponent<Rigidbody> ().isKinematic = false;
 	}
 		
-	private void StartDot(float[] dot){
-		StartCoroutine(DamageOverTime(dot[0], dot[1], dot[2]));
+	private void StartDot(float[] bundle){
+		StartCoroutine(DamageOverTime(bundle[0], bundle[1]));
 	}
 
-	IEnumerator DamageOverTime(float damageDuration, float damageCount, float damageAmount)
+	IEnumerator DamageOverTime(float tics, float damagePerTic)
 	{
-		int currentCount = 0;
-		while(currentCount < damageCount)
+		int currentCount = 1;
+        yield return new WaitForSeconds(.5f);
+		while(currentCount < tics)
 		{
-			hitpoints -= damageAmount;
-			UpdateHealthbar ();
-			yield return new WaitForSeconds(damageDuration);
-			currentCount++;
+            TakeDamage(damagePerTic);
+            yield return new WaitForSeconds(1);
+            currentCount++;
 		}
-	}
+        TakeDamage(damagePerTic);
+        yield return new WaitForSeconds(.5f);
+    }
 }
