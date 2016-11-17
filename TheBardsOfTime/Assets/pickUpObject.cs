@@ -18,22 +18,26 @@ public class pickUpObject : MonoBehaviour {
             }
         }
  
-        if (carrying) {
+        if (carrying && carriedObjectExists) {
             carry(carriedObject);
         }
 	}
 
+
     void carry(GameObject o) {
-        if(carriedObjectExists)
-        o.transform.position = Vector3.Lerp(o.transform.position, GameObject.Find("pickupPlace").transform.position, Time.deltaTime * smooth );
+        //o.transform.position = Vector3.Lerp(o.transform.position, GameObject.Find("pickupPlace").transform.position, Time.deltaTime * smooth );
+        if (GameObject.Find("pickupPlace")) { 
+            Vector3 temp = GameObject.Find("pickupPlace").transform.position;
+            o.transform.position = new Vector3(temp.x, temp.y, temp.z);
+        }
     }
 
 
     void OnTriggerEnter(Collider col) {
         
-        if(col.gameObject.tag == "pickup") {
+        if(col.gameObject.tag == "pickup" && !carrying) {
             carriedObjectExists = true;
-        carriedObject = col.gameObject;
+            carriedObject = col.gameObject;
         }
     }
 
@@ -48,7 +52,6 @@ public class pickUpObject : MonoBehaviour {
     void dropObject() {
         carrying = false;
         carriedObject.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-        carriedObject = null;
     }
 
 }

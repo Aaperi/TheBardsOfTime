@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 public class CharacterCombat : MonoBehaviour {
 
-	private string[,] Instruments = { {"Violin", "Cello"}, {"Flute", ""}, {"Tuba", "Trombone"}, {"MarchDrum", ""} };
+	//private string[,] Instruments = { {"Violin", "Cello"}, {"Flute", ""}, {"Tuba", "Trombone"}, {"MarchDrum", ""} };
     private List<GameObject> InAttackRange = new List<GameObject>();
     private List<GameObject> InSpellRange = new List<GameObject>();
     private List<GameObject> InSkillRange = new List<GameObject>();
-    private Collider[] activeColliders;
+    //private Collider[] activeColliders;
     private bool isProcessing = false;
     private bool channeling = false;
     public string activeInstrument;
@@ -31,7 +31,7 @@ public class CharacterCombat : MonoBehaviour {
 
 	void Start () {
         activeInstrument = "Violin";
-        activeColliders = GameObject.Find(Instruments[0,0]).GetComponentsInChildren<MeshCollider>();
+        //activeColliders = GameObject.Find(Instruments[0,0]).GetComponentsInChildren<MeshCollider>();
 	}
 
 	void Update () {
@@ -75,6 +75,7 @@ public class CharacterCombat : MonoBehaviour {
         switch (instrument)
         {
             case "Violin": {
+                    Debug.Log("Normal attack");
                     yield return new WaitForSeconds(atkCastTime);
                     foreach (GameObject go in InAttackRange)
                         if(InAttackRange.Contains(go))
@@ -122,10 +123,11 @@ public class CharacterCombat : MonoBehaviour {
         {
             case "Violin":
                 {
+                    Debug.Log("Roots!");
                     yield return new WaitForSeconds(skillCastTime);
                     foreach (GameObject go in InSkillRange)
                         if (InSkillRange.Contains(go)) {
-                            float[] bundle = { 5f, 10 };
+                            float[] bundle = { 5f, skillDamage };
                             go.SendMessageUpwards("StartDot", bundle);
                             go.SendMessageUpwards("StartRoot", bundle[0]);
                         }
