@@ -62,13 +62,6 @@ public class CharacterCombat : MonoBehaviour {
     void SpellRangeUpdate(List<GameObject> temp){InSpellRange = temp;}
     void SkillRangeUpdate(List<GameObject> temp){InSkillRange = temp;}
 
-    void iDied(GameObject temp)
-    {
-        InAttackRange.Remove(temp);
-        InSpellRange.Remove(temp);
-        InSkillRange.Remove(temp);
-    }
-
     IEnumerator Attack(string instrument)
     {
         isProcessing = true;
@@ -77,9 +70,11 @@ public class CharacterCombat : MonoBehaviour {
             case "Violin": {
                     Debug.Log("Normal attack");
                     yield return new WaitForSeconds(atkCastTime);
-                    foreach (GameObject go in InAttackRange)
-                        if(InAttackRange.Contains(go))
-                            go.SendMessageUpwards("TakeDamage", atkDamage);
+                    foreach (GameObject go in InAttackRange){
+                        try { go.SendMessageUpwards("TakeDamage", atkDamage, SendMessageOptions.DontRequireReceiver); }
+                        catch { Debug.Log("ninki ninki"); }
+                    }
+                            
                     atkStamp = Time.time + atkCooldown;
                     break;
                 }

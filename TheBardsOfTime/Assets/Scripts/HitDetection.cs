@@ -11,6 +11,23 @@ public class HitDetection : MonoBehaviour {
         updateAlert = gameObject.name + "RangeUpdate";
     }
 
+    public void iDied(GameObject go)
+    {
+        Debug.Log("JOOJOOJOO");
+        if (colliders.Contains(go)){
+            foreach(GameObject gg in colliders)
+            {
+                Debug.Log(gg.name);
+            }
+            colliders.Remove(go);
+            SendMessageUpwards(updateAlert, colliders);
+            foreach (GameObject gg in colliders)
+            {
+                Debug.Log(gg.name);
+            }
+        }
+    }
+
     void OnTriggerEnter(Collider col)
     {
         GameObject temp = col.gameObject;

@@ -5,7 +5,7 @@ using System.Collections;
 public class HPScript : MonoBehaviour {
 
     public Image HPSlider;
-    private float hitpoints;
+    public float hitpoints;
     public float maxHitpoints;
 	public bool iNeedUI;
 
@@ -19,10 +19,17 @@ public class HPScript : MonoBehaviour {
 	void Update () {
 		if (hitpoints < 0) {
 			hitpoints = 0;
-			Destroy (gameObject);
-            GameObject.Find("Player").SendMessage("iDied", gameObject);
-		}
+            HitDetection[] temp = GameObject.Find("Player").GetComponentsInChildren<HitDetection>();
+            foreach(HitDetection HD in temp){
+                HD.iDied(gameObject);
+            }
+            //Destroy(gameObject);
+        }
 	}
+
+    private float getHP(){
+        return hitpoints;
+    }
 
     private void UpdateHealthbar()
     {
