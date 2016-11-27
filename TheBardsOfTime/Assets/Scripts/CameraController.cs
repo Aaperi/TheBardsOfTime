@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour {
 
-
+    public int zoom = 2;
     public Transform target;
     public float lookSmooth = 0.03f;
     public Vector3 offsetFromTarget = new Vector3(0, 6, -8);
@@ -14,9 +14,16 @@ public class CameraController : MonoBehaviour {
 
     float rotateVel = 0;
     
-
     void Start() {
         SetCameraTarget(target);
+    }
+
+
+
+    void Update() {
+        zoomIn();
+        zoomOut();
+
     }
 
     void SetCameraTarget(Transform t) {
@@ -41,5 +48,19 @@ public class CameraController : MonoBehaviour {
         float eulerYAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, target.eulerAngles.y, ref rotateVel, lookSmooth);
         transform.rotation = Quaternion.Euler(transform.eulerAngles.x, eulerYAngle, 0);
     }
+
+    void zoomIn() {
+        if(Input.GetAxis("Mouse ScrollWheel") > 0) {
+            offsetFromTarget += new Vector3(0, 0, zoom);
+        }
+    }
+
+    void zoomOut() {
+        if(Input.GetAxis("Mouse ScrollWheel") < 0) {
+            offsetFromTarget -= new Vector3(0, 0, zoom);
+
+        }
+    }
+
 
 }

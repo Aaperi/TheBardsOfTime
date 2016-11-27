@@ -66,6 +66,7 @@ public class CharacterController : MonoBehaviour {
     void Update() {
         GetInput();
         Turn();
+
         Debug.DrawRay(transform.position, Vector3.down, Color.red);
     }
 
