@@ -6,10 +6,7 @@ using System.Collections.Generic;
 public class CharacterCombat : MonoBehaviour {
 
 	//private string[,] Instruments = { {"Violin", "Cello"}, {"Flute", ""}, {"Tuba", "Trombone"}, {"MarchDrum", ""} };
-    private List<GameObject> InAttackRange = new List<GameObject>();
-    private List<GameObject> InSpellRange = new List<GameObject>();
-    private List<GameObject> InSkillRange = new List<GameObject>();
-    //private Collider[] activeColliders;
+    private HitDetection[] activeColliders;
     private bool isProcessing = false;
     private bool channeling = false;
     public string activeInstrument;
@@ -31,10 +28,11 @@ public class CharacterCombat : MonoBehaviour {
 
 	void Start () {
         activeInstrument = "Violin";
-        //activeColliders = GameObject.Find(Instruments[0,0]).GetComponentsInChildren<MeshCollider>();
+        activeColliders = GameObject.Find(activeInstrument).GetComponentsInChildren<HitDetection>();
 	}
 
 	void Update () {
+        //ehto: Nappi pohjassa + ei ole cooldownissa + muut hyökkäykset eivät ole kesken
         if (Input.GetKeyDown(KeyCode.Alpha1) && atkStamp < Time.time && !isProcessing)
         {
             StartCoroutine(Attack(activeInstrument));
@@ -57,10 +55,29 @@ public class CharacterCombat : MonoBehaviour {
             StartCoroutine(Skill(activeInstrument));
         }
     }
-    
-    void AttackRangeUpdate (List<GameObject> temp){InAttackRange = temp;}
-    void SpellRangeUpdate(List<GameObject> temp){InSpellRange = temp;}
-    void SkillRangeUpdate(List<GameObject> temp){InSkillRange = temp;}
+
+    //Käy hakemassa listan Collidereilta jotka tunnistavat ketä on milläkin rangella
+    List<GameObject> getList(string ListName)
+    {
+        switch (ListName)
+        {
+            case "AttackRange": {
+                    return activeColliders[0].enemyList;
+                }
+
+            case "SpellRange":
+                {
+                    return activeColliders[1].enemyList;
+                }
+
+            case "SkillRange":
+                {
+                    return activeColliders[2].enemyList;
+                }
+
+            default: return new List<GameObject>();
+        }
+    }
 
     IEnumerator Attack(string instrument)
     {
@@ -70,11 +87,10 @@ public class CharacterCombat : MonoBehaviour {
             case "Violin": {
                     Debug.Log("Normal attack");
                     yield return new WaitForSeconds(atkCastTime);
-                    foreach (GameObject go in InAttackRange){
-                        try { go.SendMessageUpwards("TakeDamage", atkDamage, SendMessageOptions.DontRequireReceiver); }
-                        catch { Debug.Log("ninki ninki"); }
+                    foreach (GameObject go in getList("AttackRange")){
+                        try { go.SendMessageUpwards("TakeDamage", atkDamage, SendMessageOptions.DontRequireReceiver);  Debug.Log(go.name+" takes "+atkDamage+"damage"); }
+                        catch { Debug.Log("ATTACK FAILS!"); }
                     }
-                            
                     atkStamp = Time.time + atkCooldown;
                     break;
                 }
@@ -96,11 +112,10 @@ public class CharacterCombat : MonoBehaviour {
                     while (channeling)
                     {
                         yield return new WaitForSeconds(1f);
-                        foreach (GameObject go in InSpellRange)
-                            if (InSpellRange.Contains(go)){
-                                Debug.Log("vinkuvonku");
-                                go.SendMessageUpwards("TakeDamage", spellDamage);
-                            }
+                        foreach (GameObject go in getList("SpellRange")){
+                            Debug.Log("vinkuvonku");
+                            go.SendMessageUpwards("TakeDamage", spellDamage);
+                        }
                     }
                     spellStamp = Time.time + spellCooldown;
                     Debug.Log("vingutus loppuu!");
@@ -120,8 +135,7 @@ public class CharacterCombat : MonoBehaviour {
                 {
                     Debug.Log("Roots!");
                     yield return new WaitForSeconds(skillCastTime);
-                    foreach (GameObject go in InSkillRange)
-                        if (InSkillRange.Contains(go)) {
+                    foreach (GameObject go in getList("SkillRange")){
                             float[] bundle = { 5f, skillDamage };
                             go.SendMessageUpwards("StartDot", bundle);
                             go.SendMessageUpwards("StartRoot", bundle[0]);

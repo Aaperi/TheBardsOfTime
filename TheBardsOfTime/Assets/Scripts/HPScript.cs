@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class HPScript : MonoBehaviour {
 
@@ -9,27 +10,20 @@ public class HPScript : MonoBehaviour {
     public float maxHitpoints;
 	public bool iNeedUI;
 
-	// Use this for initialization
 	void Start () {
         hitpoints = maxHitpoints;
         UpdateHealthbar();
 	}
 	
-	// Update is called once per frame
 	void Update () {
-		if (hitpoints < 0) {
+		if (hitpoints <= 0) {
 			hitpoints = 0;
-            HitDetection[] temp = GameObject.Find("Player").GetComponentsInChildren<HitDetection>();
-            foreach(HitDetection HD in temp){
-                HD.iDied(gameObject);
-            }
-            //Destroy(gameObject);
+            HitDetection[] temp = FindObjectsOfType<HitDetection>();
+            foreach(HitDetection HD in temp)
+                    HD.enemyList.Remove(gameObject);
+            gameObject.SetActive(false);
         }
 	}
-
-    private float getHP(){
-        return hitpoints;
-    }
 
     private void UpdateHealthbar()
     {
