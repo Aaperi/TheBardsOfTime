@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemyBehaviour : MonoBehaviour {
     public float fieldOfView = 115f;
@@ -7,6 +8,7 @@ public class EnemyBehaviour : MonoBehaviour {
     public Vector3 personalLastSighting;
     public float dist;
 
+    private List<GameObject> detected = new List<GameObject>();
     private NavMeshAgent nav;
     private GameObject player;
     private SphereCollider Sphere;
@@ -31,13 +33,12 @@ public class EnemyBehaviour : MonoBehaviour {
         Vector3 direction = player.transform.position - transform.position;
         float angle = Vector3.Angle(direction.normalized * dist, transform.forward);
         Debug.DrawRay(transform.position, direction.normalized * dist, Color.red);
-        Debug.Log(Sphere.radius);
+
         if (angle < fieldOfView * 0.5f)
         {
             RaycastHit hit;
             if (Physics.Raycast(transform.position, direction.normalized, out hit, dist))
             {
-                Debug.Log(hit.collider.gameObject);
                 if (hit.collider.tag == "Player" && withinRange)
                 {
                     playerInSight = true;
@@ -47,12 +48,26 @@ public class EnemyBehaviour : MonoBehaviour {
             }
         }
 
+        for(int i = 0; i < detected.Count; i++)
+        {
+            if(detected[i].tag == "Player")
+            {
+                if (lastPlayerSighting.position != previousSighting)
+                    personalLastSighting = lastPlayerSighting.position;
 
-        if (lastPlayerSighting.position != previousSighting)
-            personalLastSighting = lastPlayerSighting.position;
+                previousSighting = lastPlayerSighting.position;
+            }
+        }
+        
 
-        previousSighting = lastPlayerSighting.position;
+    }
 
+    void OnTriggerEnter(Collider col)
+    {
+        if(col.tag == "Player" || col.tag == "Enemy")
+        {
+            detected.Add(col.gameObject);
+        }
     }
 
     void OnTriggerStay(Collider col)
@@ -65,6 +80,11 @@ public class EnemyBehaviour : MonoBehaviour {
 
     void OnTriggerExit(Collider col)
     {
+        if (col.tag == "Player" || col.tag == "Enemy")
+        {
+            detected.Remove(col.gameObject);
+        }
+
         if (col.gameObject == player)
         {
             withinRange = false;

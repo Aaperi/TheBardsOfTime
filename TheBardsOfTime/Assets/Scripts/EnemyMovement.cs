@@ -3,13 +3,13 @@ using System.Collections;
 
 public class EnemyMovement : MonoBehaviour {
 
+    public NavMeshAgent Agent;
     public float chaseSpeed = 4.0f;
     public float patrolSpeed = 1.0f;
     public float chaseWaitTime = 5.0f;
     public float patrolWaitTime = 2.0f;
     public GameObject[] wayPoints;
 
-    private NavMeshAgent Agent;
     private SphereCollider DetCollider;
     private EnemyBehaviour behaviour;
     private int wayPoint;
@@ -18,12 +18,13 @@ public class EnemyMovement : MonoBehaviour {
     private float patrolTimer;
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
         behaviour = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyBehaviour>();
-        wayPoint = 0;
-        Agent = GameObject.FindGameObjectWithTag("Enemy").GetComponent<NavMeshAgent>();
         lastPlayerSighting = FindObjectOfType<LastPlayerSighting>();
         DetCollider = GameObject.FindGameObjectWithTag("Enemy").GetComponent<SphereCollider>();
+        wayPoint = 0;
+
+        Debug.Log(Agent.name);
     }
 	
 	// Update is called once per frame
@@ -40,6 +41,8 @@ public class EnemyMovement : MonoBehaviour {
             }
                 
         }
+
+        Debug.Log(wayPoint);
 
     }
 
@@ -62,9 +65,11 @@ public class EnemyMovement : MonoBehaviour {
                     wayPoint = 0;
                 }
                 patrolTimer = 0f;
+
                 Agent.destination = wayPoints[wayPoint].transform.position;
             }
         }
+
     }
 
     void Chase()
