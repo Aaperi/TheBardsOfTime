@@ -3,14 +3,14 @@ using System.Collections;
 
 public class EnemyMovement : MonoBehaviour {
 
-    public NavMeshAgent Agent;
     public float chaseSpeed = 4.0f;
     public float patrolSpeed = 1.0f;
     public float chaseWaitTime = 5.0f;
     public float patrolWaitTime = 2.0f;
     public GameObject[] wayPoints;
 
-    private SphereCollider DetCollider;
+    private NavMeshAgent Agent;
+    private SphereCollider DetCollider; // Ei käytössä atm, ehkä voisi muokata ilmotusrangeksi kun jahtaa vihollista?
     private EnemyBehaviour behaviour;
     private int wayPoint;
     private LastPlayerSighting lastPlayerSighting;
@@ -19,12 +19,13 @@ public class EnemyMovement : MonoBehaviour {
 
     // Use this for initialization
     void Awake () {
-        behaviour = GameObject.FindGameObjectWithTag("Enemy").GetComponent<EnemyBehaviour>();
-        lastPlayerSighting = FindObjectOfType<LastPlayerSighting>();
-        DetCollider = GameObject.FindGameObjectWithTag("Enemy").GetComponent<SphereCollider>();
-        wayPoint = 0;
+        Agent = GetComponent<NavMeshAgent>();
 
-        Debug.Log(Agent.name);
+        behaviour = GetComponent<EnemyBehaviour>();
+
+        lastPlayerSighting = FindObjectOfType<LastPlayerSighting>();
+        DetCollider = GetComponent<SphereCollider>();
+        wayPoint = 0;
     }
 	
 	// Update is called once per frame
@@ -33,6 +34,7 @@ public class EnemyMovement : MonoBehaviour {
         {
             Invoke("Chase", 0.5f);
         }
+
         else
         {
             if (wayPoints.Length > 0)
@@ -41,8 +43,6 @@ public class EnemyMovement : MonoBehaviour {
             }
                 
         }
-
-        Debug.Log(wayPoint);
 
     }
 
@@ -98,4 +98,30 @@ public class EnemyMovement : MonoBehaviour {
             chaseTimer = 0;
 
     }
+
+    float CalculatePathLength(Vector3 targetPosition)
+    {
+        NavMeshPath path = new NavMeshPath();
+        if (Agent.enabled)
+            Agent.CalculatePath(targetPosition, path);
+
+        Vector3[] allWayPoints = new Vector3[path.corners.Length + 2];
+        allWayPoints[0] = transform.position;
+        allWayPoints[allWayPoints.Length + 1] = targetPosition;
+
+        for (int i = 0; i < path.corners.Length; i++)
+        {
+            allWayPoints[i + 1] = path.corners[i];
+        }
+
+        float pathLength = 0;
+
+        for (int i = 0; i < allWayPoints.Length - 1; i++)
+        {
+            pathLength += Vector3.Distance(allWayPoints[i], allWayPoints[i + 1]);
+        }
+
+        return pathLength;
+    }
+
 }
