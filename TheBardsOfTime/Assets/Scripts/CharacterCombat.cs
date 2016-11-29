@@ -56,7 +56,7 @@ public class CharacterCombat : MonoBehaviour {
         }
     }
 
-    //Käy hakemassa listan Collidereilta jotka tunnistavat ketä on milläkin rangella
+    //Käy hakemassa listan vihollisista joita löytyy kysytyltä rangella
     List<GameObject> getList(string ListName)
     {
         switch (ListName)
@@ -65,13 +65,11 @@ public class CharacterCombat : MonoBehaviour {
                     return activeColliders[0].enemyList;
                 }
 
-            case "SpellRange":
-                {
+            case "SpellRange": {
                     return activeColliders[1].enemyList;
                 }
 
-            case "SkillRange":
-                {
+            case "SkillRange": {
                     return activeColliders[2].enemyList;
                 }
 
@@ -112,8 +110,8 @@ public class CharacterCombat : MonoBehaviour {
                     while (channeling)
                     {
                         yield return new WaitForSeconds(1f);
+                        Debug.Log("vinkuvonku");
                         foreach (GameObject go in getList("SpellRange")){
-                            Debug.Log("vinkuvonku");
                             go.SendMessageUpwards("TakeDamage", spellDamage);
                         }
                     }
