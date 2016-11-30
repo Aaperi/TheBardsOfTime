@@ -26,6 +26,8 @@ public class CharacterCombat : MonoBehaviour {
     private float skillDamage = 10;
     private float skillStamp;
 
+    public Violin vil = new Violin();
+
 	void Start () {
         activeInstrument = "Violin";
         activeColliders = GameObject.Find(activeInstrument).GetComponentsInChildren<HitDetection>();

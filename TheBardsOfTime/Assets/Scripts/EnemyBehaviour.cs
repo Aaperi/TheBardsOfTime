@@ -9,9 +9,8 @@ public class EnemyBehaviour : MonoBehaviour {
     public float dist;
 
     private List<GameObject> detected = new List<GameObject>();
-    private NavMeshAgent nav;
     private GameObject player;
-    private SphereCollider Sphere;
+    private SphereCollider Sphere; // Ei käytössä atm, ehkä voisi muokata ilmotusrangeksi kun jahtaa vihollista?
     private Vector3 previousSighting;
     private LastPlayerSighting lastPlayerSighting;
     private bool withinRange = false;
@@ -20,7 +19,6 @@ public class EnemyBehaviour : MonoBehaviour {
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player");
         Sphere = GetComponent<SphereCollider>();
-        nav = GetComponent<NavMeshAgent>();
         lastPlayerSighting = FindObjectOfType<LastPlayerSighting>();
 
         personalLastSighting = lastPlayerSighting.resetPosition;
@@ -91,28 +89,4 @@ public class EnemyBehaviour : MonoBehaviour {
         }
     }
 
-    float CalculatePathLength(Vector3 targetPosition)
-    {
-        NavMeshPath path = new NavMeshPath();
-        if (nav.enabled)
-            nav.CalculatePath(targetPosition, path);
-
-        Vector3[] allWayPoints = new Vector3[path.corners.Length + 2];
-        allWayPoints[0] = transform.position;
-        allWayPoints[allWayPoints.Length + 1] = targetPosition;
-
-        for (int i = 0; i < path.corners.Length; i++)
-        {
-            allWayPoints[i + 1] = path.corners[i];
-        }
-
-        float pathLength = 0;
-
-        for(int i = 0; i < allWayPoints.Length - 1; i++)
-        {
-            pathLength += Vector3.Distance(allWayPoints[i], allWayPoints[i + 1]);
-        }
-
-        return pathLength;
-    }
 }
