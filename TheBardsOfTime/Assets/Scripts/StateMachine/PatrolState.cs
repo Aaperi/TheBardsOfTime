@@ -38,6 +38,11 @@ public class PatrolState : IEnemyState
         enemy.currentState = enemy.chaseState;
     }
 
+    public void ToAttackState()
+    {
+
+    }
+
     private void Look()
     {
         RaycastHit hit;
@@ -51,12 +56,13 @@ public class PatrolState : IEnemyState
     void Patrol()
     {
         enemy.meshRendererFlag.material.color = Color.green;
-        enemy.navMeshAgent.destination = enemy.wayPoints[nextWayPoint].position;
+        //enemy.navMeshAgent.destination = enemy.wayPoints[nextWayPoint].position;
+        enemy.navMeshAgent.destination = enemy.script.Path[nextWayPoint].transform.position;
         enemy.navMeshAgent.Resume();
 
         if(enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance && !enemy.navMeshAgent.pathPending)
         {
-            nextWayPoint = (nextWayPoint + 1) % enemy.wayPoints.Length;
+            nextWayPoint = (nextWayPoint + 1) % enemy.script.Path.Count;
         }
     }
 }

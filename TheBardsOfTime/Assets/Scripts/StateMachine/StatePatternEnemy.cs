@@ -6,11 +6,12 @@ public class StatePatternEnemy : MonoBehaviour {
     public float searchingTurnSpeed = 60f;
     public float searchingDuration = 6f;
     public float sightRange = 50f;
-    public Transform[] wayPoints;
+    //public Transform[] wayPoints;
     public Transform eyes;
     public Vector3 offset = new Vector3(0, .5f, 0);
     public MeshRenderer meshRendererFlag;
     public LayerMask mask;
+    public PathScript script;
 
     [HideInInspector] public Transform chaseTarget;
     [HideInInspector] public IEnemyState currentState;

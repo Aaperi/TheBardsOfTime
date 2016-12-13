@@ -36,6 +36,11 @@ public class ChaseState : IEnemyState {
 
     }
 
+    public void ToAttackState()
+    {
+
+    }
+
     private void Look()
     {
         RaycastHit hit;

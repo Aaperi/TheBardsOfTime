@@ -39,6 +39,11 @@ public class AlertState : IEnemyState
         searchTimer = 0f;
     }
 
+    public void ToAttackState()
+    {
+
+    }
+
     private void Look()
     {
         RaycastHit hit;
