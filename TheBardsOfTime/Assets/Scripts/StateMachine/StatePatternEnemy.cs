@@ -3,9 +3,9 @@ using System.Collections;
 
 public class StatePatternEnemy : MonoBehaviour {
 
-    public float searchingTurnSpeed = 60f;
-    public float searchingDuration = 6f;
-    public float sightRange = 50f;
+    public float searchingTurnSpeed;
+    public float searchingDuration;
+    public float sightRange;
     //public Transform[] wayPoints;
     public Transform eyes;
     public Vector3 offset = new Vector3(0, .5f, 0);
@@ -18,10 +18,13 @@ public class StatePatternEnemy : MonoBehaviour {
     [HideInInspector] public ChaseState chaseState;
     [HideInInspector] public AlertState alertState;
     [HideInInspector] public PatrolState patrolState;
+    [HideInInspector] public CombatState combatState;
     [HideInInspector] public NavMeshAgent navMeshAgent;
+    [HideInInspector] public bool withinRange = false;
 
     private void Awake()
     {
+        combatState = new CombatState(this);
         chaseState = new ChaseState(this);
         alertState = new AlertState(this);
         patrolState = new PatrolState(this);

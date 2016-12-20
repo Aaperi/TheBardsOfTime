@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AlertState : IEnemyState
-{
-    private readonly StatePatternEnemy enemy;
-    private float searchTimer;
-    private Transform player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+public class CombatState : IEnemyState {
 
-    public AlertState(StatePatternEnemy statePatternEnemy)
+    private readonly StatePatternEnemy enemy;
+    private HPScript hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
+    private float attackCoolDown = .75f;
+
+    public CombatState(StatePatternEnemy statePatternEnemy)
     {
         enemy = statePatternEnemy;
     }
@@ -15,39 +15,37 @@ public class AlertState : IEnemyState
     public void UpdateState()
     {
         Look();
-        Search();
+        Attack();
     }
 
     public void OnTriggerEnter(Collider other)
     {
-
+       
     }
 
     public void OnTriggerExit(Collider other)
     {
-        ToPatrolState();
+        
     }
 
     public void ToPatrolState()
     {
         enemy.currentState = enemy.patrolState;
-        searchTimer = 0f;
     }
 
     public void ToAlertState()
     {
-        Debug.Log("Can't transition to same state");
+        enemy.currentState = enemy.alertState;
     }
 
     public void ToChaseState()
     {
         enemy.currentState = enemy.chaseState;
-        searchTimer = 0f;
     }
 
     public void ToAttackState()
     {
-
+        Debug.Log("Can't transition to same state");
     }
 
     private void Look()
@@ -60,17 +58,25 @@ public class AlertState : IEnemyState
         }
     }
 
-    private void Search()
+    void Attack()
     {
-        Vector3 targetDir = player.position - enemy.transform.position;
-        enemy.meshRendererFlag.material.color = Color.yellow;
-        enemy.navMeshAgent.Stop();
-        Vector3 newDir = Vector3.RotateTowards(enemy.transform.forward, targetDir, enemy.searchingTurnSpeed * Time.deltaTime, 0.0f);
-        enemy.transform.rotation = Quaternion.LookRotation(newDir);
-        
-        searchTimer += Time.deltaTime;
+        attackCoolDown -= Time.deltaTime;
 
-        if (searchTimer >= enemy.searchingDuration)
+        if(attackCoolDown <= 0)
+        {
+            Debug.Log("Lyö");
+            hp.TakeDamage(10f);
+            attackCoolDown = .75f;
+        }
+
+        if(enemy.navMeshAgent.destination != enemy.chaseTarget.position || enemy.navMeshAgent.remainingDistance > 4.1f)
+        {
+            ToChaseState();
+        }
+
+        if(hp.hitpoints <= 0)
+        {
             ToPatrolState();
+        }
     }
 }

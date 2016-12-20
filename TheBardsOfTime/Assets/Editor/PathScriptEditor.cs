@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 [CustomEditor(typeof(PathScript))]
 public class PathScriptEditor : Editor {
+    
     public override void OnInspectorGUI()
     {
         // Get a reference to the script

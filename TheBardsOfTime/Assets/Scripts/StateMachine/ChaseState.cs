@@ -21,9 +21,14 @@ public class ChaseState : IEnemyState {
 
     }
 
+    public void OnTriggerExit(Collider other)
+    {
+        ToAlertState();
+    }
+
     public void ToPatrolState()
     {
-
+        enemy.currentState = enemy.patrolState;
     }
 
     public void ToAlertState()
@@ -38,6 +43,7 @@ public class ChaseState : IEnemyState {
 
     public void ToAttackState()
     {
+        enemy.currentState = enemy.combatState;
 
     }
 
@@ -59,6 +65,14 @@ public class ChaseState : IEnemyState {
     {
         enemy.meshRendererFlag.material.color = Color.red;
         enemy.navMeshAgent.destination = enemy.chaseTarget.position;
-        enemy.navMeshAgent.Resume();
+        if (enemy.navMeshAgent.remainingDistance < 2f)
+            enemy.navMeshAgent.Stop();
+        else
+            enemy.navMeshAgent.Resume();
+
+        if(enemy.navMeshAgent.remainingDistance < 2f)
+        {
+            ToAttackState();
+        }
     }
 }

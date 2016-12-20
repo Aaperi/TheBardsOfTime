@@ -20,7 +20,16 @@ public class PatrolState : IEnemyState
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
+        {
+            enemy.withinRange = true;
             ToAlertState();
+        }
+            
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+
     }
 
     public void ToPatrolState()
