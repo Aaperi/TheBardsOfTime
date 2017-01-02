@@ -5,80 +5,46 @@ using System.Collections.Generic;
 
 public class CharacterCombat : MonoBehaviour {
 
-	//private string[,] Instruments = { {"Violin", "Cello"}, {"Flute", ""}, {"Tuba", "Trombone"}, {"MarchDrum", ""} };
-    private HitDetection[] activeColliders;
-    private bool isProcessing = false;
-    private bool channeling = false;
+    //private string[,] Instruments = { {"Violin", "Cello"}, {"Flute", ""}, {"Tuba", "Trombone"}, {"MarchDrum", ""} };
+    public HitDetection[] activeColliders;
+    public bool isProcessing = false;
+    public bool isChanneling = false;
     public string activeInstrument;
 
-    private float atkCastTime = .5f;
-    private float atkCooldown = .25f;
-    private float atkDamage = 60;
-    private float atkStamp;
-
-    private float spellCastTime = 1;
-    private float spellCooldown = 0;
-    private float spellDamage = 30;
-    private float spellStamp;
-
-    private float skillCastTime = 0;
-    private float skillCooldown = 10;
-    private float skillDamage = 10;
-    private float skillStamp;
-
-    public Violin vil = new Violin();
+    public Instrument equippedWeapon;
 
 	void Start () {
         activeInstrument = "Violin";
+        equippedWeapon = Resources.Load("Data/" + activeInstrument) as Instrument;
         activeColliders = GameObject.Find(activeInstrument).GetComponentsInChildren<HitDetection>();
 	}
 
 	void Update () {
-        //ehto: Nappi pohjassa + ei ole cooldownissa + muut hyökkäykset eivät ole kesken
-        if (Input.GetKeyDown(KeyCode.Alpha1) && atkStamp < Time.time && !isProcessing)
+
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !isProcessing && !isChanneling && equippedWeapon.attack.Stamp < Time.time)
         {
-            StartCoroutine(Attack(activeInstrument));
+            Debug.Log(equippedWeapon.attack.Stamp + " < " + Time.time);
+            StartCoroutine(equippedWeapon.Attack(activeColliders[0].enemyList));
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+
+        if (Input.GetKeyDown(KeyCode.Alpha2) && !isProcessing && !isChanneling && equippedWeapon.spell.Stamp < Time.time)
         {
-            if (!channeling)
-            {
-                if (spellStamp < Time.time && !isProcessing)
-                {
-                    StartCoroutine(Spell(activeInstrument));
-                }
-            }
-            else
-                channeling = false;
-            
+            Debug.Log(equippedWeapon.attack.Stamp + " < " + Time.time);
+            StartCoroutine(equippedWeapon.Attack(activeColliders[1].enemyList));
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3) && skillStamp < Time.time && !isProcessing)
+
+        /*
+        if (Input.GetKeyDown(KeyCode.Alpha3) && !isProcessing)
         {
             StartCoroutine(Skill(activeInstrument));
-        }
+        }*/
     }
 
-    //Käy hakemassa listan vihollisista joita löytyy kysytyltä rangella
-    List<GameObject> getList(string ListName)
-    {
-        switch (ListName)
-        {
-            case "AttackRange": {
-                    return activeColliders[0].enemyList;
-                }
-
-            case "SpellRange": {
-                    return activeColliders[1].enemyList;
-                }
-
-            case "SkillRange": {
-                    return activeColliders[2].enemyList;
-                }
-
-            default: return new List<GameObject>();
-        }
+    public void StateManager(bool process, bool channel){
+        isProcessing = process; isChanneling = channel;
     }
 
+    /*
     IEnumerator Attack(string instrument)
     {
         isProcessing = true;
@@ -146,14 +112,5 @@ public class CharacterCombat : MonoBehaviour {
             default: break;
         }
         isProcessing = false;
-    }
-
-    void ViolinAttack(){
-	}
-
-	void ViolinSkill(){
-	}
-
-	void ViolinSpell(){
-	}
+    }*/
 }
