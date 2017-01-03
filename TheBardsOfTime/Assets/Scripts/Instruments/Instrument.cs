@@ -32,10 +32,12 @@ public class Instrument : ScriptableObject {
     public AttackSettings attack = new AttackSettings();
     public SpellSettings spell = new SpellSettings();
     public SkillSettings skill = new SkillSettings();
+    public CharacterCombat CCref;
 
     void OnEnable()
     {
         attack.Stamp = 0; spell.Stamp = 0; skill.Stamp = 0;
+        CCref = GameObject.Find("Player").GetComponent<CharacterCombat>();
     }
 
     public virtual IEnumerator Attack(List<GameObject> EnemyList) {

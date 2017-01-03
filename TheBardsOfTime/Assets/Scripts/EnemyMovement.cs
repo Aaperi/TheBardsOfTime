@@ -78,7 +78,7 @@ public class EnemyMovement : MonoBehaviour {
         if (sightingDeltaPos.sqrMagnitude > 10f)
             Agent.destination = behaviour.personalLastSighting;
         
-        Agent.stoppingDistance = 1f;
+        Agent.stoppingDistance = 5f;
         Agent.speed = chaseSpeed;
 
         if (Agent.remainingDistance < Agent.stoppingDistance)

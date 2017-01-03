@@ -40,10 +40,6 @@ public class CharacterCombat : MonoBehaviour {
         }*/
     }
 
-    public void StateManager(bool process, bool channel){
-        isProcessing = process; isChanneling = channel;
-    }
-
     /*
     IEnumerator Attack(string instrument)
     {

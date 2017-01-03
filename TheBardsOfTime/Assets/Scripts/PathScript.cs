@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PathScript : MonoBehaviour {
-
     public List<GameObject> Path = new List<GameObject>();
     public bool PathEnabled = true;
 
@@ -19,7 +18,7 @@ public class PathScript : MonoBehaviour {
         script.Path = this;
         Path.Add(obj);
 
-        obj.name = "p" + (Path.Count - 1);
+        obj.name = "P" + (Path.Count - 1);
 
         return obj;
     }
@@ -27,8 +26,11 @@ public class PathScript : MonoBehaviour {
     public void RemovePoint(GameObject obj)
     {
         Path.Remove(obj);
+#if UNITY_EDITOR
         DestroyImmediate(obj);
+#else
         Destroy(obj);
+#endif
     }
 
 
@@ -36,9 +38,9 @@ public class PathScript : MonoBehaviour {
 	void Start () {
 	
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
 	
 	}
 
@@ -49,7 +51,7 @@ public class PathScript : MonoBehaviour {
 
         Gizmos.color = (PathEnabled) ? Color.blue : Color.gray;
         Vector3 start = transform.position;
-        foreach (GameObject obj in Path)
+        foreach(GameObject obj in Path)
         {
             Gizmos.DrawLine(start, obj.transform.position);
             start = obj.transform.position;

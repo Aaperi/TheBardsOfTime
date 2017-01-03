@@ -33,7 +33,7 @@ public class HPScript : MonoBehaviour {
 		}
     }
 
-    private void TakeDamage(float damage)
+    public void TakeDamage(float damage)
     {
         hitpoints -= damage;
         UpdateHealthbar();

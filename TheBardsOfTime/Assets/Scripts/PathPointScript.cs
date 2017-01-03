@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class PathPointScript : MonoBehaviour {
-
     public PathScript Path;
     public string PointName
     {
@@ -26,7 +25,7 @@ public class PathPointScript : MonoBehaviour {
 
     void OnDrawGizmos()
     {
-        Gizmos.color = (Path.PathEnabled) ? Color.green : Color.grey;
+        Gizmos.color = (Path.PathEnabled) ? Color.green : Color.gray;
         Gizmos.DrawWireSphere(transform.position, 1f);
     }
 }

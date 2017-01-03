@@ -7,7 +7,7 @@ public class CameraTest : MonoBehaviour {
 
     [System.Serializable]
     public class PositionSettings {
-        public Vector3 targetPosOffset = new Vector3(0, 3.4f, 0);
+        public Vector3 targetPosOffset = new Vector3(0, 0, 0);
         public float lookSmooth = 100f;
         public float distanceFromTarget = -8;
         public float zoomSmooth = 10;
@@ -60,16 +60,22 @@ public class CameraTest : MonoBehaviour {
         charController = target.GetComponent<CharacterController>();
     }
 
-    void GetInput() {
+    void CameraRotate() {
         vOrbitInput     = Input.GetAxisRaw(input.ORBIT_VERTICAL);
         hOrbitInput     = Input.GetAxisRaw(input.ORBIT_HORIZONTAL);
-        hOrbitSnapInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL_SNAP);
-        zoomInput       = Input.GetAxisRaw(input.ZOOM);
     }
-
+    
+    void GetInput() {
+        hOrbitSnapInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL_SNAP);
+        zoomInput = Input.GetAxisRaw(input.ZOOM);
+    }
+    
     void Update() {
+        if (Input.GetMouseButton(1)) {
+            CameraRotate();
+            OrbitTarget();
+        }
         GetInput();
-        OrbitTarget();
         ZoomInTarget();
     }
 
@@ -89,7 +95,7 @@ public class CameraTest : MonoBehaviour {
 
     void LookAtTarget() {
         Quaternion targetRotation = Quaternion.LookRotation(targetPos - transform.position);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, position.lookSmooth * Time.deltaTime);
+        transform.rotation = targetRotation;//Quaternion.Lerp(transform.rotation, targetRotation, position.lookSmooth * Time.deltaTime);
     }
 
     void OrbitTarget() {
@@ -119,6 +125,4 @@ public class CameraTest : MonoBehaviour {
             position.distanceFromTarget = position.minZoom;
         }
     }
-
-
 }
