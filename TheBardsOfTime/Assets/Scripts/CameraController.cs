@@ -62,7 +62,7 @@ public class CameraController : MonoBehaviour {
     Vector3 destination = Vector3.zero;
     Vector3 adjustedDestination = Vector3.zero;
     Vector3 camVel = Vector3.zero;
-    CharacterController charController;
+    CC charController;
     float vOrbitInput, hOrbitInput, zoomInput, hOrbitSnapInput, mouseOrbitInput, vMouseOrbitInput;
     Vector3 previousMousePos = Vector3.zero;
     Vector3 currentMousePos = Vector3.zero;
@@ -94,11 +94,11 @@ public class CameraController : MonoBehaviour {
         target = t;
         if (target != null)
         {
-            if (target.GetComponent<CharacterController>())
+            if (target.GetComponent<CC>())
             {
-                charController = target.GetComponent<CharacterController>();
+                charController = target.GetComponent<CC>();
             } else {
-                Debug.LogError("CameraController needs a target!");
+                Debug.LogError("Didn't find character controller!");
             }
         } else
         {
