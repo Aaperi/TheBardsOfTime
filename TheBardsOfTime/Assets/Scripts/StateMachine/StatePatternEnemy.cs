@@ -13,17 +13,24 @@ public class StatePatternEnemy : MonoBehaviour {
     public LayerMask mask;
     public PathScript script;
 
-    [HideInInspector] public Transform chaseTarget;
-    [HideInInspector] public IEnemyState currentState;
-    [HideInInspector] public ChaseState chaseState;
-    [HideInInspector] public AlertState alertState;
-    [HideInInspector] public PatrolState patrolState;
-    [HideInInspector] public CombatState combatState;
-    [HideInInspector] public NavMeshAgent navMeshAgent;
-    [HideInInspector] public bool withinRange = false;
+    [HideInInspector]
+    public Transform chaseTarget;
+    [HideInInspector]
+    public IEnemyState currentState;
+    [HideInInspector]
+    public ChaseState chaseState;
+    [HideInInspector]
+    public AlertState alertState;
+    [HideInInspector]
+    public PatrolState patrolState;
+    [HideInInspector]
+    public CombatState combatState;
+    [HideInInspector]
+    public NavMeshAgent navMeshAgent;
+    [HideInInspector]
+    public bool withinRange = false;
 
-    private void Awake()
-    {
+    private void Awake() {
         combatState = new CombatState(this);
         chaseState = new ChaseState(this);
         alertState = new AlertState(this);
@@ -31,22 +38,19 @@ public class StatePatternEnemy : MonoBehaviour {
 
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
-    
-	// Use this for initialization
-	void Start ()
-    {
-        currentState = patrolState;
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        Debug.DrawRay(eyes.position, eyes.forward * sightRange, Color.red);        
-        currentState.UpdateState();
-	}
 
-    private void OnTriggerEnter(Collider other)
-    {
+    // Use this for initialization
+    void Start() {
+        currentState = patrolState;
+    }
+
+    // Update is called once per frame
+    void Update() {
+        Debug.DrawRay(eyes.position, eyes.forward * sightRange, Color.red);
+        currentState.UpdateState();
+    }
+
+    private void OnTriggerEnter(Collider other) {
         currentState.OnTriggerEnter(other);
     }
 }

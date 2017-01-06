@@ -5,72 +5,57 @@ public class ChaseState : IEnemyState {
 
     private readonly StatePatternEnemy enemy;
 
-    public ChaseState(StatePatternEnemy statePatternEnemy)
-    {
+    public ChaseState(StatePatternEnemy statePatternEnemy) {
         enemy = statePatternEnemy;
     }
 
-    public void UpdateState()
-    {
+    public void UpdateState() {
         Look();
         Chase();
     }
 
-    public void OnTriggerEnter(Collider other)
-    {
+    public void OnTriggerEnter(Collider other) {
 
     }
 
-    public void OnTriggerExit(Collider other)
-    {
+    public void OnTriggerExit(Collider other) {
         ToAlertState();
     }
 
-    public void ToPatrolState()
-    {
+    public void ToPatrolState() {
         enemy.currentState = enemy.patrolState;
     }
 
-    public void ToAlertState()
-    {
+    public void ToAlertState() {
         enemy.currentState = enemy.alertState;
     }
 
-    public void ToChaseState()
-    {
+    public void ToChaseState() {
 
     }
 
-    public void ToAttackState()
-    {
+    public void ToAttackState() {
         enemy.currentState = enemy.combatState;
 
     }
 
-    private void Look()
-    {
+    private void Look() {
         RaycastHit hit;
         Vector3 enemyToTarget = (enemy.chaseTarget.position + enemy.offset) - enemy.eyes.transform.position;
-        if (Physics.Raycast(enemy.eyes.transform.position, enemyToTarget, out hit, enemy.sightRange, enemy.mask) && hit.collider.CompareTag("Player"))
-        {
+        if (Physics.Raycast(enemy.eyes.transform.position, enemyToTarget, out hit, enemy.sightRange, enemy.mask) && hit.collider.CompareTag("Player")) {
             enemy.chaseTarget = hit.transform;
-        }
-        else
-        {
+        } else {
             ToAlertState();
         }
     }
 
-    private void Chase()
-    {
+    private void Chase() {
         enemy.meshRendererFlag.material.color = Color.red;
         enemy.navMeshAgent.destination = enemy.chaseTarget.position;
-        if (enemy.navMeshAgent.remainingDistance < 4.1f)
-        {
+        if (enemy.navMeshAgent.remainingDistance < 4.1f) {
             enemy.navMeshAgent.Stop();
             ToAttackState();
-        }
-        else
+        } else
             enemy.navMeshAgent.Resume();
 
     }
