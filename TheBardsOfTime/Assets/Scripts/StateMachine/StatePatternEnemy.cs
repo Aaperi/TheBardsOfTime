@@ -41,7 +41,7 @@ public class StatePatternEnemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        Debug.DrawRay(eyes.position, eyes.forward * sightRange, Color.red);
+        Debug.DrawRay(eyes.position, eyes.forward * sightRange, Color.red);        
         currentState.UpdateState();
 	}
 

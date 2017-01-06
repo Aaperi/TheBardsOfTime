@@ -58,12 +58,12 @@ public class CombatState : IEnemyState
             enemy.chaseTarget = hit.transform;
             ToChaseState();
         }
-        else
+       /* else
         {
             Vector3 targetDir = player.position - enemy.transform.position;
             Vector3 newDir = Vector3.RotateTowards(enemy.transform.forward, targetDir, enemy.searchingTurnSpeed * Time.deltaTime, 0.0f);
             enemy.transform.rotation = Quaternion.LookRotation(newDir);
-        }
+        }*/
             
     }
 
@@ -80,6 +80,13 @@ public class CombatState : IEnemyState
                 attackCoolDown = .75f;
             }
         }
+        
+        /*if (attackCoolDown <= 0)
+        {
+            Debug.Log("Lyö");
+            hp.TakeDamage(10f);
+            attackCoolDown = .75f;
+        }*/
 
         if (enemy.navMeshAgent.destination != enemy.chaseTarget.position || enemy.navMeshAgent.remainingDistance > 4f)
         {
