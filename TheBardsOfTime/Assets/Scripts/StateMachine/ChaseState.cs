@@ -65,12 +65,12 @@ public class ChaseState : IEnemyState {
     {
         enemy.meshRendererFlag.material.color = Color.red;
         enemy.navMeshAgent.destination = enemy.chaseTarget.position;
-        if (enemy.navMeshAgent.remainingDistance < 2f)
+        if (enemy.navMeshAgent.remainingDistance < 4f)
             enemy.navMeshAgent.Stop();
         else
             enemy.navMeshAgent.Resume();
 
-        if(enemy.navMeshAgent.remainingDistance < 2f)
+        if(enemy.navMeshAgent.remainingDistance < 4f)
         {
             ToAttackState();
         }

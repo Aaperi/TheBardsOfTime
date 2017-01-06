@@ -86,25 +86,30 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         GetInput();
-        ZoomInOnTarget();		
+        ZoomInOnTarget();	
+  
 	}
 
     public void SetCameraTarget(Transform t)
     {
         target = t;
-        if (target != null)
-        {
-            if (target.GetComponent<CC>())
+            if (target != null)
             {
-                charController = target.GetComponent<CC>();
-            } else {
-                Debug.LogError("Didn't find character controller!");
+                if (target.GetComponent<CC>())
+                {
+                    charController = target.GetComponent<CC>();
+                }
+                else
+                {
+                    Debug.LogError("Didn't find character controller!");
+                }
             }
-        } else
-        {
-            Debug.LogError("CameraController needs a target!");
-        }
+            else
+            {
+                Debug.LogError("CameraController needs a target!");
+            }
     }
+
 
     private void FixedUpdate()
     {
