@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CombatState : IEnemyState {
+public class CombatState : IEnemyState
+{
 
     private readonly StatePatternEnemy enemy;
     private HPScript hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
     private float attackCoolDown = .75f;
+    private Transform player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
     public CombatState(StatePatternEnemy statePatternEnemy)
     {
@@ -20,12 +22,12 @@ public class CombatState : IEnemyState {
 
     public void OnTriggerEnter(Collider other)
     {
-       
+
     }
 
     public void OnTriggerExit(Collider other)
     {
-        
+
     }
 
     public void ToPatrolState()
@@ -56,25 +58,35 @@ public class CombatState : IEnemyState {
             enemy.chaseTarget = hit.transform;
             ToChaseState();
         }
+        else
+        {
+            Vector3 targetDir = player.position - enemy.transform.position;
+            Vector3 newDir = Vector3.RotateTowards(enemy.transform.forward, targetDir, enemy.searchingTurnSpeed * Time.deltaTime, 0.0f);
+            enemy.transform.rotation = Quaternion.LookRotation(newDir);
+        }
+            
     }
 
     void Attack()
     {
         attackCoolDown -= Time.deltaTime;
-
-        if(attackCoolDown <= 0)
+        RaycastHit hit;
+        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange, enemy.mask) && hit.collider.CompareTag("Player"))
         {
-            Debug.Log("Lyö");
-            hp.TakeDamage(10f);
-            attackCoolDown = .75f;
+            if (attackCoolDown <= 0)
+            {
+                Debug.Log("Lyö");
+                hp.TakeDamage(10f);
+                attackCoolDown = .75f;
+            }
         }
 
-        if(enemy.navMeshAgent.destination != enemy.chaseTarget.position || enemy.navMeshAgent.remainingDistance > 4.1f)
+        if (enemy.navMeshAgent.destination != enemy.chaseTarget.position || enemy.navMeshAgent.remainingDistance > 4f)
         {
             ToChaseState();
         }
 
-        if(hp.hitpoints <= 0)
+        if (hp.hitpoints <= 0)
         {
             ToPatrolState();
         }
