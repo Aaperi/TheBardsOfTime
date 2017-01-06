@@ -10,7 +10,7 @@ public class Instrument : ScriptableObject {
         public float CastTime;
         public float Cooldown;
         public float Damage;
-        public float Stamp = 0;
+        public float Stamp;
     }
 
     [System.Serializable]
@@ -18,7 +18,7 @@ public class Instrument : ScriptableObject {
         public float CastTime;
         public float Cooldown;
         public float Damage;
-        public float Stamp = 0;
+        public float Stamp;
     }
 
     [System.Serializable]
@@ -26,29 +26,15 @@ public class Instrument : ScriptableObject {
         public float CastTime;
         public float Cooldown;
         public float Damage;
-        public float Stamp = 0;
+        public float Stamp;
     }
 
     public AttackSettings attack = new AttackSettings();
     public SpellSettings spell = new SpellSettings();
     public SkillSettings skill = new SkillSettings();
-    public CharacterCombat CCref;
 
     void OnEnable()
     {
         attack.Stamp = 0; spell.Stamp = 0; skill.Stamp = 0;
-        CCref = GameObject.Find("Player").GetComponent<CharacterCombat>();
-    }
-
-    public virtual IEnumerator Attack(List<GameObject> EnemyList) {
-        yield return null;
-    }
-
-    public virtual IEnumerator Spell(List<GameObject> EnemyList) {
-        yield return null;
-    }
-
-    public virtual IEnumerator Skill(List<GameObject> EnemyList) {
-        yield return null;
     }
 }
