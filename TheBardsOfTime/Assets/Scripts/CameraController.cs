@@ -271,7 +271,7 @@ public class CameraController : MonoBehaviour {
             intoArray[3] = (atRotation * new Vector3( x, -y, z)) + cameraPosition;
             intoArray[4] = cameraPosition - camera.transform.forward;
 
-            Debug.Log(intoArray);
+            /*Debug.Log(intoArray);*/
         }
 
         public float GetAdjustedDistanceWithRayFrom(Vector3 from)

@@ -7,30 +7,29 @@ public class CharacterCombat : MonoBehaviour {
 
     //private string[,] Instruments = { {"Violin", "Cello"}, {"Flute", ""}, {"Tuba", "Trombone"}, {"MarchDrum", ""} };
     public HitDetection[] activeColliders;
-    public bool isProcessing = false;
+    public bool isProcessing = true;
     public bool isChanneling = false;
     public string activeInstrument;
 
     public Instrument equippedWeapon;
 
 	void Start () {
-        activeInstrument = "Violin";
+        activeInstrument = "ViolinSO";
         equippedWeapon = Resources.Load("Data/" + activeInstrument) as Instrument;
         activeColliders = GameObject.Find(activeInstrument).GetComponentsInChildren<HitDetection>();
 	}
 
 	void Update () {
 
-        if (Input.GetKeyDown(KeyCode.Alpha1) && !isProcessing && !isChanneling && equippedWeapon.attack.Stamp < Time.time)
+        if (Input.GetKeyDown(KeyCode.Alpha1) && !isProcessing /*&& !isChanneling && equippedWeapon.attack.Stamp < Time.time*/)
         {
             Debug.Log(equippedWeapon.attack.Stamp + " < " + Time.time);
-            StartCoroutine(equippedWeapon.Attack(activeColliders[0].enemyList));
+            /*StartCoroutine(equippedWeapon.Attack(activeColliders[0].enemyList));
+            Debug.Log(isProcessing);*/
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2) && !isProcessing && !isChanneling && equippedWeapon.spell.Stamp < Time.time)
         {
-            Debug.Log(equippedWeapon.attack.Stamp + " < " + Time.time);
-            StartCoroutine(equippedWeapon.Attack(activeColliders[1].enemyList));
         }
 
         /*
