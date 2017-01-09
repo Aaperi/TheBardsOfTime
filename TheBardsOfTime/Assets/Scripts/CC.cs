@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class CC : MonoBehaviour {
 
-    private List<Object> RefList = new List<Object>();
-    public bool canDoubleJump = false;
-    public string[] InstrumentList = { "Violin", "Flute" };
+    private bool canDoubleJump = false;
+    private int insID = 1;
+    public List<GameObject> RefList = new List<GameObject>();
 
     [System.Serializable]
     public class MoveSettings {
@@ -31,6 +31,9 @@ public class CC : MonoBehaviour {
         public string TURN_AXIS = "Horizontal";
         public string JUMP_AXIS = "Jump";
         public string ATTACK = "Fire1";
+        public string SKILL = "Fire2";
+        public string SPELL = "Fire3";
+        public string SWAP = "SwapInstrument";
     }
 
     public MoveSettings moveSetting = new MoveSettings();
@@ -41,6 +44,7 @@ public class CC : MonoBehaviour {
     Quaternion targetRotation;
     Rigidbody rb;
     float forwardInput, turnInput, jumpInput;
+    bool attackInput, spellInput, skillInput, swapInput;
 
 
 
@@ -59,10 +63,11 @@ public class CC : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
 
         forwardInput = turnInput = jumpInput = 0;
+        attackInput = skillInput = spellInput = swapInput = false;
 
-        foreach (string ins in InstrumentList) {
-            RefList.Add(GameObject.Find(ins).GetComponent(ins));
-        }
+        foreach (Transform child in GameObject.Find("Instruments").transform)
+            RefList.Add(child.gameObject);
+
     }
 
     void GetInput()
@@ -70,6 +75,10 @@ public class CC : MonoBehaviour {
         forwardInput = Input.GetAxis(inputSetting.FORWARD_AXIS);
         turnInput = Input.GetAxis(inputSetting.TURN_AXIS);
         jumpInput = Input.GetAxisRaw(inputSetting.JUMP_AXIS);
+        attackInput = Input.GetButtonDown(inputSetting.ATTACK);
+        skillInput = Input.GetButtonDown(inputSetting.SKILL);
+        spellInput = Input.GetButtonDown(inputSetting.SPELL);
+        swapInput = Input.GetButtonDown(inputSetting.SWAP);
     }
 
 
@@ -85,6 +94,7 @@ public class CC : MonoBehaviour {
     {
         Run();
         Jump();
+        Combat();
         DoubleJump();
         rb.velocity = transform.TransformDirection(velocity);
     }
@@ -95,7 +105,8 @@ public class CC : MonoBehaviour {
             //move
             velocity.z = moveSetting.forwardVel * forwardInput;
 
-        } else {
+        }
+        else {
             //no velocity
             velocity.z = 0;
         }
@@ -126,12 +137,43 @@ public class CC : MonoBehaviour {
         if (jumpInput > 0 && Grounded()) {
             velocity.y = moveSetting.jumpVel;
             canDoubleJump = true;
-        } else if (jumpInput == 0 && Grounded()) {
+        }
+        else if (jumpInput == 0 && Grounded()) {
             velocity.y = 0;
-        } else {
+        }
+        else {
             velocity.y -= physSetting.downAccel;
         }
     }
 
+    void Combat()
+    {
+        if (attackInput) {
+            RefList[insID].SendMessage("Attack");
+        }
+
+        if (skillInput) {
+            RefList[insID].SendMessage("Skill");
+        }
+
+        if (spellInput) {
+            RefList[insID].SendMessage("Spell");
+        }
+
+        if (swapInput) {
+            if(insID == 0) {
+                RefList[insID].SendMessage("UnEquip");
+                insID = 1;
+                RefList[insID].SendMessage("Equip");
+                Debug.Log("Instrument swapped into " + insID);
+            }
+            else if(insID == 1) {
+                RefList[insID].SendMessage("UnEquip");
+                insID = 0;
+                RefList[insID].SendMessage("Equip");
+                Debug.Log("Instrument swapped into " + insID);
+            }
+        }
+    }
 
 }
