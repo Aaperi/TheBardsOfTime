@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 public class CC : MonoBehaviour {
 
-    private bool canDoubleJump = false;
     private int insID = 1;
+    private bool canDoubleJump = false;
+    public bool targetIsLocked = true;
+    public GameObject target;
     public List<GameObject> RefList = new List<GameObject>();
 
     [System.Serializable]
@@ -28,13 +30,14 @@ public class CC : MonoBehaviour {
     public class InputSettings {
         public float inputDelay = 0.1f;
         public string FORWARD_AXIS = "Vertical";
-        public string TURN_AXIS = "Horizontal";
+        public string SIDE_AXIS = "Horizontal";
         public string JUMP_AXIS = "Jump";
         public string ATTACK = "Fire1";
         public string SKILL = "Fire2";
         public string SPELL = "Fire3";
         public string SWAP = "SwapInstrument";
-    }
+        public string LOCK = "TargetLock";
+    } 
 
     public MoveSettings moveSetting = new MoveSettings();
     public PhysSettings physSetting = new PhysSettings();
@@ -43,8 +46,8 @@ public class CC : MonoBehaviour {
     Vector3 velocity = Vector3.zero;
     Quaternion targetRotation;
     Rigidbody rb;
-    float forwardInput, turnInput, jumpInput;
-    bool attackInput, spellInput, skillInput, swapInput;
+    float forwardInput, sideInput, jumpInput;
+    bool attackInput, spellInput, skillInput, swapInput, targetLock;
 
 
 
@@ -62,8 +65,8 @@ public class CC : MonoBehaviour {
         targetRotation = transform.rotation;
         rb = GetComponent<Rigidbody>();
 
-        forwardInput = turnInput = jumpInput = 0;
-        attackInput = skillInput = spellInput = swapInput = false;
+        forwardInput = sideInput = jumpInput = 0;
+        attackInput = skillInput = spellInput = swapInput = targetLock = false;
 
         foreach (Transform child in GameObject.Find("Instruments").transform)
             RefList.Add(child.gameObject);
@@ -73,12 +76,13 @@ public class CC : MonoBehaviour {
     void GetInput()
     {
         forwardInput = Input.GetAxis(inputSetting.FORWARD_AXIS);
-        turnInput = Input.GetAxis(inputSetting.TURN_AXIS);
+        sideInput = Input.GetAxis(inputSetting.SIDE_AXIS);
         jumpInput = Input.GetAxisRaw(inputSetting.JUMP_AXIS);
         attackInput = Input.GetButtonDown(inputSetting.ATTACK);
         skillInput = Input.GetButtonDown(inputSetting.SKILL);
         spellInput = Input.GetButtonDown(inputSetting.SPELL);
         swapInput = Input.GetButtonDown(inputSetting.SWAP);
+        targetLock = Input.GetButtonDown(inputSetting.LOCK);
     }
 
 
@@ -105,23 +109,31 @@ public class CC : MonoBehaviour {
             //move
             velocity.z = moveSetting.forwardVel * forwardInput;
 
-        }
-        else {
+        } else {
             //no velocity
             velocity.z = 0;
+        }
+
+        if (Mathf.Abs(sideInput) > inputSetting.inputDelay && targetIsLocked) {
+            //move to side
+            velocity.x = moveSetting.forwardVel * sideInput;
         }
     }
 
 
     void Turn()
     {
-        if (Mathf.Abs(turnInput) > inputSetting.inputDelay) {
+        if (Mathf.Abs(sideInput) > inputSetting.inputDelay && !targetIsLocked) {
             float direction = forwardInput;
             if (direction == 0)
                 direction = 1;
-            targetRotation *= Quaternion.AngleAxis(moveSetting.rotateVel * turnInput * direction * Time.deltaTime, Vector3.up);
+            targetRotation *= Quaternion.AngleAxis(moveSetting.rotateVel * sideInput * direction * Time.deltaTime, Vector3.up);
+            transform.rotation = targetRotation;
+        } else {
+            var targetPosition = target.transform.position;
+            targetPosition.y = transform.position.y;
+            transform.LookAt(targetPosition);
         }
-        transform.rotation = targetRotation;
     }
 
     void DoubleJump()
@@ -137,11 +149,9 @@ public class CC : MonoBehaviour {
         if (jumpInput > 0 && Grounded()) {
             velocity.y = moveSetting.jumpVel;
             canDoubleJump = true;
-        }
-        else if (jumpInput == 0 && Grounded()) {
+        } else if (jumpInput == 0 && Grounded()) {
             velocity.y = 0;
-        }
-        else {
+        } else {
             velocity.y -= physSetting.downAccel;
         }
     }
@@ -161,13 +171,12 @@ public class CC : MonoBehaviour {
         }
 
         if (swapInput) {
-            if(insID == 0) {
+            if (insID == 0) {
                 RefList[insID].SendMessage("UnEquip");
                 insID = 1;
                 RefList[insID].SendMessage("Equip");
                 Debug.Log("Instrument swapped into " + insID);
-            }
-            else if(insID == 1) {
+            } else if (insID == 1) {
                 RefList[insID].SendMessage("UnEquip");
                 insID = 0;
                 RefList[insID].SendMessage("Equip");
