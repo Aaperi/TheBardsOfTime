@@ -6,13 +6,13 @@ public class CC : MonoBehaviour {
 
     private int insID = 1;
     private bool canDoubleJump = false;
-    public bool targetIsLocked = false;
+    private bool targetIsLocked = false;
     public GameObject target;
     public List<GameObject> RefList = new List<GameObject>();
 
     [System.Serializable]
     public class MoveSettings {
-        public readonly float forwardVel = 12;
+        public float forwardVel = 12;
         public float rotateVel = 100;
         public float jumpVel = 10;
         public float doubleJumpVel = 20;
