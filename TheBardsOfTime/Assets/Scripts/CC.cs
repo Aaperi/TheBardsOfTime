@@ -6,24 +6,23 @@ public class CC : MonoBehaviour {
 
     private int insID = 1;
     private bool canDoubleJump = false;
-    public bool targetIsLocked = true;
+    public bool targetIsLocked = false;
     public GameObject target;
     public List<GameObject> RefList = new List<GameObject>();
 
     [System.Serializable]
     public class MoveSettings {
-        public float forwardVel = 12;
+        public readonly float forwardVel = 12;
         public float rotateVel = 100;
-        public float jumpVel = 25;
-        public float doubleJumpVel = 50;
+        public float jumpVel = 10;
+        public float doubleJumpVel = 20;
         public float distToGrounded = 1.6f;
         public LayerMask ground;
-
     }
 
     [System.Serializable]
     public class PhysSettings {
-        public float downAccel = 0.75f;
+        public float downAccel = .75f;
     }
 
     [System.Serializable]
@@ -37,7 +36,7 @@ public class CC : MonoBehaviour {
         public string SPELL = "Fire3";
         public string SWAP = "SwapInstrument";
         public string LOCK = "TargetLock";
-    } 
+    }
 
     public MoveSettings moveSetting = new MoveSettings();
     public PhysSettings physSetting = new PhysSettings();
@@ -46,8 +45,8 @@ public class CC : MonoBehaviour {
     Vector3 velocity = Vector3.zero;
     Quaternion targetRotation;
     Rigidbody rb;
-    float forwardInput, sideInput, jumpInput;
-    bool attackInput, spellInput, skillInput, swapInput, targetLock;
+    float forwardInput, sideInput;
+    bool attackInput, spellInput, skillInput, swapInput, targetLock, jumpInput;
 
 
 
@@ -65,8 +64,8 @@ public class CC : MonoBehaviour {
         targetRotation = transform.rotation;
         rb = GetComponent<Rigidbody>();
 
-        forwardInput = sideInput = jumpInput = 0;
-        attackInput = skillInput = spellInput = swapInput = targetLock = false;
+        forwardInput = sideInput = 0;
+        attackInput = skillInput = spellInput = swapInput = targetLock = jumpInput = false;
 
         foreach (Transform child in GameObject.Find("Instruments").transform)
             RefList.Add(child.gameObject);
@@ -77,7 +76,7 @@ public class CC : MonoBehaviour {
     {
         forwardInput = Input.GetAxis(inputSetting.FORWARD_AXIS);
         sideInput = Input.GetAxis(inputSetting.SIDE_AXIS);
-        jumpInput = Input.GetAxisRaw(inputSetting.JUMP_AXIS);
+        jumpInput = Input.GetButtonDown(inputSetting.JUMP_AXIS);
         attackInput = Input.GetButtonDown(inputSetting.ATTACK);
         skillInput = Input.GetButtonDown(inputSetting.SKILL);
         spellInput = Input.GetButtonDown(inputSetting.SPELL);
@@ -90,6 +89,7 @@ public class CC : MonoBehaviour {
     {
         GetInput();
         Turn();
+
 
         Debug.DrawRay(transform.position, Vector3.down, Color.red);
     }
@@ -115,8 +115,11 @@ public class CC : MonoBehaviour {
         }
 
         if (Mathf.Abs(sideInput) > inputSetting.inputDelay && targetIsLocked) {
-            //move to side
+            //strafe
             velocity.x = moveSetting.forwardVel * sideInput;
+        } else {
+            //no velocity
+            velocity.x = 0;
         }
     }
 
@@ -130,6 +133,9 @@ public class CC : MonoBehaviour {
             targetRotation *= Quaternion.AngleAxis(moveSetting.rotateVel * sideInput * direction * Time.deltaTime, Vector3.up);
             transform.rotation = targetRotation;
         } else {
+            rb.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+        }
+        if (targetIsLocked) {
             var targetPosition = target.transform.position;
             targetPosition.y = transform.position.y;
             transform.LookAt(targetPosition);
@@ -146,15 +152,16 @@ public class CC : MonoBehaviour {
     }
     void Jump()
     {
-        if (jumpInput > 0 && Grounded()) {
+        if (jumpInput && Grounded()) {
             velocity.y = moveSetting.jumpVel;
             canDoubleJump = true;
-        } else if (jumpInput == 0 && Grounded()) {
+        } else if (!jumpInput && Grounded()) {
             velocity.y = 0;
         } else {
             velocity.y -= physSetting.downAccel;
         }
     }
+
 
     void Combat()
     {
