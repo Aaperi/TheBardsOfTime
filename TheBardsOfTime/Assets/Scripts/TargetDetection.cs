@@ -5,6 +5,12 @@ using System.Collections.Generic;
 public class TargetDetection : MonoBehaviour {
 
     public List<GameObject> enemyList = new List<GameObject>();
+    public TargetManager tam;
+
+    void Start()
+    {
+        tam = transform.parent.gameObject.GetComponent<TargetManager>();
+    }
 
     void OnTriggerEnter(Collider col)
     {
@@ -12,6 +18,7 @@ public class TargetDetection : MonoBehaviour {
             GameObject temp = col.gameObject.transform.parent.gameObject;
             if (!enemyList.Contains(temp))
                 enemyList.Add(temp);
+            SortandSend(enemyList);
         }
     }
 
@@ -21,19 +28,17 @@ public class TargetDetection : MonoBehaviour {
             GameObject temp = col.gameObject.transform.parent.gameObject;
             if (enemyList.Contains(temp))
                 enemyList.Remove(temp);
+            SortandSend(enemyList);
         }
     }
 
-    void WhoIsTheClosestOne()
+    void SortandSend(List<GameObject> list)
     {
-        enemyList.Sort(delegate (GameObject a, GameObject b) {
+        list.Sort(delegate (GameObject a, GameObject b) {
             float distA = Vector3.Distance(a.transform.position, transform.position);
             float distB = Vector3.Distance(b.transform.position, transform.position);
             return distA.CompareTo(distB);
         });
-
-        foreach(GameObject go in enemyList) {
-            Debug.Log(Vector3.Distance(go.transform.position, transform.position));
-        }
+        tam.updateList(gameObject.name, enemyList);
     }
 }

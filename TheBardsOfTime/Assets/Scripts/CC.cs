@@ -6,7 +6,8 @@ public class CC : MonoBehaviour {
 
     private int insID = 1;
     private bool canDoubleJump = false;
-    private bool targetIsLocked = false;
+    public bool targetIsLocked = false;
+    private TargetManager tam;
     public GameObject target;
     public List<GameObject> RefList = new List<GameObject>();
 
@@ -36,6 +37,7 @@ public class CC : MonoBehaviour {
         public string SPELL = "Fire3";
         public string SWAP = "SwapInstrument";
         public string LOCK = "TargetLock";
+        public string NEXT = "NextTarget";
     }
 
     public MoveSettings moveSetting = new MoveSettings();
@@ -46,7 +48,7 @@ public class CC : MonoBehaviour {
     Quaternion targetRotation;
     Rigidbody rb;
     float forwardInput, sideInput;
-    bool attackInput, spellInput, skillInput, swapInput, targetLock, jumpInput;
+    bool attackInput, spellInput, skillInput, swapInput, targetLock, jumpInput, nextTarget;
 
 
 
@@ -63,6 +65,7 @@ public class CC : MonoBehaviour {
     {
         targetRotation = transform.rotation;
         rb = GetComponent<Rigidbody>();
+        tam = GameObject.Find("TargetDetection").GetComponent<TargetManager>();
 
         forwardInput = sideInput = 0;
         attackInput = skillInput = spellInput = swapInput = targetLock = jumpInput = false;
@@ -82,6 +85,7 @@ public class CC : MonoBehaviour {
         spellInput = Input.GetButtonDown(inputSetting.SPELL);
         swapInput = Input.GetButtonDown(inputSetting.SWAP);
         targetLock = Input.GetButtonDown(inputSetting.LOCK);
+        nextTarget = Input.GetButtonDown(inputSetting.NEXT);
     }
 
 
@@ -175,6 +179,25 @@ public class CC : MonoBehaviour {
 
         if (spellInput) {
             RefList[insID].SendMessage("Spell");
+        }
+
+        if (targetLock) {
+            if (!targetIsLocked) {
+                Debug.Log("lukkopäälle >:D");
+                tam.changeTarget("First");
+                if (target != null) {
+                    targetIsLocked = true;
+                }
+            } else {
+                Debug.Log("lukkopois D:<");
+                targetIsLocked = false;
+            }
+        }
+
+        if (nextTarget) {
+            if (targetIsLocked) {
+                tam.changeTarget("Next");
+            }
         }
 
         if (swapInput) {
