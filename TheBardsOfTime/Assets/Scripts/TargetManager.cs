@@ -10,7 +10,7 @@ public class TargetManager : MonoBehaviour {
 
     void Start()
     {
-        CCref = GameObject.Find("Player").GetComponent<CC>();
+        CCref = FindObjectOfType<CC>();
     }
 
     void Update()
