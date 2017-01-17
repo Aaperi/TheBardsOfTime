@@ -21,6 +21,8 @@ public class HPScript : MonoBehaviour {
             HitDetection[] temp = FindObjectsOfType<HitDetection>();
             foreach(HitDetection HD in temp)
                     HD.enemyList.Remove(gameObject);
+            TargetManager tamp = GameObject.Find("TargetDetection").GetComponent<TargetManager>();
+            tamp.RemoveTarget(gameObject);
             gameObject.SetActive(false);
         }
 	}
