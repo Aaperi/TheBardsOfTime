@@ -8,29 +8,33 @@ public class HPScript : MonoBehaviour {
     public Image HPSlider;
     public float hitpoints;
     public float maxHitpoints;
-	public bool iNeedUI;
+    public bool iNeedUI;
 
-	void Start () {
+    void Start()
+    {
         hitpoints = maxHitpoints;
         UpdateHealthbar();
-	}
-	
-	void Update () {
-		if (hitpoints <= 0) {
-			hitpoints = 0;
+    }
+
+    void Update()
+    {
+        if (hitpoints <= 0) {
+            hitpoints = 0;
             HitDetection[] temp = FindObjectsOfType<HitDetection>();
-            foreach(HitDetection HD in temp)
-                    HD.enemyList.Remove(gameObject);
+            foreach (HitDetection HD in temp)
+                HD.enemyList.Remove(gameObject);
+            TargetManager tamp = GameObject.Find("TargetDetection").GetComponent<TargetManager>();
+            tamp.RemoveTarget(gameObject);
             gameObject.SetActive(false);
         }
-	}
+    }
 
     private void UpdateHealthbar()
     {
-		if (iNeedUI) {
-			float ratio = hitpoints / maxHitpoints;
-            HPSlider.rectTransform.localScale = new Vector3 (ratio, 1, 1);
-		}
+        if (iNeedUI) {
+            float ratio = hitpoints / maxHitpoints;
+            HPSlider.rectTransform.localScale = new Vector3(ratio, 1, 1);
+        }
     }
 
     public void TakeDamage(float damage)
@@ -39,30 +43,32 @@ public class HPScript : MonoBehaviour {
         UpdateHealthbar();
     }
 
-	private void StartRoot(float duration){
-		StartCoroutine (Root (duration));
-	}
+    private void StartRoot(float duration)
+    {
+        StartCoroutine(Root(duration));
+    }
 
-	IEnumerator Root(float duration){
-		GetComponent<Rigidbody> ().isKinematic = true;
-		yield return new WaitForSeconds (duration);
-		GetComponent<Rigidbody> ().isKinematic = false;
-	}
-		
-	private void StartDot(float[] bundle){
-		StartCoroutine(DamageOverTime(bundle[0], bundle[1]));
-	}
+    IEnumerator Root(float duration)
+    {
+        GetComponent<Rigidbody>().isKinematic = true;
+        yield return new WaitForSeconds(duration);
+        GetComponent<Rigidbody>().isKinematic = false;
+    }
 
-	IEnumerator DamageOverTime(float tics, float damagePerTic)
-	{
-		int currentCount = 1;
+    private void StartDot(float[] bundle)
+    {
+        StartCoroutine(DamageOverTime(bundle[0], bundle[1]));
+    }
+
+    IEnumerator DamageOverTime(float tics, float damagePerTic)
+    {
+        int currentCount = 1;
         yield return new WaitForSeconds(.5f);
-		while(currentCount < tics)
-		{
+        while (currentCount < tics) {
             TakeDamage(damagePerTic);
             yield return new WaitForSeconds(1);
             currentCount++;
-		}
+        }
         TakeDamage(damagePerTic);
         yield return new WaitForSeconds(.5f);
     }

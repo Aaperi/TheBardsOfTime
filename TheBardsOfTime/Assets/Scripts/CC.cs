@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class CC : MonoBehaviour {
 
-    private int insID = 1;
+    private int insID = 0;
     private bool canDoubleJump = false;
     public bool targetIsLocked = false;
     private TargetManager tam;
@@ -94,16 +94,19 @@ public class CC : MonoBehaviour {
         GetInput();
         Turn();
 
-
         Debug.DrawRay(transform.position, Vector3.down, Color.red);
     }
 
     void FixedUpdate()
     {
+        if (target == null)
+            targetIsLocked = false;
+
         Run();
         Jump();
         Combat();
         DoubleJump();
+
         rb.velocity = transform.TransformDirection(velocity);
     }
 
@@ -183,13 +186,16 @@ public class CC : MonoBehaviour {
 
         if (targetLock) {
             if (!targetIsLocked) {
-                Debug.Log("lukkopäälle >:D");
+                target = null;
                 tam.changeTarget("First");
                 if (target != null) {
                     targetIsLocked = true;
+                } else {
+                    targetIsLocked = false;
+                    target = null;
                 }
+                Debug.Log(targetIsLocked);
             } else {
-                Debug.Log("lukkopois D:<");
                 targetIsLocked = false;
             }
         }

@@ -4,56 +4,82 @@ using System.Collections.Generic;
 
 public class TargetManager : MonoBehaviour {
 
-    public List<GameObject> frontList = new List<GameObject>();
-    public List<GameObject> aroundList = new List<GameObject>();
-    public CC CCref;
+    private CC CCref;
     private int pointer = 0;
+    public List<GameObject> enemyList = new List<GameObject>();
 
     void Start()
     {
         CCref = GameObject.Find("Player").GetComponent<CC>();
     }
 
-    public void updateList(string imp, List<GameObject> list)
+    void Update()
     {
-        if (imp == "Front") {
-            frontList = list;
-        } else
-            aroundList = list;
+        Vector3 newRotation = transform.eulerAngles;
+        newRotation.y = Camera.main.transform.eulerAngles.y + 90;
+        transform.eulerAngles = newRotation;
+    }
 
-        if (frontList.Count < 1 && aroundList.Count < 1) {
-            pointer = 0;
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.layer == LayerMask.NameToLayer("Hitbox")) {
+            GameObject temp = col.gameObject.transform.parent.gameObject;
+            if (!enemyList.Contains(temp))
+                enemyList.Add(temp);
         }
+    }
 
-        if (frontList.Count > 0 && aroundList.Count > 0) {
-            foreach(GameObject go in aroundList) {
-                if (frontList.Contains(go)) {
-                    aroundList.Remove(go);
-                }
-            }
+    void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.layer == LayerMask.NameToLayer("Hitbox")) {
+            GameObject temp = col.gameObject.transform.parent.gameObject;
+            if (enemyList.Contains(temp))
+                enemyList.Remove(temp);
         }
+    }
+
+    public void RemoveTarget(GameObject go)
+    {
+        if (CCref.target == go) {
+            CCref.targetIsLocked = false;
+        }
+        enemyList.Remove(go);
+    }
+
+    void SortByDistance(List<GameObject> list)
+    {
+        list.Sort(delegate (GameObject a, GameObject b) {
+            float distA = Vector3.Distance(a.transform.position, transform.position);
+            float distB = Vector3.Distance(b.transform.position, transform.position);
+            return distA.CompareTo(distB);
+        });
     }
 
     public void changeTarget(string who)
     {
-        Debug.Log("Pointer: " + pointer);
-        if (who == "Next") {
-            pointer += 1;
-            if (pointer < frontList.Count && frontList.Count > 0) {
-                CCref.target = frontList[pointer];
-            } else {
-                pointer = 0;
-                CCref.target = frontList[pointer];
-            }
-            Debug.Log(CCref.target.name);
-        } else {
-            pointer = 0;
-            if (frontList.Count > 0)
-                CCref.target = frontList[pointer];
-            /*else if (aroundList.Count > 0)
-                CCref.target = aroundList[pointer];*/
-            else
-                CCref.target = null;
+        switch (who) {
+            case "First": {
+                    pointer = 0;
+                    if (enemyList.Count > 0) {
+                        SortByDistance(enemyList);
+                        CCref.target = enemyList[pointer];
+                    } else
+                        CCref.target = null;
+                    break;
+                }
+
+            case "Next": {
+                    pointer += 1;
+                    if (pointer < enemyList.Count && enemyList.Count > 0) {
+                        CCref.target = enemyList[pointer];
+                    } else {
+                        pointer = 0;
+                        CCref.target = enemyList[pointer];
+                    }
+                    break;
+                }
+
+            default: CCref.targetIsLocked = false; break;
         }
     }
 }
