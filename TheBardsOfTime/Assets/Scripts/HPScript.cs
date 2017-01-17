@@ -10,13 +10,17 @@ public class HPScript : MonoBehaviour {
     public float maxHitpoints;
 	public bool iNeedUI;
 
+    MenuScript menu;
+
 	void Start () {
         hitpoints = maxHitpoints;
         UpdateHealthbar();
+        menu = FindObjectOfType<MenuScript>();
 	}
 	
 	void Update () {
 		if (hitpoints <= 0) {
+            
 			hitpoints = 0;
             HitDetection[] temp = FindObjectsOfType<HitDetection>();
             foreach(HitDetection HD in temp)

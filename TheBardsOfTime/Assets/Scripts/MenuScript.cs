@@ -5,26 +5,29 @@ using System.Collections;
 
 public class MenuScript : MonoBehaviour {
 
-    public Canvas 
+    public Canvas
         mainMenuCanvas,
         exitMenuCanvas,
         pauseMenuCanvas,
         quitMenuCanvas,
-        optionsCanvas;
+        optionsCanvas,
+        gameoverCanvas;
 
     public GameObject
     play, exit, options, // mainMenu
     back, // options
     exitYes, exitNo, // exitGameMenu
     cont, quit, // pauseMenu
-    quitYes, quitNo; // quitToMenu
+    quitYes, quitNo, // quitToMenu
+    restart, quitToMenu; // gameoverMenu
 
     private Button
         playButton, exitButton, optionsButton, // mainMenu
         backButton, // options
         exitYesButton, exitNoButton, // exitMenu
         continueButton, quitButton,  // pauseMenu
-        quitYesButton, quitNoButton; // quitToMenu
+        quitYesButton, quitNoButton, // quitToMenu
+        restartButton, quitToMenuButton; // gameoverMenu
 
     public bool paused, canvasOn, firstLaunch;
 
@@ -158,6 +161,33 @@ public class MenuScript : MonoBehaviour {
         SelectButton(cont);
     }
 
+    public void RestartButton() {
+        DisableAll();
+
+        Application.LoadLevel(Application.loadedLevel);
+    }
+
+    public void AfterDeadQuit() {
+        DisableAll();
+
+        quitMenuCanvas.enabled = true;
+        quitYesButton.enabled = true;
+        quitNoButton.enabled = true;
+
+        SelectButton(quitNo);
+    }
+
+    public void AfterDeadQuitNo() {
+        DisableAll();
+
+        gameoverCanvas.enabled = true;
+
+        restartButton.enabled = true;
+        quitToMenuButton.enabled = true;
+
+        SelectButton(restart);
+    }
+
     #endregion "Button Clicks"
 
     void GetButtonReferences() {
@@ -170,6 +200,8 @@ public class MenuScript : MonoBehaviour {
         quitButton = quit.GetComponent<Button>();
         quitYesButton = quitYes.GetComponent<Button>();
         quitNoButton = quitNo.GetComponent<Button>();
+        restartButton = restart.GetComponent<Button>();
+        quitToMenuButton = quitToMenu.GetComponent<Button>();
     }
 
     bool AnyCanvasOn() {
@@ -195,6 +227,7 @@ public class MenuScript : MonoBehaviour {
         pauseMenuCanvas.enabled = false;
         quitMenuCanvas.enabled = false;
         optionsCanvas.enabled = false;
+        gameoverCanvas.enabled = false;
     }
 
     void DisableAllButtons() {
@@ -213,6 +246,10 @@ public class MenuScript : MonoBehaviour {
         // QuitToMenu
         quitNoButton.enabled = false;
         quitYesButton.enabled = false;
+
+        // GameOverMenu
+        restartButton.enabled = false;
+        quitToMenuButton.enabled = false;
     }
 
     void DisableAll() {
