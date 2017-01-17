@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class HPScript : MonoBehaviour {
 
-    public Image HPSlider;
+    public Slider HPSlider;
     public float hitpoints;
     public float maxHitpoints;
 	public bool iNeedUI;
@@ -28,8 +28,7 @@ public class HPScript : MonoBehaviour {
     private void UpdateHealthbar()
     {
 		if (iNeedUI) {
-			float ratio = hitpoints / maxHitpoints;
-            HPSlider.rectTransform.localScale = new Vector3 (ratio, 1, 1);
+            HPSlider.value = hitpoints;
 		}
     }
 

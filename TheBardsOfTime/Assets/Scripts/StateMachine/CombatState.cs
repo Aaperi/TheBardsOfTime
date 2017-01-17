@@ -61,18 +61,10 @@ public class CombatState : IEnemyState {
         RaycastHit hit;
         if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange, enemy.mask) && hit.collider.CompareTag("Player")) {
             if (attackCoolDown <= 0) {
-                Debug.Log("Lyö");
                 hp.TakeDamage(10f);
                 attackCoolDown = .75f;
             }
         }
-
-        /*if (attackCoolDown <= 0)
-        {
-            Debug.Log("Lyö");
-            hp.TakeDamage(10f);
-            attackCoolDown = .75f;
-        }*/
 
         if (enemy.navMeshAgent.destination != enemy.chaseTarget.position || enemy.navMeshAgent.remainingDistance > 4f) {
             ToChaseState();
