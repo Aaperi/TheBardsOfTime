@@ -33,13 +33,11 @@ public class MenuScript : MonoBehaviour {
         dialoguesPlaying;  //Used for the check whether an dialogue was playing before pausing.
 
     EventSystem eventSystem;
-    DialogueScript dia;
 
 	// Use this for initialization
 	void Start () {
         GetButtonReferences();
         eventSystem = FindObjectOfType<EventSystem>();
-        dia = FindObjectOfType<DialogueScript>();
         DisableAll();
         
 	}
@@ -200,7 +198,7 @@ public class MenuScript : MonoBehaviour {
 
     bool AnyCanvasOn() {
         if (pauseMenuCanvas.enabled || mainMenuCanvas.enabled || exitMenuCanvas.enabled || quitMenuCanvas.enabled
-            || optionsCanvas.enabled || gameoverCanvas.enabled)
+            || optionsCanvas.enabled || gameoverCanvas.enabled || chatCanvas.enabled)
             return true;
         else return false;
     }

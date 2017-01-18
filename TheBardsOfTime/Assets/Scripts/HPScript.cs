@@ -29,9 +29,12 @@ public class HPScript : MonoBehaviour {
             gameObject.SetActive(false);
         }
 
-        if(HPSlider.value <= 0) {
-            menu.ShowGameOver();
+        if(iNeedUI) {
+            if (HPSlider.value <= 0) {
+                menu.ShowGameOver();
+            }
         }
+        
 	}
 
     private void UpdateHealthbar()

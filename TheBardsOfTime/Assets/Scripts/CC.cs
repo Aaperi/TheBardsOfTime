@@ -8,6 +8,7 @@ public class CC : MonoBehaviour {
     private bool canDoubleJump = false;
     public bool targetIsLocked = false;
     private TargetManager tam;
+    private DialogueScript dia;
     public GameObject target;
     public List<GameObject> RefList = new List<GameObject>();
 
@@ -38,6 +39,7 @@ public class CC : MonoBehaviour {
         public string SWAP = "SwapInstrument";
         public string LOCK = "TargetLock";
         public string NEXT = "NextTarget";
+        public string INTERACTION = "Interaction";
     }
 
     public MoveSettings moveSetting = new MoveSettings();
@@ -48,7 +50,7 @@ public class CC : MonoBehaviour {
     Quaternion targetRotation;
     Rigidbody rb;
     float forwardInput, sideInput;
-    bool attackInput, spellInput, skillInput, swapInput, targetLock, jumpInput, nextTarget;
+    bool attackInput, spellInput, skillInput, swapInput, targetLock, jumpInput, nextTarget, intAction;
 
 
 
@@ -66,6 +68,7 @@ public class CC : MonoBehaviour {
         targetRotation = transform.rotation;
         rb = GetComponent<Rigidbody>();
         tam = GameObject.Find("TargetDetection").GetComponent<TargetManager>();
+        dia = FindObjectOfType<DialogueScript>();
 
         forwardInput = sideInput = 0;
         attackInput = skillInput = spellInput = swapInput = targetLock = jumpInput = false;
@@ -86,6 +89,7 @@ public class CC : MonoBehaviour {
         swapInput = Input.GetButtonDown(inputSetting.SWAP);
         targetLock = Input.GetButtonDown(inputSetting.LOCK);
         nextTarget = Input.GetButtonDown(inputSetting.NEXT);
+        intAction = Input.GetButtonDown(inputSetting.INTERACTION);
     }
 
 
@@ -106,6 +110,7 @@ public class CC : MonoBehaviour {
         Jump();
         Combat();
         DoubleJump();
+        Interaction();
 
         rb.velocity = transform.TransformDirection(velocity);
     }
@@ -219,6 +224,17 @@ public class CC : MonoBehaviour {
                 Debug.Log("Instrument swapped into " + insID);
             }
         }
+    }
+
+    void Interaction() {
+        if (intAction && !dia.dialogueActive) {
+            Debug.Log("LAZOR!");
+            RaycastHit hit;
+            Physics.Raycast(transform.position, transform.forward, out hit, 4f);
+            if (hit.collider.name == "PuhuvaSylinteri")
+                StartCoroutine(dia.dialogTest1(1f));
+        }
+
     }
 
 }
