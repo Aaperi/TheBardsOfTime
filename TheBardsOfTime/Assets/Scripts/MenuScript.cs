@@ -205,7 +205,7 @@ public class MenuScript : MonoBehaviour {
     }
 
     bool AnyCanvasOn() {
-        if (pauseMenuCanvas.enabled || mainMenuCanvas.enabled || exitMenuCanvas.enabled || quitMenuCanvas.enabled || optionsCanvas.enabled)
+        if (pauseMenuCanvas.enabled || mainMenuCanvas.enabled || exitMenuCanvas.enabled || quitMenuCanvas.enabled || optionsCanvas.enabled || gameoverCanvas.enabled)
             return true;
         else return false;
     }
@@ -269,5 +269,15 @@ public class MenuScript : MonoBehaviour {
         optionsButton.enabled = true;
 
         SelectButton(play);
+    }
+
+    public void ShowGameOver() {
+        DisableAll();
+
+        gameoverCanvas.enabled = true;
+        restartButton.enabled = true;
+        quitToMenuButton.enabled = true;
+
+        SelectButton(restart);
     }
 }

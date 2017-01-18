@@ -20,14 +20,17 @@ public class HPScript : MonoBehaviour {
 	
 	void Update () {
 		if (hitpoints <= 0) {
-            
 			hitpoints = 0;
             HitDetection[] temp = FindObjectsOfType<HitDetection>();
             foreach(HitDetection HD in temp)
                     HD.enemyList.Remove(gameObject);
-            TargetManager tamp = GameObject.Find("TargetDetection").GetComponent<TargetManager>();
+            TargetManager tamp = FindObjectOfType<TargetManager>();
             tamp.RemoveTarget(gameObject);
             gameObject.SetActive(false);
+        }
+
+        if(HPSlider.value <= 0) {
+            menu.ShowGameOver();
         }
 	}
 
