@@ -13,7 +13,6 @@ public class DialogueScript : MonoBehaviour {
 
     private Text text;
     private MenuScript menu;
-    private float elapsedTime;
 
     [HideInInspector]
     public bool dialogueActive;
@@ -25,19 +24,13 @@ public class DialogueScript : MonoBehaviour {
         text = chat.GetComponentInChildren<Text>();
         menu = FindObjectOfType<MenuScript>();
         portrait = chat.GetComponentInChildren<Image>();
-
         chat.enabled = false;
 	}
 
-    void Update() {
-        Debug.Log(elapsedTime);
-    }
     IEnumerator WaitForTime(float time) {
-        elapsedTime = 0f;
-        while(elapsedTime < time) {
-            elapsedTime += Time.deltaTime;
+        float start = Time.realtimeSinceStartup;
+        while(Time.realtimeSinceStartup < start + time) { 
             if(Input.GetKey(KeyCode.E) && dialogueActive) {
-                yield return new WaitForSeconds(0.2f * Time.timeScale);
                 break;
             }
             else yield return null;

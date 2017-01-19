@@ -51,7 +51,7 @@ public class MenuScript : MonoBehaviour {
          else 
             canvasOn = false;
 
-        if (canvasOn || paused) {
+        if (canvasOn || paused || dia.dialogueActive) {
             Time.timeScale = .000000001f;
         } else {
             Time.timeScale = 1f;
