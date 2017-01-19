@@ -13,7 +13,7 @@ public class Flute : MonoBehaviour
 
     void Start()
     {
-        CCref = GameObject.Find("Player").GetComponent<CC>();
+        CCref = FindObjectOfType<CC>();
         normalSpeed = CCref.moveSetting.forwardVel;
         ins = Resources.Load("Data/FluteSO") as Instrument;
         Colliders = gameObject.GetComponentsInChildren<HitDetection>();

@@ -29,8 +29,12 @@ public class DialogueScript : MonoBehaviour {
 
     IEnumerator WaitForTime(float time) {
         float start = Time.realtimeSinceStartup;
-        while(Time.realtimeSinceStartup < start + time) { 
-            if(Input.GetKey(KeyCode.E) && dialogueActive) {
+        while(Time.realtimeSinceStartup < start + time) {
+            if(Input.GetKeyDown(KeyCode.E) && dialogueActive) {
+                start = Time.realtimeSinceStartup;
+                while (Time.realtimeSinceStartup < start + .2f) {
+                    yield return null;
+                }
                 break;
             }
             else yield return null;
