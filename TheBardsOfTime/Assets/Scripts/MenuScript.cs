@@ -34,12 +34,14 @@ public class MenuScript : MonoBehaviour {
 
     EventSystem eventSystem;
     DialogueScript dia;
+    HPScript hp;
 
 	// Use this for initialization
 	void Start () {
         GetButtonReferences();
         eventSystem = FindObjectOfType<EventSystem>();
         dia = FindObjectOfType<DialogueScript>();
+        hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
         DisableAll();
         
 	}
@@ -64,8 +66,9 @@ public class MenuScript : MonoBehaviour {
         if(Application.loadedLevelName == "menuScene") {
             ShowMainMenu();
         }
-            
-	}
+
+        Debug.Log(hp.HPSlider.value);
+    }
 
     #region "Button clicks"
     public void PlayClick() {
@@ -92,10 +95,7 @@ public class MenuScript : MonoBehaviour {
     public void ExitNo() {
         DisableAll();
 
-        mainMenuCanvas.enabled = true;
-        playButton.enabled = true;
-        exitButton.enabled = true;
-        optionsButton.enabled = true;
+        ShowMainMenu();
 
         SelectButton(play);
     }
@@ -110,10 +110,7 @@ public class MenuScript : MonoBehaviour {
     public void OptionsBack() {
         DisableAll();
 
-        mainMenuCanvas.enabled = true;
-        playButton.enabled = true;
-        exitButton.enabled = true;
-        optionsButton.enabled = true;
+        ShowMainMenu();
 
         SelectButton(play);
     }
@@ -128,7 +125,6 @@ public class MenuScript : MonoBehaviour {
         DisableAll();
 
         quitMenuCanvas.enabled = true;
-
         quitYesButton.enabled = true;
         quitNoButton.enabled = true;
 
@@ -138,10 +134,7 @@ public class MenuScript : MonoBehaviour {
     public void QuitYesButton() {
         DisableAll();
 
-        mainMenuCanvas.enabled = true;
-        playButton.enabled = true;
-        exitButton.enabled = true;
-        optionsButton.enabled = true;
+        ShowMainMenu();
 
         SelectButton(play);
 
@@ -151,9 +144,13 @@ public class MenuScript : MonoBehaviour {
     public void QuitNoButton() {
         DisableAll();
 
-        pauseMenuCanvas.enabled = true;
-        quitButton.enabled = true;
-        continueButton.enabled = true;
+        if(hp.iNeedUI && hp.HPSlider.value > 0) {
+            ShowPauseMenu();
+        }
+
+        if (hp.iNeedUI && hp.HPSlider.value <= 0) {
+            ShowGameOver();
+        }
 
         SelectButton(cont);
     }
@@ -164,7 +161,7 @@ public class MenuScript : MonoBehaviour {
         Application.LoadLevel(Application.loadedLevel);
     }
 
-    /*public void AfterDeadQuit() {
+   /* public void AfterDeadQuit() {
         DisableAll();
 
         quitMenuCanvas.enabled = true;
@@ -172,18 +169,15 @@ public class MenuScript : MonoBehaviour {
         quitNoButton.enabled = true;
 
         SelectButton(quitNo);
-    }*/
+    }
 
     public void AfterDeadQuitNo() {
         DisableAll();
 
-        gameoverCanvas.enabled = true;
-
-        restartButton.enabled = true;
-        quitToMenuButton.enabled = true;
+        ShowGameOver();
 
         SelectButton(restart);
-    }
+    }*/
 
     #endregion "Button Clicks"
 
@@ -207,17 +201,6 @@ public class MenuScript : MonoBehaviour {
             || optionsCanvas.enabled || gameoverCanvas.enabled)
             return true;
         else return false;
-    }
-
-    void ShowPauseMenu() {
-        paused = true;
-
-        pauseMenuCanvas.enabled = true;
-
-        continueButton.enabled = true;
-        quitButton.enabled = true;
-
-        SelectButton(cont);
     }
 
     void DisableAllCanvases() {
@@ -268,6 +251,17 @@ public class MenuScript : MonoBehaviour {
         optionsButton.enabled = true;
 
         SelectButton(play);
+    }
+
+    void ShowPauseMenu() {
+        paused = true;
+
+        pauseMenuCanvas.enabled = true;
+
+        continueButton.enabled = true;
+        quitButton.enabled = true;
+
+        SelectButton(cont);
     }
 
     public void ShowGameOver() {
