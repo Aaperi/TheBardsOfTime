@@ -47,12 +47,12 @@ public class CombatState : IEnemyState {
             enemy.chaseTarget = hit.transform;
             ToChaseState();
         }
-        /* else
+         else
          {
              Vector3 targetDir = player.position - enemy.transform.position;
              Vector3 newDir = Vector3.RotateTowards(enemy.transform.forward, targetDir, enemy.searchingTurnSpeed * Time.deltaTime, 0.0f);
              enemy.transform.rotation = Quaternion.LookRotation(newDir);
-         }*/
+         }
 
     }
 
