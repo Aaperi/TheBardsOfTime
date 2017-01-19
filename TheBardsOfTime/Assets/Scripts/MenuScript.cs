@@ -60,6 +60,10 @@ public class MenuScript : MonoBehaviour {
         if(Input.GetKey(KeyCode.Escape) && !canvasOn){
             ShowPauseMenu();
         }
+
+        if(Application.loadedLevelName == "menuScene") {
+            ShowMainMenu();
+        }
             
 	}
 
@@ -195,6 +199,7 @@ public class MenuScript : MonoBehaviour {
         quitNoButton = quitNo.GetComponent<Button>();
         restartButton = restart.GetComponent<Button>();
         quitToMenuButton = quitToMenu.GetComponent<Button>();
+        backButton = back.GetComponent<Button>();
     }
 
     bool AnyCanvasOn() {
