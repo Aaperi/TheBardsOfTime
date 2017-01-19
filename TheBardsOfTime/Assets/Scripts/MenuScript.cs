@@ -123,7 +123,6 @@ public class MenuScript : MonoBehaviour {
     public void QuitButton() {
         DisableAll();
 
-        pauseMenuCanvas.enabled = false;
         quitMenuCanvas.enabled = true;
 
         quitYesButton.enabled = true;
@@ -161,7 +160,7 @@ public class MenuScript : MonoBehaviour {
         Application.LoadLevel(Application.loadedLevel);
     }
 
-    public void AfterDeadQuit() {
+    /*public void AfterDeadQuit() {
         DisableAll();
 
         quitMenuCanvas.enabled = true;
@@ -169,7 +168,7 @@ public class MenuScript : MonoBehaviour {
         quitNoButton.enabled = true;
 
         SelectButton(quitNo);
-    }
+    }*/
 
     public void AfterDeadQuitNo() {
         DisableAll();
