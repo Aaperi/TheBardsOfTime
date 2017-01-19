@@ -1,0 +1,150 @@
+fileFormatVersion: 2
+guid: 590d48c72f7fd944880d12eaa62e27c8
+timeCreated: 1484753761
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Body
+    100002: f
+    100004: f_001
+    100006: kieli
+    100008: kieli_001
+    100010: kieli_002
+    100012: kieli_003
+    100014: kieltenohain
+    100016: otelauta
+    100018: satua
+    100020: talla
+    100022: Viritin
+    100024: Viritin_001
+    100026: Viritin_002
+    100028: Viritin_003
+    100030: //RootNode
+    400000: Body
+    400002: f
+    400004: f_001
+    400006: kieli
+    400008: kieli_001
+    400010: kieli_002
+    400012: kieli_003
+    400014: kieltenohain
+    400016: otelauta
+    400018: satua
+    400020: talla
+    400022: Viritin
+    400024: Viritin_001
+    400026: Viritin_002
+    400028: Viritin_003
+    400030: //RootNode
+    2300000: Body
+    2300002: f
+    2300004: f_001
+    2300006: kieli
+    2300008: kieli_001
+    2300010: kieli_002
+    2300012: kieli_003
+    2300014: kieltenohain
+    2300016: otelauta
+    2300018: satua
+    2300020: talla
+    2300022: Viritin
+    2300024: Viritin_001
+    2300026: Viritin_002
+    2300028: Viritin_003
+    3300000: Body
+    3300002: f
+    3300004: f_001
+    3300006: kieli
+    3300008: kieli_001
+    3300010: kieli_002
+    3300012: kieli_003
+    3300014: kieltenohain
+    3300016: otelauta
+    3300018: satua
+    3300020: talla
+    3300022: Viritin
+    3300024: Viritin_001
+    3300026: Viritin_002
+    3300028: Viritin_003
+    4300000: kieli
+    4300002: Viritin
+    4300004: satua
+    4300006: talla
+    4300008: kieltenohain
+    4300010: otelauta
+    4300012: Body
+    4300014: f_001
+    4300016: f
+    4300018: Viritin_001
+    4300020: Viritin_002
+    4300022: Viritin_003
+    4300024: kieli_001
+    4300026: kieli_002
+    4300028: kieli_003
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

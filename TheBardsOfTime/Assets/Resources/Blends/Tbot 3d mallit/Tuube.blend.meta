@@ -1,0 +1,125 @@
+fileFormatVersion: 2
+guid: 8b8460d4ec70fa2459ccb852e3d71376
+timeCreated: 1484753788
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Circle_001
+    100002: Cylinder
+    100004: Cylinder_001
+    100006: soitinnappiputki_000
+    100008: soitinnappiputki_001
+    100010: soitinnappiputki_002
+    100012: soitinnappiputki_004
+    100014: soitinnappiputki_005
+    100016: Suuputki
+    100018: Tuuba_runko
+    100020: //RootNode
+    400000: Circle_001
+    400002: Cylinder
+    400004: Cylinder_001
+    400006: soitinnappiputki_000
+    400008: soitinnappiputki_001
+    400010: soitinnappiputki_002
+    400012: soitinnappiputki_004
+    400014: soitinnappiputki_005
+    400016: Suuputki
+    400018: Tuuba_runko
+    400020: //RootNode
+    2300000: Circle_001
+    2300002: Cylinder
+    2300004: Cylinder_001
+    2300006: soitinnappiputki_000
+    2300008: soitinnappiputki_001
+    2300010: soitinnappiputki_002
+    2300012: soitinnappiputki_004
+    2300014: soitinnappiputki_005
+    2300016: Suuputki
+    2300018: Tuuba_runko
+    3300000: Circle_001
+    3300002: Cylinder
+    3300004: Cylinder_001
+    3300006: soitinnappiputki_000
+    3300008: soitinnappiputki_001
+    3300010: soitinnappiputki_002
+    3300012: soitinnappiputki_004
+    3300014: soitinnappiputki_005
+    3300016: Suuputki
+    3300018: Tuuba_runko
+    4300000: soitinnappiputki_000
+    4300002: Circle_001
+    4300004: Cylinder_001
+    4300006: Suuputki
+    4300008: Cylinder
+    4300010: Tuuba_runko
+    4300012: soitinnappiputki_001
+    4300014: soitinnappiputki_002
+    4300016: soitinnappiputki_005
+    4300018: soitinnappiputki_004
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,205 @@
+fileFormatVersion: 2
+guid: cdc22f7b06e6df641abde814cbafff57
+timeCreated: 1484753798
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: betoni_alusta
+    100002: Circle
+    100004: Circle_001
+    100006: Circle_005
+    100008: Cube
+    100010: ikkuna
+    100012: ikkuna_001
+    100014: ikkuna_002
+    100016: ikkuna_003
+    100018: KAtto
+    100020: Lautoja
+    100022: Lautoja_001
+    100024: Lautoja_002
+    100026: Lautoja_003
+    100028: Lautoja_004
+    100030: Lautoja_005
+    100032: Lautoja_006
+    100034: Perusta
+    100036: Perusta_001
+    100038: //RootNode
+    100040: Plane_001
+    100042: Sein_laudat
+    100044: Sein_laudat_001
+    100046: Sein_laudat_002
+    100048: Sein_laudat_003
+    100050: Sphere
+    100052: Tukipilarit
+    400000: betoni_alusta
+    400002: Circle
+    400004: Circle_001
+    400006: Circle_005
+    400008: Cube
+    400010: ikkuna
+    400012: ikkuna_001
+    400014: ikkuna_002
+    400016: ikkuna_003
+    400018: KAtto
+    400020: Lautoja
+    400022: Lautoja_001
+    400024: Lautoja_002
+    400026: Lautoja_003
+    400028: Lautoja_004
+    400030: Lautoja_005
+    400032: Lautoja_006
+    400034: Perusta
+    400036: Perusta_001
+    400038: //RootNode
+    400040: Plane_001
+    400042: Sein_laudat
+    400044: Sein_laudat_001
+    400046: Sein_laudat_002
+    400048: Sein_laudat_003
+    400050: Sphere
+    400052: Tukipilarit
+    2300000: betoni_alusta
+    2300002: Circle
+    2300004: Circle_001
+    2300006: Circle_005
+    2300008: Cube
+    2300010: ikkuna
+    2300012: ikkuna_001
+    2300014: ikkuna_002
+    2300016: ikkuna_003
+    2300018: KAtto
+    2300020: Lautoja
+    2300022: Lautoja_001
+    2300024: Lautoja_002
+    2300026: Lautoja_003
+    2300028: Lautoja_004
+    2300030: Lautoja_005
+    2300032: Lautoja_006
+    2300034: Perusta
+    2300036: Perusta_001
+    2300038: Plane_001
+    2300040: Sein_laudat
+    2300042: Sein_laudat_001
+    2300044: Sein_laudat_002
+    2300046: Sein_laudat_003
+    2300048: Sphere
+    2300050: Tukipilarit
+    3300000: betoni_alusta
+    3300002: Circle
+    3300004: Circle_001
+    3300006: Circle_005
+    3300008: Cube
+    3300010: ikkuna
+    3300012: ikkuna_001
+    3300014: ikkuna_002
+    3300016: ikkuna_003
+    3300018: KAtto
+    3300020: Lautoja
+    3300022: Lautoja_001
+    3300024: Lautoja_002
+    3300026: Lautoja_003
+    3300028: Lautoja_004
+    3300030: Lautoja_005
+    3300032: Lautoja_006
+    3300034: Perusta
+    3300036: Perusta_001
+    3300038: Plane_001
+    3300040: Sein_laudat
+    3300042: Sein_laudat_001
+    3300044: Sein_laudat_002
+    3300046: Sein_laudat_003
+    3300048: Sphere
+    3300050: Tukipilarit
+    4300000: Sphere
+    4300002: Circle_001
+    4300004: Circle
+    4300006: Perusta_001
+    4300008: Plane_001
+    4300010: Cube
+    4300012: Lautoja_003
+    4300014: Lautoja_001
+    4300016: ikkuna
+    4300018: betoni_alusta
+    4300020: KAtto
+    4300022: Perusta
+    4300024: Tukipilarit
+    4300026: Lautoja
+    4300028: ikkuna_001
+    4300030: ikkuna_002
+    4300032: Sein_laudat
+    4300034: Sein_laudat_001
+    4300036: Lautoja_002
+    4300038: Sein_laudat_003
+    4300040: Lautoja_004
+    4300042: Lautoja_005
+    4300044: Sein_laudat_002
+    4300046: Lautoja_006
+    4300048: Circle_005
+    4300050: ikkuna_003
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
