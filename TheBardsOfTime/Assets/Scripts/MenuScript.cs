@@ -66,8 +66,6 @@ public class MenuScript : MonoBehaviour {
         if(Application.loadedLevelName == "menuScene") {
             ShowMainMenu();
         }
-
-        Debug.Log(hp.HPSlider.value);
     }
 
     #region "Button clicks"
