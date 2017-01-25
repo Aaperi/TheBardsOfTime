@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CC : MonoBehaviour {
+public class CC : MonoBehaviour
+{
 
     private int insID = 0;
     private bool canDoubleJump = false;
@@ -10,10 +11,13 @@ public class CC : MonoBehaviour {
     private TargetManager tam;
     private DialogueScript dia;
     public GameObject target;
+    public GameObject ViolinModel;
+    public GameObject FluteModel;
     public List<GameObject> RefList = new List<GameObject>();
 
     [System.Serializable]
-    public class MoveSettings {
+    public class MoveSettings
+    {
         public float forwardVel = 12;
         public float rotateVel = 100;
         public float jumpVel = 10;
@@ -23,12 +27,14 @@ public class CC : MonoBehaviour {
     }
 
     [System.Serializable]
-    public class PhysSettings {
+    public class PhysSettings
+    {
         public float downAccel = .75f;
     }
 
     [System.Serializable]
-    public class InputSettings {
+    public class InputSettings
+    {
         public float inputDelay = 0.1f;
         public string FORWARD_AXIS = "Vertical";
         public string SIDE_AXIS = "Horizontal";
@@ -76,6 +82,8 @@ public class CC : MonoBehaviour {
         foreach (Transform child in GameObject.Find("Instruments").transform)
             RefList.Add(child.gameObject);
 
+        ViolinModel = GameObject.Find("Violin").transform.FindChild("Model").gameObject;
+        FluteModel = GameObject.Find("Flute").transform.FindChild("Model").gameObject;
     }
 
     void GetInput()
@@ -111,7 +119,14 @@ public class CC : MonoBehaviour {
         Combat();
         DoubleJump();
         Interaction();
-
+        if (insID == 0) {
+            ViolinModel.SetActive(true);
+            FluteModel.SetActive(false);
+        }
+        else {
+            ViolinModel.SetActive(false);
+            FluteModel.SetActive(true);
+        }
         rb.velocity = transform.TransformDirection(velocity);
     }
 
@@ -121,7 +136,8 @@ public class CC : MonoBehaviour {
             //move
             velocity.z = moveSetting.forwardVel * forwardInput;
 
-        } else {
+        }
+        else {
             //no velocity
             velocity.z = 0;
         }
@@ -129,7 +145,8 @@ public class CC : MonoBehaviour {
         if (Mathf.Abs(sideInput) > inputSetting.inputDelay && targetIsLocked) {
             //strafe
             velocity.x = moveSetting.forwardVel * sideInput;
-        } else {
+        }
+        else {
             //no velocity
             velocity.x = 0;
         }
@@ -144,7 +161,8 @@ public class CC : MonoBehaviour {
                 direction = 1;
             targetRotation *= Quaternion.AngleAxis(moveSetting.rotateVel * sideInput * direction * Time.deltaTime, Vector3.up);
             transform.rotation = targetRotation;
-        } else {
+        }
+        else {
             rb.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
         }
         if (targetIsLocked) {
@@ -167,9 +185,11 @@ public class CC : MonoBehaviour {
         if (jumpInput && Grounded()) {
             velocity.y = moveSetting.jumpVel;
             canDoubleJump = true;
-        } else if (!jumpInput && Grounded()) {
+        }
+        else if (!jumpInput && Grounded()) {
             velocity.y = 0;
-        } else {
+        }
+        else {
             velocity.y -= physSetting.downAccel;
         }
     }
@@ -195,12 +215,14 @@ public class CC : MonoBehaviour {
                 tam.changeTarget("First");
                 if (target != null) {
                     targetIsLocked = true;
-                } else {
+                }
+                else {
                     targetIsLocked = false;
                     target = null;
                 }
                 Debug.Log(targetIsLocked);
-            } else {
+            }
+            else {
                 targetIsLocked = false;
             }
         }
@@ -217,7 +239,8 @@ public class CC : MonoBehaviour {
                 insID = 1;
                 RefList[insID].SendMessage("Equip");
                 Debug.Log("Instrument swapped into " + insID);
-            } else if (insID == 1) {
+            }
+            else if (insID == 1) {
                 RefList[insID].SendMessage("UnEquip");
                 insID = 0;
                 RefList[insID].SendMessage("Equip");
@@ -226,13 +249,17 @@ public class CC : MonoBehaviour {
         }
     }
 
-    void Interaction() {
+    void Interaction()
+    {
         if (intAction && !dia.dialogueActive) {
             Debug.Log("LAZOR!");
             RaycastHit hit;
             Physics.Raycast(transform.position, transform.forward, out hit, 4f);
-            if (hit.collider.name == "PuhuvaSylinteri")
-                StartCoroutine(dia.dialogTest1(1f));
+            try {
+                if (hit.collider.name == "PuhuvaSylinteri")
+                    StartCoroutine(dia.dialogTest1(1f));
+            }
+            catch { }
         }
 
     }

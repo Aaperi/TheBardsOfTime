@@ -8,6 +8,7 @@ public class pressurePlate : MonoBehaviour {
 
     public int totalWeight = 5;
     public int currentWeight;
+    public GameObject Obstacle;
     public List<GameObject> weights = new List<GameObject>();
 
     void OnTriggerEnter(Collider col) {
@@ -35,7 +36,7 @@ public class pressurePlate : MonoBehaviour {
         }
 
         if (totalWeight == currentWeight) {
-            Destroy(GameObject.Find("ovi"));
+            Destroy(Obstacle);
         }
     }
 }

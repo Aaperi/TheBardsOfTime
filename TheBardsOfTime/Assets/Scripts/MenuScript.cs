@@ -3,7 +3,8 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class MenuScript : MonoBehaviour {
+public class MenuScript : MonoBehaviour
+{
 
     public Canvas
         mainMenuCanvas,
@@ -36,47 +37,53 @@ public class MenuScript : MonoBehaviour {
     DialogueScript dia;
     HPScript hp;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         GetButtonReferences();
         eventSystem = FindObjectOfType<EventSystem>();
         dia = FindObjectOfType<DialogueScript>();
-        hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
+        try {
+            hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
+        }
+        catch { }
         DisableAll();
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if(AnyCanvasOn() || paused) 
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (AnyCanvasOn() || paused)
             canvasOn = true;
-         else 
+        else
             canvasOn = false;
 
         if (canvasOn || paused || dia.dialogueActive) {
             Time.timeScale = .000000001f;
-        } else {
+        }
+        else {
             Time.timeScale = 1f;
         }
 
-        if(Input.GetKey(KeyCode.Escape) && !canvasOn){
+        if (Input.GetKey(KeyCode.Escape) && !canvasOn) {
             ShowPauseMenu();
         }
 
-        if(Application.loadedLevelName == "menuScene") {
+        if (Application.loadedLevelName == "menuScene") {
             ShowMainMenu();
         }
-
-        Debug.Log(hp.HPSlider.value);
     }
 
     #region "Button clicks"
-    public void PlayClick() {
+    public void PlayClick()
+    {
         DisableAll();
         Application.LoadLevel(1); // should be in the build
     }
 
-    public void ExitClick() {
+    public void ExitClick()
+    {
         DisableAll();
 
         mainMenuCanvas.enabled = true;
@@ -88,11 +95,13 @@ public class MenuScript : MonoBehaviour {
         SelectButton(exitNo);
     }
 
-    public void ExitYes() {
+    public void ExitYes()
+    {
         Application.Quit(); // should be in the build
     }
 
-    public void ExitNo() {
+    public void ExitNo()
+    {
         DisableAll();
 
         ShowMainMenu();
@@ -100,14 +109,16 @@ public class MenuScript : MonoBehaviour {
         SelectButton(play);
     }
 
-    public void Options() {
+    public void Options()
+    {
         DisableAll();
 
         optionsCanvas.enabled = true;
         backButton.enabled = true;
     }
 
-    public void OptionsBack() {
+    public void OptionsBack()
+    {
         DisableAll();
 
         ShowMainMenu();
@@ -115,13 +126,15 @@ public class MenuScript : MonoBehaviour {
         SelectButton(play);
     }
 
-    public void ContinueButton() {
+    public void ContinueButton()
+    {
         paused = false;
 
         DisableAll();
     }
 
-    public void QuitButton() {
+    public void QuitButton()
+    {
         DisableAll();
 
         quitMenuCanvas.enabled = true;
@@ -131,7 +144,8 @@ public class MenuScript : MonoBehaviour {
         SelectButton(quitNo);
     }
 
-    public void QuitYesButton() {
+    public void QuitYesButton()
+    {
         DisableAll();
 
         ShowMainMenu();
@@ -141,10 +155,11 @@ public class MenuScript : MonoBehaviour {
         Application.LoadLevel(0);
     }
 
-    public void QuitNoButton() {
+    public void QuitNoButton()
+    {
         DisableAll();
 
-        if(hp.iNeedUI && hp.HPSlider.value > 0) {
+        if (hp.iNeedUI && hp.HPSlider.value > 0) {
             ShowPauseMenu();
         }
 
@@ -155,33 +170,35 @@ public class MenuScript : MonoBehaviour {
         SelectButton(cont);
     }
 
-    public void RestartButton() {
+    public void RestartButton()
+    {
         DisableAll();
 
         Application.LoadLevel(Application.loadedLevel);
     }
 
-   /* public void AfterDeadQuit() {
-        DisableAll();
+    /* public void AfterDeadQuit() {
+         DisableAll();
 
-        quitMenuCanvas.enabled = true;
-        quitYesButton.enabled = true;
-        quitNoButton.enabled = true;
+         quitMenuCanvas.enabled = true;
+         quitYesButton.enabled = true;
+         quitNoButton.enabled = true;
 
-        SelectButton(quitNo);
-    }
+         SelectButton(quitNo);
+     }
 
-    public void AfterDeadQuitNo() {
-        DisableAll();
+     public void AfterDeadQuitNo() {
+         DisableAll();
 
-        ShowGameOver();
+         ShowGameOver();
 
-        SelectButton(restart);
-    }*/
+         SelectButton(restart);
+     }*/
 
     #endregion "Button Clicks"
 
-    void GetButtonReferences() {
+    void GetButtonReferences()
+    {
         playButton = play.GetComponent<Button>();
         exitButton = exit.GetComponent<Button>();
         exitYesButton = exitYes.GetComponent<Button>();
@@ -196,14 +213,16 @@ public class MenuScript : MonoBehaviour {
         backButton = back.GetComponent<Button>();
     }
 
-    bool AnyCanvasOn() {
+    bool AnyCanvasOn()
+    {
         if (pauseMenuCanvas.enabled || mainMenuCanvas.enabled || exitMenuCanvas.enabled || quitMenuCanvas.enabled
             || optionsCanvas.enabled || gameoverCanvas.enabled)
             return true;
         else return false;
     }
 
-    void DisableAllCanvases() {
+    void DisableAllCanvases()
+    {
         mainMenuCanvas.enabled = false;
         exitMenuCanvas.enabled = false;
         pauseMenuCanvas.enabled = false;
@@ -212,7 +231,8 @@ public class MenuScript : MonoBehaviour {
         gameoverCanvas.enabled = false;
     }
 
-    void DisableAllButtons() {
+    void DisableAllButtons()
+    {
         // MainMenu
         playButton.enabled = false;
         exitButton.enabled = false;
@@ -234,16 +254,19 @@ public class MenuScript : MonoBehaviour {
         quitToMenuButton.enabled = false;
     }
 
-    void DisableAll() {
+    void DisableAll()
+    {
         DisableAllButtons();
         DisableAllCanvases();
     }
 
-    void SelectButton(GameObject button) {
+    void SelectButton(GameObject button)
+    {
         eventSystem.SetSelectedGameObject(button);
     }
 
-    void ShowMainMenu() {
+    void ShowMainMenu()
+    {
         mainMenuCanvas.enabled = true;
 
         playButton.enabled = true;
@@ -253,7 +276,8 @@ public class MenuScript : MonoBehaviour {
         SelectButton(play);
     }
 
-    void ShowPauseMenu() {
+    void ShowPauseMenu()
+    {
         paused = true;
 
         pauseMenuCanvas.enabled = true;
@@ -264,7 +288,8 @@ public class MenuScript : MonoBehaviour {
         SelectButton(cont);
     }
 
-    public void ShowGameOver() {
+    public void ShowGameOver()
+    {
         DisableAll();
 
         gameoverCanvas.enabled = true;

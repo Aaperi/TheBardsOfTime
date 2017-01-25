@@ -77,7 +77,7 @@ public class DialogueScript : MonoBehaviour {
             Speaker1("Sheikkailemaan :DDD");
             yield return StartCoroutine(WaitForTime(3f + dialogueSpeed));
 
-            Speaker2("Seikkailu on parasta :-D ja taikajuomat :-DDD");
+            Speaker2("Sheikkailu on parasta :-D ja taikajuomat :-DDD");
             yield return StartCoroutine(WaitForTime(3f + dialogueSpeed));
 
             Speaker1("Joo joo joo!");
