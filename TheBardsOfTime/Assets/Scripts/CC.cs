@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class CC : MonoBehaviour
 {
-
     private int insID = 0;
     private bool canDoubleJump = false;
     public bool targetIsLocked = false;
@@ -14,6 +13,9 @@ public class CC : MonoBehaviour
     public GameObject ViolinModel;
     public GameObject FluteModel;
     public List<GameObject> RefList = new List<GameObject>();
+
+    [HideInInspector]
+    public bool inCombat = false;
 
     [System.Serializable]
     public class MoveSettings

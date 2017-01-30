@@ -29,12 +29,15 @@ public class StatePatternEnemy : MonoBehaviour {
     public NavMeshAgent navMeshAgent;
     [HideInInspector]
     public bool withinRange = false;
+    [HideInInspector]
+    public CC player;
 
     private void Awake() {
         combatState = new CombatState(this);
         chaseState = new ChaseState(this);
         alertState = new AlertState(this);
         patrolState = new PatrolState(this);
+        player = FindObjectOfType<CC>();
 
         navMeshAgent = GetComponent<NavMeshAgent>();
     }

@@ -9,21 +9,26 @@ public class HPScript : MonoBehaviour
     public Slider HPSlider;
     public float hitpoints;
     public float maxHitpoints;
+    public float regenAmount;
+    public float regenSpeed = 2;
     public bool iNeedUI;
     public Transform trans;
     private bool isRooted = false;
     MenuScript menu;
+    CC player;
 
     void Start()
     {
         trans = gameObject.GetComponent<Transform>();
         hitpoints = maxHitpoints;
-        UpdateHealthbar();
         menu = FindObjectOfType<MenuScript>();
+        player = FindObjectOfType<CC>();
+        UpdateHealthbar();
     }
 
     void Update()
     {
+        Debug.Log(player.inCombat);
         if (gameObject.transform.position.y < -50 || hitpoints <= 0) {
             Death();
             if (iNeedUI) {
@@ -35,6 +40,13 @@ public class HPScript : MonoBehaviour
         }
         gameObject.GetComponent<Transform>().position = trans.position;
 
+        if (iNeedUI && !player.inCombat && hitpoints < 100) {
+            regenSpeed -= Time.deltaTime;
+            if(regenSpeed <= 0) {
+                RegenHP(regenAmount);
+                regenSpeed = 2;
+            }
+        }
     }
 
     void Death()
@@ -50,14 +62,22 @@ public class HPScript : MonoBehaviour
 
     private void UpdateHealthbar()
     {
-        if (iNeedUI) {
-            HPSlider.value = hitpoints;
-        }
+        if(iNeedUI)
+        HPSlider.value = hitpoints;
+
     }
 
     public void TakeDamage(float damage)
     {
         hitpoints -= damage;
+        if (iNeedUI) {
+            UpdateHealthbar();
+        }
+
+    }
+
+    private void RegenHP(float regenAmount) {
+        hitpoints += regenAmount;
         UpdateHealthbar();
     }
 

@@ -26,6 +26,7 @@ public class AlertState : IEnemyState {
     public void ToPatrolState() {
         enemy.currentState = enemy.patrolState;
         searchTimer = 0f;
+        enemy.player.inCombat = false;
     }
 
     public void ToAlertState() {
@@ -35,6 +36,7 @@ public class AlertState : IEnemyState {
     public void ToChaseState() {
         enemy.currentState = enemy.chaseState;
         searchTimer = 0f;
+        enemy.player.inCombat = true;
     }
 
     public void ToAttackState() {
