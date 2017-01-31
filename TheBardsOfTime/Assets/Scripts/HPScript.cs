@@ -5,21 +5,19 @@ using System.Collections.Generic;
 
 public class HPScript : MonoBehaviour
 {
-
+    [HideInInspector]
+    public bool rooted = false;
     public Slider HPSlider;
     public float hitpoints;
     public float maxHitpoints;
     public float regenAmount;
     public float regenSpeed = 2;
     public bool iNeedUI;
-    public Transform trans;
-    private bool isRooted = false;
     MenuScript menu;
     CC player;
 
     void Start()
     {
-        trans = gameObject.GetComponent<Transform>();
         hitpoints = maxHitpoints;
         menu = FindObjectOfType<MenuScript>();
         player = FindObjectOfType<CC>();
@@ -35,10 +33,6 @@ public class HPScript : MonoBehaviour
                 menu.ShowGameOver();
             }
         }
-        if (isRooted) {
-            gameObject.GetComponent<Transform>().position = trans.position;
-        }
-        gameObject.GetComponent<Transform>().position = trans.position;
 
         if (iNeedUI && !player.inCombat && hitpoints < 100) {
             regenSpeed -= Time.deltaTime;
@@ -88,12 +82,10 @@ public class HPScript : MonoBehaviour
 
     IEnumerator Root(float duration)
     {
-        trans = gameObject.GetComponent<Transform>();
-        isRooted = true;
-        gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        rooted = true;
+        GetComponent<NavMeshAgent>().Stop();
         yield return new WaitForSeconds(duration);
-        gameObject.GetComponent<Rigidbody>().isKinematic = false;
-        isRooted = false;
+        rooted = false;
     }
 
     private void StartDot(float[] bundle)
