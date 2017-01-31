@@ -23,12 +23,12 @@ public class HPScript : MonoBehaviour
         hitpoints = maxHitpoints;
         menu = FindObjectOfType<MenuScript>();
         player = FindObjectOfType<CC>();
+
         UpdateHealthbar();
     }
 
     void Update()
     {
-        Debug.Log(player.inCombat);
         if (gameObject.transform.position.y < -50 || hitpoints <= 0) {
             Death();
             if (iNeedUI) {
