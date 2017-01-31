@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 using System.Collections;
+using System.Collections.Generic;
+using System.Xml.Serialization;
+using DialogClass;
 
 public class DialogueScript : MonoBehaviour {
     [HideInInspector]
@@ -13,12 +17,14 @@ public class DialogueScript : MonoBehaviour {
 
     private Text text;
     private MenuScript menu;
+    private Dialogue dia;
 
     [HideInInspector]
     public bool dialogueActive;
 
 	// Use this for initialization
 	void Start () {
+        LoadDialogues();
         dialogueActive = false;
         chat = GameObject.Find("chat").GetComponent<Canvas>();
         text = chat.GetComponentInChildren<Text>();
@@ -26,20 +32,6 @@ public class DialogueScript : MonoBehaviour {
         portrait = chat.GetComponentInChildren<Image>();
         chat.enabled = false;
 	}
-
-    IEnumerator WaitForTime(float time) {
-        float start = Time.realtimeSinceStartup;
-        while(Time.realtimeSinceStartup < start + time) {
-            if(Input.GetKeyDown(KeyCode.E) && dialogueActive) {
-                start = Time.realtimeSinceStartup;
-                while (Time.realtimeSinceStartup < start + .2f) {
-                    yield return null;
-                }
-                break;
-            }
-            else yield return null;
-        }
-    }
 
     void Speaker1(string dialogue) {
         portrait.sprite = speaker1;
@@ -51,39 +43,41 @@ public class DialogueScript : MonoBehaviour {
         text.text = dialogue;
     }
 
-    public IEnumerator dialogTest1(float delay) {
+    private void LoadDialogues()
+    {
+        XmlSerializer serial = new XmlSerializer(typeof(Dialogue));
+        Stream reader = new FileStream("Assets/Resources/Data/dialogs.xml", FileMode.Open);
+        dia = (Dialogue)serial.Deserialize(reader);
+    }
+
+    public IEnumerator dialogFromXml(int sceneID)
+    {
         chat.enabled = true;
         if (!dialogueActive) {
             dialogueActive = true;
-
-            Speaker2("Hyvää päivää Seikkalija");
-            yield return StartCoroutine(WaitForTime(2f + dialogueSpeed));
-
-            Speaker2("Huomaan että teillä on mahtipisteet lopussa");
-            yield return StartCoroutine(WaitForTime(3f + dialogueSpeed));
-
-            Speaker1("Kyllä vain, olisiko teillä myydä taikajuomaa?");
-            yield return StartCoroutine(WaitForTime(3f + dialogueSpeed));
-
-            Speaker2("Kyllä vain, 23 kultarahaa");
-            yield return StartCoroutine(WaitForTime(2f + dialogueSpeed));
-
-            Speaker1("Kiitos!");
-            yield return StartCoroutine(WaitForTime(1f + dialogueSpeed));
-
-            Speaker2("Eipä kestä. Olisiko mahdollista udella, minne olette matkalla?");
-            yield return StartCoroutine(WaitForTime(3f + dialogueSpeed));
-
-            Speaker1("Sheikkailemaan :DDD");
-            yield return StartCoroutine(WaitForTime(3f + dialogueSpeed));
-
-            Speaker2("Sheikkailu on parasta :-D ja taikajuomat :-DDD");
-            yield return StartCoroutine(WaitForTime(3f + dialogueSpeed));
-
-            Speaker1("Joo joo joo!");
-            yield return StartCoroutine(WaitForTime(3f + dialogueSpeed));
+            foreach (Line ln in dia.Scenes[sceneID].Lines) {
+                if(ln.SpeakerID == 1)
+                    Speaker1(ln.Text);
+                else
+                    Speaker2(ln.Text);
+                yield return StartCoroutine(WaitForTime(ln.Delay));
+            }
         }
         dialogueActive = false;
         chat.enabled = false;
+    }
+
+    IEnumerator WaitForTime(float time)
+    {
+        float start = Time.realtimeSinceStartup;
+        while (Time.realtimeSinceStartup < start + time) {
+            if (Input.GetKeyDown(KeyCode.E) && dialogueActive) {
+                start = Time.realtimeSinceStartup;
+                while (Time.realtimeSinceStartup < start + .2f) {
+                    yield return null;
+                }
+                break;
+            } else yield return null;
+        }
     }
 }

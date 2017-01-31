@@ -259,7 +259,7 @@ public class CC : MonoBehaviour
             Physics.Raycast(transform.position, transform.forward, out hit, 4f);
             try {
                 if (hit.collider.name == "PuhuvaSylinteri")
-                    StartCoroutine(dia.dialogTest1(1f));
+                    StartCoroutine(dia.dialogFromXml(0));
             }
             catch { }
         }

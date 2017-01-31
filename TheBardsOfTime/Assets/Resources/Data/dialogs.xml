@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<dialogue>
+	<scene name="firstScene">
+		<lines>
+			<line speakerID="2" delay="2">
+				<text>Hyvää päivää Seikkailija</text>
+			</line>
+			<line speakerID="2" delay="3">
+				<text>Huomaan että teillä on mahtipisteet lopussa</text>
+			</line>
+			<line speakerID="1" delay="3">
+				<text>Kyllä vain, olisiko teillä myydä taikajuomaa?</text>
+			</line>
+			<line speakerID="2" delay="2">
+				<text>Kyllä vain, 23 kultarahaa</text>
+			</line>
+			<line speakerID="1" delay="1">
+				<text>Kiitos!</text>
+			</line>
+			<line speakerID="2" delay="3">
+				<text>Eipä kestä. Olisiko mahdollista udella, minne olette matkalla?</text>
+			</line>
+			<line speakerID="1" delay="3">
+				<text>Sheikkailemaan :DDD</text>
+			</line>
+			<line speakerID="2" delay="3">
+				<text>Sheikkailu on parasta :-D ja taikajuomat :-DDD</text>
+			</line>
+			<line speakerID="1" delay="3">
+				<text>Joo joo joo!</text>
+			</line>
+		</lines>
+	</scene>
+</dialogue>
