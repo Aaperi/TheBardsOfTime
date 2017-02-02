@@ -30,12 +30,14 @@ public class MenuScript : MonoBehaviour
         quitYesButton, quitNoButton, // quitToMenu
         restartButton, quitToMenuButton; // gameoverMenu
 
-    public bool paused, canvasOn,
+    public bool 
+        paused, canvasOn,
         dialoguesPlaying;  //Used for the check whether an dialogue was playing before pausing.
 
     EventSystem eventSystem;
     DialogueScript dia;
     HPScript hp;
+    CameraController player;
 
     // Use this for initialization
     void Start()
@@ -43,11 +45,18 @@ public class MenuScript : MonoBehaviour
         GetButtonReferences();
         eventSystem = FindObjectOfType<EventSystem>();
         dia = FindObjectOfType<DialogueScript>();
+        player = FindObjectOfType<CameraController>();
+
         try {
             hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
         }
         catch { }
         DisableAll();
+
+        if (Application.loadedLevelName == "menuScene") {
+            ShowMainMenu();
+        }
+
 
     }
 
@@ -68,10 +77,6 @@ public class MenuScript : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Escape) && !canvasOn) {
             ShowPauseMenu();
-        }
-
-        if (Application.loadedLevelName == "menuScene") {
-            ShowMainMenu();
         }
     }
 

@@ -36,6 +36,7 @@ public class ChaseState : IEnemyState {
 
     public void ToAttackState() {
         enemy.currentState = enemy.combatState;
+        enemy.player.inCombat = true;
     }
 
     private void Look() {

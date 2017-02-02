@@ -15,18 +15,25 @@ public class HPScript : MonoBehaviour
     public bool iNeedUI;
     MenuScript menu;
     CC player;
+    MeshRenderer mesh;
+
+    bool vilkkuminen = false;
+    float vilkkumisAika;
 
     void Start()
     {
         hitpoints = maxHitpoints;
         menu = FindObjectOfType<MenuScript>();
         player = FindObjectOfType<CC>();
-
+        mesh = GetComponent<MeshRenderer>();
         UpdateHealthbar();
+
+        vilkkumisAika = .75f;
     }
 
     void Update()
     {
+        
         if (gameObject.transform.position.y < -50 || hitpoints <= 0) {
             Death();
             if (iNeedUI) {
@@ -41,6 +48,21 @@ public class HPScript : MonoBehaviour
                 regenSpeed = 2;
             }
         }
+
+        if(vilkkuminen) {
+            vilkkumisAika -= Time.deltaTime;
+            mesh.material.color = Color.white;
+            if (vilkkumisAika <= 0) {
+                if(iNeedUI) {
+                    mesh.material.color = Color.blue;
+                }
+                else
+                    mesh.material.color = Color.red;
+
+                vilkkuminen = false;
+                vilkkumisAika = .25f;
+            }
+        }
     }
 
     void Death()
@@ -52,6 +74,8 @@ public class HPScript : MonoBehaviour
         TargetManager tamp = FindObjectOfType<TargetManager>();
         tamp.RemoveTarget(gameObject);
         gameObject.SetActive(false);
+
+        player.inCombat = false;
     }
 
     private void UpdateHealthbar()
@@ -64,10 +88,10 @@ public class HPScript : MonoBehaviour
     public void TakeDamage(float damage)
     {
         hitpoints -= damage;
+        vilkkuminen = true;
         if (iNeedUI) {
             UpdateHealthbar();
         }
-
     }
 
     private void RegenHP(float regenAmount) {
