@@ -38,11 +38,8 @@ public class MenuScript : MonoBehaviour
     EventSystem eventSystem;
     DialogueScript dia;
     HPScript hp;
-<<<<<<< HEAD
-    CameraController player;
-=======
     Text aText;
->>>>>>> origin/master
+
 
     // Use this for initialization
     void Start()
@@ -51,7 +48,6 @@ public class MenuScript : MonoBehaviour
         GetButtonReferences();
         eventSystem = FindObjectOfType<EventSystem>();
         dia = FindObjectOfType<DialogueScript>();
-        player = FindObjectOfType<CameraController>();
 
         try {
             hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
