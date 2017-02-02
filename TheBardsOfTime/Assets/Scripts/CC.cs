@@ -7,6 +7,7 @@ public class CC : MonoBehaviour
     private int insID = 0;
     private bool canDoubleJump = false;
     public bool targetIsLocked = false;
+    private MenuScript MSref;
     private TargetManager tam;
     private DialogueScript dia;
     public GameObject target;
@@ -77,6 +78,7 @@ public class CC : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         tam = GameObject.Find("TargetDetection").GetComponent<TargetManager>();
         dia = FindObjectOfType<DialogueScript>();
+        MSref = FindObjectOfType<MenuScript>();
 
         forwardInput = sideInput = 0;
         attackInput = skillInput = spellInput = swapInput = targetLock = jumpInput = false;
@@ -253,17 +255,24 @@ public class CC : MonoBehaviour
 
     void Interaction()
     {
-        if (intAction && !dia.dialogueActive) {
-            Debug.Log("LAZOR!");
-            RaycastHit hit;
-            Physics.Raycast(transform.position, transform.forward, out hit, 4f);
-            try {
-                if (hit.collider.name == "PuhuvaSylinteri")
-                    StartCoroutine(dia.dialogFromXml(0));
-            }
-            catch { }
-        }
+        RaycastHit hit;
+        Physics.Raycast(transform.position, transform.forward, out hit, 4f);
 
+        try {
+            if (hit.collider.gameObject.GetComponent<Mouth>() != null) {
+                if(!MSref.actionGuide.activeSelf)
+                    MSref.ShowGuide("speak with " + hit.collider.name);
+                if(intAction)
+                    StartCoroutine(dia.dialogFromXml(hit.collider.gameObject.GetComponent<Mouth>().dialogID));
+            } else {
+                if(MSref.actionGuide.activeSelf)
+                    MSref.HideGuide();
+            }
+        }
+        catch {
+            if (MSref.actionGuide.activeSelf)
+                MSref.HideGuide();
+        }
     }
 
 }

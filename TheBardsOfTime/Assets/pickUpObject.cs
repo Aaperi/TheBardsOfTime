@@ -6,6 +6,12 @@ public class pickUpObject : MonoBehaviour {
     private bool carrying;
     private float smooth;
     private GameObject carriedObject;
+    private MenuScript MSref;
+
+    void Start()
+    {
+        MSref = FindObjectOfType<MenuScript>();
+    }
 
 	void Update () {
 
@@ -20,7 +26,11 @@ public class pickUpObject : MonoBehaviour {
         if (carrying && carriedObject != null) {
             Carry();
         }
-	}
+
+        if(!carrying && !MSref.actionGuide.activeSelf && carriedObject != null) {
+            MSref.SendMessage("ShowGuide", "pickup " + carriedObject.name);
+        }
+    }
 
 
     void Carry() {
@@ -41,6 +51,7 @@ public class pickUpObject : MonoBehaviour {
         if(col.gameObject == carriedObject && !carrying) {
             carriedObject = null;
         }
+        MSref.SendMessage("HideGuide");
     }
 
     void Drop()
@@ -53,6 +64,7 @@ public class pickUpObject : MonoBehaviour {
     {
         carrying = true;
         carriedObject.GetComponent<Rigidbody>().isKinematic = true;
+        MSref.SendMessage("HideGuide");
     }
 }
 
