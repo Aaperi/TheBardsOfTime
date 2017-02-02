@@ -46,7 +46,7 @@ public class HPScript : MonoBehaviour
             if(regenSpeed <= 0) {
                 RegenHP(regenAmount);
                 regenSpeed = 2;
-            }
+            } 
         }
 
         if(vilkkuminen) {

@@ -15,12 +15,13 @@ public class MenuScript : MonoBehaviour
         gameoverCanvas;
 
     public GameObject
-    play, exit, options, // mainMenu
-    back, // options
-    exitYes, exitNo, // exitGameMenu
-    cont, quit, // pauseMenu
-    quitYes, quitNo, // quitToMenu
-    restart, quitToMenu; // gameoverMenu
+        play, exit, options, // mainMenu
+        back, // options
+        exitYes, exitNo, // exitGameMenu
+        cont, quit, // pauseMenu
+        quitYes, quitNo, // quitToMenu
+        restart, quitToMenu, // gameoverMenu
+        actionGuide; // is displayed when player is next to an item or npc
 
     private Button
         playButton, exitButton, optionsButton, // mainMenu
@@ -37,11 +38,16 @@ public class MenuScript : MonoBehaviour
     EventSystem eventSystem;
     DialogueScript dia;
     HPScript hp;
+<<<<<<< HEAD
     CameraController player;
+=======
+    Text aText;
+>>>>>>> origin/master
 
     // Use this for initialization
     void Start()
     {
+        init();
         GetButtonReferences();
         eventSystem = FindObjectOfType<EventSystem>();
         dia = FindObjectOfType<DialogueScript>();
@@ -78,6 +84,13 @@ public class MenuScript : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape) && !canvasOn) {
             ShowPauseMenu();
         }
+    }
+
+    void init()
+    {
+        actionGuide = GameObject.Find("actionGuide");
+        aText = GameObject.Find("aText").GetComponent<Text>();
+        actionGuide.SetActive(false);
     }
 
     #region "Button clicks"
@@ -302,5 +315,17 @@ public class MenuScript : MonoBehaviour
         quitToMenuButton.enabled = true;
 
         SelectButton(restart);
+    }
+
+    public void ShowGuide(string message)
+    {
+        actionGuide.SetActive(true);
+        aText.text += message;
+    }
+
+    public void HideGuide()
+    {
+        aText.text = aText.text.Substring(0, 13);
+        actionGuide.SetActive(false);
     }
 }
