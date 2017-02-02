@@ -81,7 +81,7 @@ public class HPScript : MonoBehaviour
     private void UpdateHealthbar()
     {
         if(iNeedUI)
-        HPSlider.value = hitpoints;
+            HPSlider.value = hitpoints;
 
     }
 
