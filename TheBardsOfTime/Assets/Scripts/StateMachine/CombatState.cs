@@ -5,7 +5,6 @@ public class CombatState : IEnemyState {
 
     private readonly StatePatternEnemy enemy;
     private HPScript hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
-    private float attackCoolDown = .75f;
     private Transform player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
 
     public CombatState(StatePatternEnemy statePatternEnemy) {
@@ -57,12 +56,13 @@ public class CombatState : IEnemyState {
     }
 
     void Attack() {
-        attackCoolDown -= Time.deltaTime;
+        float cd = enemy.attackCoolDown;
+        cd -= Time.deltaTime;
         RaycastHit hit;
         if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange, enemy.mask) && hit.collider.CompareTag("Player")) {
-            if (attackCoolDown <= 0) {
-                hp.TakeDamage(10f);
-                attackCoolDown = .75f;
+            if (cd <= 0) {
+                hp.TakeDamage(enemy.attackDamage);
+                cd = enemy.attackCoolDown;
             }
         }
 

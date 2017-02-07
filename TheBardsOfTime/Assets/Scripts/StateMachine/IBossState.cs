@@ -9,6 +9,8 @@ public interface IBossState {
 
     void OnTriggerExit(Collider other);
 
+    void ToChaseState();
+
     void ToCombatState();
 
     void ToCastingState();

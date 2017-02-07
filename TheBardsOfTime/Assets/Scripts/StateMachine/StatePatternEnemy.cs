@@ -6,6 +6,8 @@ public class StatePatternEnemy : MonoBehaviour {
     public float searchingTurnSpeed;
     public float searchingDuration;
     public float sightRange;
+    public float attackDamage;
+    public float attackCoolDown;
     //public Transform[] wayPoints;
     public Transform eyes;
     public Vector3 offset = new Vector3(0, .5f, 0);
