@@ -126,8 +126,7 @@ public class CC : MonoBehaviour
         if (insID == 0) {
             ViolinModel.SetActive(true);
             FluteModel.SetActive(false);
-        }
-        else {
+        } else {
             ViolinModel.SetActive(false);
             FluteModel.SetActive(true);
         }
@@ -140,8 +139,7 @@ public class CC : MonoBehaviour
             //move
             velocity.z = moveSetting.forwardVel * forwardInput;
 
-        }
-        else {
+        } else {
             //no velocity
             velocity.z = 0;
         }
@@ -149,8 +147,7 @@ public class CC : MonoBehaviour
         if (Mathf.Abs(sideInput) > inputSetting.inputDelay && targetIsLocked) {
             //strafe
             velocity.x = moveSetting.forwardVel * sideInput;
-        }
-        else {
+        } else {
             //no velocity
             velocity.x = 0;
         }
@@ -165,8 +162,7 @@ public class CC : MonoBehaviour
                 direction = 1;
             targetRotation *= Quaternion.AngleAxis(moveSetting.rotateVel * sideInput * direction * Time.deltaTime, Vector3.up);
             transform.rotation = targetRotation;
-        }
-        else {
+        } else {
             rb.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
         }
         if (targetIsLocked) {
@@ -189,13 +185,29 @@ public class CC : MonoBehaviour
         if (jumpInput && Grounded()) {
             velocity.y = moveSetting.jumpVel;
             canDoubleJump = true;
-        }
-        else if (!jumpInput && Grounded()) {
+        } else if (!jumpInput && Grounded()) {
             velocity.y = 0;
-        }
-        else {
+        } else {
             velocity.y -= physSetting.downAccel;
         }
+    }
+
+    void LockTarget()
+    {
+        target = null;
+        tam.changeTarget("First");
+        if (target != null) {
+            targetIsLocked = true;
+        } else {
+            targetIsLocked = false;
+            target = null;
+        }
+    }
+
+    void UnlockTarget()
+    {
+        target = null;
+        targetIsLocked = false;
     }
 
 
@@ -215,19 +227,9 @@ public class CC : MonoBehaviour
 
         if (targetLock) {
             if (!targetIsLocked) {
-                target = null;
-                tam.changeTarget("First");
-                if (target != null) {
-                    targetIsLocked = true;
-                }
-                else {
-                    targetIsLocked = false;
-                    target = null;
-                }
-                Debug.Log(targetIsLocked);
-            }
-            else {
-                targetIsLocked = false;
+                LockTarget();
+            } else {
+                UnlockTarget();
             }
         }
 
@@ -243,8 +245,7 @@ public class CC : MonoBehaviour
                 insID = 1;
                 RefList[insID].SendMessage("Equip");
                 Debug.Log("Instrument swapped into " + insID);
-            }
-            else if (insID == 1) {
+            } else if (insID == 1) {
                 RefList[insID].SendMessage("UnEquip");
                 insID = 0;
                 RefList[insID].SendMessage("Equip");
@@ -260,16 +261,15 @@ public class CC : MonoBehaviour
 
         try {
             if (hit.collider.gameObject.GetComponent<Mouth>() != null) {
-                if(!MSref.actionGuide.activeSelf)
+                if (!MSref.actionGuide.activeSelf)
                     MSref.ShowGuide("speak with " + hit.collider.name);
-                if(intAction)
+                if (intAction)
                     StartCoroutine(dia.dialogFromXml(hit.collider.gameObject.GetComponent<Mouth>().dialogID));
             } else {
-                if(MSref.actionGuide.activeSelf)
+                if (MSref.actionGuide.activeSelf)
                     MSref.HideGuide();
             }
-        }
-        catch {
+        } catch {
             if (MSref.actionGuide.activeSelf)
                 MSref.HideGuide();
         }

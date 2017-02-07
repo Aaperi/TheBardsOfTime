@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
     public Transform target;
+    private CC CCref;
 
     [System.Serializable]
     public class PositionSettings
@@ -71,7 +72,7 @@ public class CameraController : MonoBehaviour {
 	void Start () {
         
         SetCameraTarget(target);
-
+        CCref = FindObjectOfType<CC>();
         vOrbitInput = hOrbitInput = zoomInput = hOrbitSnapInput = mouseOrbitInput = vMouseOrbitInput = 0;
         MoveToTarget();
         collision.Initialize(Camera.main);
@@ -87,7 +88,6 @@ public class CameraController : MonoBehaviour {
 	void Update () {
         GetInput();
         ZoomInOnTarget();	
-  
 	}
 
     public void SetCameraTarget(Transform t)
@@ -116,7 +116,9 @@ public class CameraController : MonoBehaviour {
         MoveToTarget();
         LookAtTarget();
         OrbitTarget();
-        MouseOrbitTarget();
+
+        if(CCref.targetIsLocked)
+            LockedCamera();
 
         collision.UpdateCameraClipPoints(transform.position, transform.rotation, 
             ref collision.adjustedCameraClipPoints);
@@ -206,9 +208,10 @@ public class CameraController : MonoBehaviour {
         if (orbit.xRotation < orbit.minXRotation) orbit.xRotation = orbit.minXRotation;
     }
 
-    void MouseOrbitTarget()
+    void LockedCamera()
     {
-
+        orbit.yRotation = -180f;
+        orbit.xRotation = -20f;
     }
 
     void ZoomInOnTarget()
