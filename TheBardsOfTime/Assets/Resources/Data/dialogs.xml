@@ -2,33 +2,36 @@
 <dialogue>
 	<scene name="firstScene">
 		<lines>
-			<line speakerID="2" delay="2">
+			<line speakerID="2" delay="1.5">
 				<text>Hyvää päivää Seikkailija</text>
 			</line>
-			<line speakerID="2" delay="3">
+			<line speakerID="2" delay="2">
 				<text>Huomaan että teillä on mahtipisteet lopussa</text>
 			</line>
-			<line speakerID="1" delay="3">
+			<line speakerID="1" delay="2">
 				<text>Kyllä vain, olisiko teillä myydä taikajuomaa?</text>
 			</line>
-			<line speakerID="2" delay="2">
+			<line speakerID="2" delay="1.5">
 				<text>Kyllä vain, 23 kultarahaa</text>
 			</line>
-			<line speakerID="1" delay="1">
+			<line speakerID="1" delay="1.5">
 				<text>Kiitos!</text>
 			</line>
-			<line speakerID="2" delay="3">
+			<line speakerID="2" delay="2">
 				<text>Eipä kestä. Olisiko mahdollista udella, minne olette matkalla?</text>
 			</line>
-			<line speakerID="1" delay="3">
+			<line speakerID="1" delay="1.5">
 				<text>Sheikkailemaan :DDD</text>
 			</line>
-			<line speakerID="2" delay="3">
+			<line speakerID="2" delay="2">
 				<text>Sheikkailu on parasta :-D ja taikajuomat :-DDD</text>
 			</line>
-			<line speakerID="1" delay="3">
+			<line speakerID="1" delay="1.5">
 				<text>Joo joo joo!</text>
 			</line>
+      <line speakerID="2" delay="1.5">
+        <text>Hyvä</text>
+      </line>
 		</lines>
 	</scene>
 </dialogue>

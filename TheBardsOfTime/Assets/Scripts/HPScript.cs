@@ -5,46 +5,62 @@ using System.Collections.Generic;
 
 public class HPScript : MonoBehaviour
 {
-
+    [HideInInspector]
+    public bool rooted = false;
     public Slider HPSlider;
     public float hitpoints;
     public float maxHitpoints;
     public float regenAmount;
     public float regenSpeed = 2;
     public bool iNeedUI;
-    public Transform trans;
-    private bool isRooted = false;
     MenuScript menu;
     CC player;
+    MeshRenderer mesh;
+
+    bool vilkkuminen = false;
+    float vilkkumisAika;
 
     void Start()
     {
-        trans = gameObject.GetComponent<Transform>();
         hitpoints = maxHitpoints;
         menu = FindObjectOfType<MenuScript>();
         player = FindObjectOfType<CC>();
-
+        mesh = GetComponent<MeshRenderer>();
         UpdateHealthbar();
+
+        vilkkumisAika = .75f;
     }
 
     void Update()
     {
+        
         if (gameObject.transform.position.y < -50 || hitpoints <= 0) {
             Death();
             if (iNeedUI) {
                 menu.ShowGameOver();
             }
         }
-        if (isRooted) {
-            gameObject.GetComponent<Transform>().position = trans.position;
-        }
-        gameObject.GetComponent<Transform>().position = trans.position;
 
         if (iNeedUI && !player.inCombat && hitpoints < 100) {
             regenSpeed -= Time.deltaTime;
             if(regenSpeed <= 0) {
                 RegenHP(regenAmount);
                 regenSpeed = 2;
+            } 
+        }
+
+        if(vilkkuminen) {
+            vilkkumisAika -= Time.deltaTime;
+            mesh.material.color = Color.white;
+            if (vilkkumisAika <= 0) {
+                if(iNeedUI) {
+                    mesh.material.color = Color.blue;
+                }
+                else
+                    mesh.material.color = Color.red;
+
+                vilkkuminen = false;
+                vilkkumisAika = .25f;
             }
         }
     }
@@ -58,22 +74,24 @@ public class HPScript : MonoBehaviour
         TargetManager tamp = FindObjectOfType<TargetManager>();
         tamp.RemoveTarget(gameObject);
         gameObject.SetActive(false);
+
+        player.inCombat = false;
     }
 
     private void UpdateHealthbar()
     {
         if(iNeedUI)
-        HPSlider.value = hitpoints;
+            HPSlider.value = hitpoints;
 
     }
 
     public void TakeDamage(float damage)
     {
         hitpoints -= damage;
+        vilkkuminen = true;
         if (iNeedUI) {
             UpdateHealthbar();
         }
-
     }
 
     private void RegenHP(float regenAmount) {
@@ -88,12 +106,10 @@ public class HPScript : MonoBehaviour
 
     IEnumerator Root(float duration)
     {
-        trans = gameObject.GetComponent<Transform>();
-        isRooted = true;
-        gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        rooted = true;
+        GetComponent<NavMeshAgent>().Stop();
         yield return new WaitForSeconds(duration);
-        gameObject.GetComponent<Rigidbody>().isKinematic = false;
-        isRooted = false;
+        rooted = false;
     }
 
     private void StartDot(float[] bundle)

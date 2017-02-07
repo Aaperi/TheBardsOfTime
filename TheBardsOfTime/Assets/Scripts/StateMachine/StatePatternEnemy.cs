@@ -31,6 +31,7 @@ public class StatePatternEnemy : MonoBehaviour {
     public bool withinRange = false;
     [HideInInspector]
     public CC player;
+    private HPScript hps;
 
     private void Awake() {
         combatState = new CombatState(this);
@@ -38,6 +39,7 @@ public class StatePatternEnemy : MonoBehaviour {
         alertState = new AlertState(this);
         patrolState = new PatrolState(this);
         player = FindObjectOfType<CC>();
+        hps = GetComponent<HPScript>();
 
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
@@ -50,7 +52,9 @@ public class StatePatternEnemy : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         Debug.DrawRay(eyes.position, eyes.forward * sightRange, Color.red);
-        currentState.UpdateState();
+        if (!hps.rooted) {
+            currentState.UpdateState();
+        }
     }
 
     private void OnTriggerEnter(Collider other) {
