@@ -14,6 +14,8 @@ public class BossData : ScriptableObject {
 
     [System.Serializable]
     public class SpellSettings {
+        public float castingRange;
+        public float castingRadius;
         public float CastTime;
         public float Cooldown;
         public float Damage;

@@ -9,7 +9,6 @@ public class BossChaseState : IBossState {
     }
 
     public void UpdateState() {
-        Debug.Log(boss.navMeshAgent.remainingDistance);
         if (boss.startCasting) {
             ToCastingState();
         }
@@ -20,7 +19,7 @@ public class BossChaseState : IBossState {
     }
 
     public void OnTriggerEnter(Collider other) {
-
+        boss.player.inCombat = true;
     }
 
     public void OnTriggerExit(Collider other) {
@@ -48,7 +47,6 @@ public class BossChaseState : IBossState {
     }
 
     void Chase() {
-        boss.navMeshAgent.destination = boss.chaseTarget.position;
         if (boss.navMeshAgent.remainingDistance < 4.1f) {
             boss.navMeshAgent.Stop();
             ToCombatState();

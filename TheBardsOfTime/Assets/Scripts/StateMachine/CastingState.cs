@@ -5,6 +5,7 @@ public class CastingState : IBossState {
     private readonly StatePatternBoss boss;
     private HPScript hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
     private Transform player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+    public float castSpell;
 
     public CastingState(StatePatternBoss statePatternBoss) {
         boss = statePatternBoss;
@@ -38,10 +39,10 @@ public class CastingState : IBossState {
     }
 
     void Casting() {
-        float castSpell = boss.bossData.spell.CastTime;
+        boss.navMeshAgent.Stop();
         castSpell -= Time.deltaTime;
-
         if(castSpell <= 0) {
+            
             Cast();
             boss.startCasting = false;
             boss.cd = boss.timeToCasting;
@@ -51,7 +52,10 @@ public class CastingState : IBossState {
     }
 
     void Cast() {
-        hp.TakeDamage(boss.bossData.spell.Damage);
+        Vector3 targetDir = player.position - boss.transform.position;
+        if(Vector3.Distance(boss.transform.position, boss.player.transform.position) <= boss.bossData.spell.castingRange && Vector3.Angle(targetDir, boss.transform.forward) <= (boss.bossData.spell.castingRadius / 2)) {
+            hp.TakeDamage(boss.bossData.spell.Damage);
+        }
         ToChaseState();
     }
 }

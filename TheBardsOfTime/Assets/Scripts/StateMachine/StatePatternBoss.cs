@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class StatePatternBoss : MonoBehaviour {
-    public float castingRadius;
-    public float castingRange;
     public float turnSpeed;
     public float sightRange;
     public float timeToCasting;
@@ -51,22 +49,29 @@ public class StatePatternBoss : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        combatState.attcd = attackCoolDown;
+        castingState.castSpell = bossData.spell.CastTime;
         currentState = chaseState;
+        cd = timeToCasting;
+        chaseTarget = player.transform;
+        navMeshAgent.destination = chaseTarget.position;
     }
 
     // Update is called once per frame
     void Update() {
         Debug.DrawRay(transform.position, transform.forward * sightRange, Color.red);
-        Debug.Log(currentState);
+
         if (!hps.rooted) {
             currentState.UpdateState();
         }
-
-        cd = timeToCasting;
+  
         cd -= Time.deltaTime;
         if(cd <= 0) {
             startCasting = true;
         }
+
+        if(!startCasting)
+            navMeshAgent.destination = chaseTarget.position;
     }
 
     private void OnTriggerEnter(Collider other) {

@@ -6,6 +6,7 @@ public class BossCombatState : IBossState {
     private readonly StatePatternBoss boss;
     private HPScript hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
     private Transform player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+    public float attcd;
 
     public BossCombatState(StatePatternBoss statePatternBoss) {
         boss = statePatternBoss;
@@ -33,7 +34,7 @@ public class BossCombatState : IBossState {
     }
 
     public void ToCombatState() {
-        boss.currentState = boss.combatState;
+
     }
 
     public void ToChaseState() {
@@ -54,11 +55,11 @@ public class BossCombatState : IBossState {
     }
 
     void Attack() {
-        float attcd = boss.bossData.attack.Cooldown;
-        attcd -= Time.deltaTime;
         RaycastHit hit;
         if (Physics.Raycast(boss.transform.position, boss.transform.forward, out hit, boss.sightRange, boss.mask) && hit.collider.CompareTag("Player")) {
+            attcd -= Time.deltaTime;
             if (attcd <= 0) {
+                Debug.Log("Attack");
                 hp.TakeDamage(boss.bossData.attack.Damage);
                 attcd = boss.bossData.attack.Cooldown;
             }
