@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class CC : MonoBehaviour
 {
     private int insID = 0;
-    private float maxDist = 15f;
+    private float maxDist = 20f;
     private bool canDoubleJump = false;
     public bool targetIsLocked = false;
     private MenuScript MSref;
@@ -132,9 +132,11 @@ public class CC : MonoBehaviour
             FluteModel.SetActive(true);
         }
         rb.velocity = transform.TransformDirection(velocity);
-        if(target != null)
+        if (target != null) {
+            Debug.Log(Vector3.Distance(transform.position, target.transform.position) +" "+ maxDist);
             if (Vector3.Distance(transform.position, target.transform.position) > maxDist)
                 UnlockTarget();
+        }
     }
 
     void Run()

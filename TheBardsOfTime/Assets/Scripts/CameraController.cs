@@ -16,7 +16,7 @@ public class CameraController : MonoBehaviour {
         public float maxZoom = -2f;
         public float minZoom = -15f;
         public bool smoothFollow = true;
-        public float smooth = 0.05f;
+        public float smooth = .1f;
 
         [HideInInspector]
         public float newDistance = -8f;
@@ -53,10 +53,10 @@ public class CameraController : MonoBehaviour {
         public bool drawAdjustedCollisionLines = true;
     }
 
+    public CollisionHandler collision = new CollisionHandler();
     public PositionSettings position = new PositionSettings();
     public OrbitSettings orbit = new OrbitSettings();
     public InputSettings input = new InputSettings();
-    public CollisionHandler collision = new CollisionHandler();
     public DebugSettings debug = new DebugSettings();
 
     Vector3 targetPos = Vector3.zero;
@@ -64,7 +64,7 @@ public class CameraController : MonoBehaviour {
     Vector3 adjustedDestination = Vector3.zero;
     Vector3 camVel = Vector3.zero;
     CC charController;
-    float vOrbitInput, hOrbitInput, zoomInput, hOrbitSnapInput, mouseOrbitInput, vMouseOrbitInput;
+    float vOrbitInput, hOrbitInput, zoomInput, hOrbitSnapInput, mouseOrbitInput;
     Vector3 previousMousePos = Vector3.zero;
     Vector3 currentMousePos = Vector3.zero;
 
@@ -73,7 +73,7 @@ public class CameraController : MonoBehaviour {
         
         SetCameraTarget(target);
         CCref = FindObjectOfType<CC>();
-        vOrbitInput = hOrbitInput = zoomInput = hOrbitSnapInput = mouseOrbitInput = vMouseOrbitInput = 0;
+        vOrbitInput = hOrbitInput = zoomInput = hOrbitSnapInput = mouseOrbitInput = 0;
         MoveToTarget();
         collision.Initialize(Camera.main);
         collision.UpdateCameraClipPoints(transform.position, transform.rotation, 
@@ -148,8 +148,6 @@ public class CameraController : MonoBehaviour {
         hOrbitInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL);
         hOrbitSnapInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL_SNAP);
         zoomInput = Input.GetAxisRaw(input.ZOOM);
-        // mouseOrbitInput = Input.GetAxisRaw(input.MOUSE_ORBIT);
-        // vMouseOrbitInput = Input.GetAxisRaw(input.MOUSE_ORBIT_VERTICAL);
     }
 
     void MoveToTarget()
@@ -201,8 +199,8 @@ public class CameraController : MonoBehaviour {
             orbit.yRotation = -180f;
         }
 
-        orbit.xRotation += -vOrbitInput * orbit.vOrbitSmooth * Time.deltaTime;
-        orbit.yRotation += -hOrbitInput * orbit.hOrbitSmooth * Time.deltaTime;
+        orbit.xRotation += -vOrbitInput * orbit.vOrbitSmooth * Time.deltaTime *.5f;
+        orbit.yRotation += -hOrbitInput * orbit.hOrbitSmooth * Time.deltaTime * .5f;
 
         if (orbit.xRotation > orbit.maxXRotation) orbit.xRotation = orbit.maxXRotation;
         if (orbit.xRotation < orbit.minXRotation) orbit.xRotation = orbit.minXRotation;
