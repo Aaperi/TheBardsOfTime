@@ -5,15 +5,20 @@ public class BossCombatState : IBossState {
 
     private readonly StatePatternBoss boss;
     private HPScript hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
-    private float attackCoolDown = .75f;
     private Transform player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+    public float attcd;
 
     public BossCombatState(StatePatternBoss statePatternBoss) {
         boss = statePatternBoss;
     }
 
     public void UpdateState() {
-
+        if (boss.startCasting) {
+            ToCastingState();
+        } else {
+            Look();
+            Attack();
+        }
     }
 
     public void OnTriggerEnter(Collider other) {
@@ -25,21 +30,47 @@ public class BossCombatState : IBossState {
     }
 
     public void ToCastingState() {
-
+        boss.currentState = boss.castingState;
     }
 
     public void ToCombatState() {
 
     }
 
-    void Attack() {
-        attackCoolDown -= Time.deltaTime;
+    public void ToChaseState() {
+        boss.currentState = boss.chaseState;
+    }
+
+    private void Look() {
         RaycastHit hit;
         if (Physics.Raycast(boss.transform.position, boss.transform.forward, out hit, boss.sightRange, boss.mask) && hit.collider.CompareTag("Player")) {
-            if (attackCoolDown <= 0) {
-                hp.TakeDamage(10f);
-                attackCoolDown = .75f;
+            boss.chaseTarget = hit.transform;
+            ToChaseState();
+        } else {
+            Vector3 targetDir = player.position - boss.transform.position;
+            Vector3 newDir = Vector3.RotateTowards(boss.transform.forward, targetDir, boss.turnSpeed * Time.deltaTime, 0.0f);
+            boss.transform.rotation = Quaternion.LookRotation(newDir);
+        }
+
+    }
+
+    void Attack() {
+        RaycastHit hit;
+        if (Physics.Raycast(boss.transform.position, boss.transform.forward, out hit, boss.sightRange, boss.mask) && hit.collider.CompareTag("Player")) {
+            attcd -= Time.deltaTime;
+            if (attcd <= 0) {
+                Debug.Log("Attack");
+                hp.TakeDamage(boss.bossData.attack.Damage);
+                attcd = boss.bossData.attack.Cooldown;
             }
+        }
+
+        float startCasting;
+        startCasting = boss.bossData.spell.Cooldown;
+        startCasting -= Time.deltaTime;
+        if(startCasting <= 0) {
+            ToCastingState();
+            startCasting = boss.bossData.spell.Cooldown;
         }
     }
 }
