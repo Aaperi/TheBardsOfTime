@@ -22,11 +22,13 @@ public class Flute : MonoBehaviour
     void Equip()
     {
         isEquipped = true;
+        CCref.moveSetting.forwardVel *= 1.2f;
     }
 
     void UnEquip()
     {
         isEquipped = false;
+        CCref.moveSetting.forwardVel *= .8f;
     }
 
     void Attack()
