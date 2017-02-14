@@ -3,9 +3,9 @@ using System.Collections;
 
 public class StatePatternEnemy : MonoBehaviour {
 
-    public float searchingTurnSpeed;
-    public float searchingDuration;
-    public float sightRange;
+    public float searchingTurnSpeed, 
+                 searchingDuration, 
+                 sightRange;
     public int attackDamage;
     public float attackCoolDown;
     //public Transform[] wayPoints;
@@ -14,6 +14,7 @@ public class StatePatternEnemy : MonoBehaviour {
     public MeshRenderer meshRendererFlag;
     public LayerMask mask;
     public PathScript script;
+    public CC player;
 
     [HideInInspector]
     public Transform chaseTarget;
@@ -32,7 +33,6 @@ public class StatePatternEnemy : MonoBehaviour {
     [HideInInspector]
     public bool withinRange = false;
     [HideInInspector]
-    public CC player;
     private HPScript hps;
 
     private void Awake() {

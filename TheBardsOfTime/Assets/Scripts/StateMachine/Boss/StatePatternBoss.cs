@@ -21,17 +21,13 @@ public class StatePatternBoss : MonoBehaviour {
     [HideInInspector]
     public NavMeshAgent navMeshAgent;
     [HideInInspector]
-    public bool withinRange = false;
-    [HideInInspector]
     public CC player;
     [HideInInspector]
     public BossData bossData;
     [HideInInspector]
     public bool startCasting;
     [HideInInspector]
-    public float cd;
-    [HideInInspector]
-    public float attackCoolDown;
+    public float cd, attackCoolDown;
 
     private HPScript hps;
 
@@ -59,7 +55,7 @@ public class StatePatternBoss : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        Debug.DrawRay(transform.position, transform.forward * sightRange, Color.red);
+        Debug.DrawRay(transform.position, transform.forward * bossData.spell.castingRange, Color.red);
 
         if (!hps.rooted) {
             currentState.UpdateState();

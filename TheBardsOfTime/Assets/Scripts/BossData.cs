@@ -9,7 +9,6 @@ public class BossData : ScriptableObject {
         public float CastTime;
         public float Cooldown;
         public int Damage;
-        public float Stamp;
     }
 
     [System.Serializable]
@@ -18,13 +17,8 @@ public class BossData : ScriptableObject {
         public float castingRadius;
         public float CastTime;
         public int Damage;
-        public float Stamp;
     }
 
     public AttackSettings attack = new AttackSettings();
     public SpellSettings spell = new SpellSettings();
-
-    void OnEnable() {
-        attack.Stamp = 0; spell.Stamp = 0;
-    }
 }
