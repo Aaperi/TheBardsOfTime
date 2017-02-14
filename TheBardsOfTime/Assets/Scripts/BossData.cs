@@ -8,7 +8,7 @@ public class BossData : ScriptableObject {
     public class AttackSettings {
         public float CastTime;
         public float Cooldown;
-        public float Damage;
+        public int Damage;
         public float Stamp;
     }
 
@@ -18,7 +18,7 @@ public class BossData : ScriptableObject {
         public float castingRadius;
         public float CastTime;
         public float Cooldown;
-        public float Damage;
+        public int Damage;
         public float Stamp;
     }
 

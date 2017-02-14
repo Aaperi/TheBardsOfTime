@@ -6,7 +6,7 @@ public class StatePatternEnemy : MonoBehaviour {
     public float searchingTurnSpeed;
     public float searchingDuration;
     public float sightRange;
-    public float attackDamage;
+    public int attackDamage;
     public float attackCoolDown;
     //public Transform[] wayPoints;
     public Transform eyes;
