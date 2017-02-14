@@ -17,7 +17,6 @@ public class BossData : ScriptableObject {
         public float castingRange;
         public float castingRadius;
         public float CastTime;
-        public float Cooldown;
         public int Damage;
         public float Stamp;
     }

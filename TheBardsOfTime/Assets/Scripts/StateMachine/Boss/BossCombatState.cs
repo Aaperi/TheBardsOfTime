@@ -64,13 +64,5 @@ public class BossCombatState : IBossState {
                 attcd = boss.bossData.attack.Cooldown;
             }
         }
-
-        float startCasting;
-        startCasting = boss.bossData.spell.Cooldown;
-        startCasting -= Time.deltaTime;
-        if(startCasting <= 0) {
-            ToCastingState();
-            startCasting = boss.bossData.spell.Cooldown;
-        }
     }
 }
