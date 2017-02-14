@@ -35,7 +35,6 @@ public class HPScript : MonoBehaviour
 
     void Update()
     {
-
         if (gameObject.transform.position.y < -50 || hitpoints <= 0) {
             Death();
             if (iNeedUI) {

@@ -12,9 +12,7 @@ public class CC : MonoBehaviour
     private TargetManager tam;
     private DialogueScript dia;
     public GameObject target;
-    public GameObject ViolinModel;
-    public GameObject FluteModel;
-    public List<GameObject> RefList = new List<GameObject>();
+    public List<GameObject> Instruments = new List<GameObject>();
 
     [HideInInspector]
     public bool inCombat = false;
@@ -85,10 +83,7 @@ public class CC : MonoBehaviour
         attackInput = skillInput = spellInput = swapInput = targetLock = jumpInput = false;
 
         foreach (Transform child in GameObject.Find("Instruments").transform)
-            RefList.Add(child.gameObject);
-
-        ViolinModel = GameObject.Find("Violin").transform.FindChild("Model").gameObject;
-        FluteModel = GameObject.Find("Flute").transform.FindChild("Model").gameObject;
+            Instruments.Add(child.gameObject);
     }
 
     void GetInput()
@@ -124,13 +119,6 @@ public class CC : MonoBehaviour
         Combat();
         DoubleJump();
         Interaction();
-        if (insID == 0) {
-            ViolinModel.SetActive(true);
-            FluteModel.SetActive(false);
-        } else {
-            ViolinModel.SetActive(false);
-            FluteModel.SetActive(true);
-        }
         rb.velocity = transform.TransformDirection(velocity);
         if (target != null)
             if (Vector3.Distance(transform.position, target.transform.position) > maxDist)
@@ -218,15 +206,15 @@ public class CC : MonoBehaviour
     void Combat()
     {
         if (attackInput) {
-            RefList[insID].SendMessage("Attack");
+            Instruments[insID].SendMessage("Attack");
         }
 
         if (skillInput) {
-            RefList[insID].SendMessage("Skill");
+            Instruments[insID].SendMessage("Skill");
         }
 
         if (spellInput) {
-            RefList[insID].SendMessage("Spell");
+            Instruments[insID].SendMessage("Spell");
         }
 
         if (targetLock) {
@@ -245,13 +233,13 @@ public class CC : MonoBehaviour
 
         if (swapInput) {
             if (insID == 0) {
-                RefList[insID].SendMessage("UnEquip");
+                Instruments[insID].SendMessage("UnEquip");
                 insID = 1;
-                RefList[insID].SendMessage("Equip");
+                Instruments[insID].SendMessage("Equip");
             } else if (insID == 1) {
-                RefList[insID].SendMessage("UnEquip");
+                Instruments[insID].SendMessage("UnEquip");
                 insID = 0;
-                RefList[insID].SendMessage("Equip");
+                Instruments[insID].SendMessage("Equip");
             }
         }
     }
