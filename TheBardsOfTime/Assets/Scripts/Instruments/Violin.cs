@@ -97,7 +97,7 @@ public class Violin : MonoBehaviour
             while (isChanneling) {
                 yield return new WaitForSeconds(.25f);
                 foreach (GameObject go in Colliders[1].enemyList) {
-                    try { go.SendMessageUpwards("TakeDamage", ins.spell.Damage, SendMessageOptions.DontRequireReceiver); Debug.Log(go.name + " takes " + ins.spell.Damage + "damage"); }
+                    try { go.SendMessageUpwards("TakeDamage", ins.spell.Damage/4, SendMessageOptions.DontRequireReceiver); Debug.Log(go.name + " takes " + ins.spell.Damage + "damage"); }
                     catch { Debug.Log("SPELL FAILS!"); }
                 }
             }
