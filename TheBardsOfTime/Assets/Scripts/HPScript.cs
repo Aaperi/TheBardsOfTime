@@ -7,12 +7,14 @@ public class HPScript : MonoBehaviour
 {
     [HideInInspector]
     public bool rooted = false;
-    public Slider HPSlider;
+    [HideInInspector]
+    public bool iNeedUI;
+    [HideInInspector]
     public int hitpoints;
+    public Slider HPSlider;
     public int maxHitpoints;
     public int regenAmount;
     public float regenSpeed = 2;
-    public bool iNeedUI;
     MenuScript menu;
     CC player;
     MeshRenderer mesh;
@@ -66,6 +68,8 @@ public class HPScript : MonoBehaviour
 
     void Death()
     {
+        Debug.Log(gameObject.name + " has died. lol!");
+
         hitpoints = 0;
         HitDetection[] temp = FindObjectsOfType<HitDetection>();
         foreach (HitDetection HD in temp)
@@ -92,6 +96,7 @@ public class HPScript : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        Debug.Log(gameObject.name + " took " + damage + "damage");
         hitpoints -= damage;
         vilkkuminen = true;
         if (iNeedUI) {

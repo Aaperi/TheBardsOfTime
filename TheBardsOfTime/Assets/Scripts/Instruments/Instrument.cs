@@ -3,34 +3,46 @@ using System.Collections;
 using System.Collections.Generic;
 
 [CreateAssetMenu]
-public class Instrument : ScriptableObject {
+public class Instrument : ScriptableObject
+{
 
     [System.Serializable]
-    public class AttackSettings {
-        public float CastTime;
-        public float Cooldown;
-        public int Damage;
+    public class AttackSettings
+    {
         [HideInInspector]
         public float Stamp;
+        public float Range;
+        public float Radius;
+        public float CastTime;
+        public float Cooldown;
+        public float Duration;
+        public int Damage;
     }
 
     [System.Serializable]
-    public class SkillSettings {
-        public float CastTime;
-        public float Cooldown;
-        public int Damage;
+    public class SkillSettings
+    {
         [HideInInspector]
         public float Stamp;
+        public float Range;
+        public float Radius;
+        public float CastTime;
+        public float Cooldown;
+        public float Duration;
+        public int Damage;
     }
 
     [System.Serializable]
     public class SpellSettings
     {
-        public float CastTime;
-        public float Cooldown;
-        public int Damage;
         [HideInInspector]
         public float Stamp;
+        public float Range;
+        public float Radius;
+        public float CastTime;
+        public float Cooldown;
+        public float Duration;
+        public int Damage;
     }
 
     public AttackSettings attack = new AttackSettings();

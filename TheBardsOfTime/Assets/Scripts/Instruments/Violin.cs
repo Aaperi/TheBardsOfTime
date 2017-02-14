@@ -56,7 +56,8 @@ public class Violin : MonoBehaviour
             ins.attack.Stamp = Time.time + ins.attack.Cooldown;
             yield return new WaitForSeconds(ins.attack.CastTime);
             foreach (GameObject go in Colliders[0].enemyList) {
-                try { go.SendMessageUpwards("TakeDamage", ins.attack.Damage, SendMessageOptions.DontRequireReceiver); Debug.Log(go.name + " takes " + ins.attack.Damage + "damage"); } catch { Debug.Log("ATTACK FAILS!"); }
+                try { go.GetComponent<HPScript>().TakeDamage(ins.attack.Damage); } 
+                catch { Debug.Log("ATTACK FAILS!"); }
             }
             isProcessing = false;
         }
@@ -75,7 +76,6 @@ public class Violin : MonoBehaviour
                 try {
                     go.GetComponent<HPScript>().DOT(5, ins.skill.Damage);
                     go.GetComponent<HPScript>().Root(5f);
-                    Debug.Log(go.name + " takes " + ins.skill.Damage / 5 + "damage");
                 } catch { Debug.Log("SKILL FAILS!"); }
             }
             isProcessing = false;
@@ -96,8 +96,8 @@ public class Violin : MonoBehaviour
                 foreach (GameObject go in Colliders[2].enemyList) {
                     try {
                         go.GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
-                        Debug.Log(go.name + " takes " + ins.spell.Damage / 2 + "damage");
-                    } catch { Debug.Log("SPELL FAILS!"); }
+                    } 
+                    catch { Debug.Log("SPELL FAILS!"); }
                 }
             }
             Debug.Log("Channelaus Loppuu");
