@@ -16,6 +16,7 @@ public class Instrument : ScriptableObject
         public float CastTime;
         public float Cooldown;
         public float Duration;
+        public float Potency;
         public int Damage;
     }
 
@@ -29,6 +30,7 @@ public class Instrument : ScriptableObject
         public float CastTime;
         public float Cooldown;
         public float Duration;
+        public float Potency;
         public int Damage;
     }
 
@@ -42,6 +44,7 @@ public class Instrument : ScriptableObject
         public float CastTime;
         public float Cooldown;
         public float Duration;
+        public float Potency;
         public int Damage;
     }
 

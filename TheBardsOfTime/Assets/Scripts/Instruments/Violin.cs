@@ -55,10 +55,8 @@ public class Violin : MonoBehaviour
             Debug.Log("Normal Attack!");
             ins.attack.Stamp = Time.time + ins.attack.Cooldown;
             yield return new WaitForSeconds(ins.attack.CastTime);
-            foreach (GameObject go in Colliders[0].enemyList) {
-                try { go.GetComponent<HPScript>().TakeDamage(ins.attack.Damage); } 
-                catch { Debug.Log("ATTACK FAILS!"); }
-            }
+            foreach (GameObject go in Colliders[0].enemyList)
+                go.GetComponent<HPScript>().TakeDamage(ins.attack.Damage);
             isProcessing = false;
         }
     }
@@ -69,14 +67,12 @@ public class Violin : MonoBehaviour
             isChanneling = false;
         else {
             isProcessing = true;
-            Debug.Log("Roots!");
             ins.skill.Stamp = Time.time + ins.skill.Cooldown;
             yield return new WaitForSeconds(ins.skill.CastTime);
             foreach (GameObject go in Colliders[1].enemyList) {
-                try {
-                    go.GetComponent<HPScript>().DOT(5, ins.skill.Damage);
-                    go.GetComponent<HPScript>().Root(5f);
-                } catch { Debug.Log("SKILL FAILS!"); }
+                //StartCoroutine(go.GetComponent<HPScript>().Root(ins.skill.Duration));
+                StartCoroutine(go.GetComponent<HPScript>().Slow(ins.skill.Duration, 50));
+                StartCoroutine(go.GetComponent<HPScript>().DOT(ins.skill.Duration, ins.skill.Damage));
             }
             isProcessing = false;
         }
@@ -93,14 +89,11 @@ public class Violin : MonoBehaviour
             yield return new WaitForSeconds(ins.spell.CastTime);
             while (isChanneling) {
                 yield return new WaitForSeconds(.5f);
-                foreach (GameObject go in Colliders[2].enemyList) {
-                    try {
-                        go.GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
-                    } 
-                    catch { Debug.Log("SPELL FAILS!"); }
-                }
+                foreach (GameObject go in Colliders[2].enemyList)
+                    go.GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
             }
             Debug.Log("Channelaus Loppuu");
         }
     }
+
 }

@@ -85,7 +85,6 @@ public class HPScript : MonoBehaviour
     {
         if (iNeedUI)
             HPSlider.value = hitpoints;
-
     }
 
     private void RegenHP(int regenAmount)
@@ -96,7 +95,7 @@ public class HPScript : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Debug.Log(gameObject.name + " took " + damage + "damage");
+        Debug.Log(gameObject.name + " took: " + damage + "damage");
         hitpoints -= damage;
         vilkkuminen = true;
         if (iNeedUI) {
@@ -104,24 +103,35 @@ public class HPScript : MonoBehaviour
         }
     }
 
-    public IEnumerator Root(float duration)
+    public IEnumerator Slow(float duration, float percentage)
     {
-        rooted = true;
-        GetComponent<NavMeshAgent>().Stop();
+        Debug.Log(gameObject.name + " slowed down by " + percentage + "%");
+        GetComponent<NavMeshAgent>().speed *= (100 - percentage) / 100;
         yield return new WaitForSeconds(duration);
-        rooted = false;
+        GetComponent<NavMeshAgent>().speed /= (100 - percentage) / 100;
     }
 
-    public IEnumerator DOT(int duration, int damage)
+    public IEnumerator Root(float duration)
     {
+        Debug.Log(gameObject.name + " became rooted in place");
+        float temp = GetComponent<NavMeshAgent>().speed;
+        GetComponent<NavMeshAgent>().speed = 0f;
+        yield return new WaitForSeconds(duration);
+        GetComponent<NavMeshAgent>().speed = temp;
+    }
+
+    public IEnumerator DOT(float duration, int damage)
+    {
+        Debug.Log(gameObject.name + " started burning");
         int currentCount = 1;
+        int ticDamage = damage / (int)duration;
         yield return new WaitForSeconds(.5f);
         while (currentCount < duration) {
-            TakeDamage(damage / duration);
-            yield return new WaitForSeconds(1);
             currentCount++;
+            TakeDamage(ticDamage);
+            yield return new WaitForSeconds(1);
         }
-        TakeDamage(damage / duration);
+        TakeDamage(ticDamage);
         yield return new WaitForSeconds(.5f);
     }
 }
