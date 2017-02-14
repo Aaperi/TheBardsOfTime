@@ -132,11 +132,9 @@ public class CC : MonoBehaviour
             FluteModel.SetActive(true);
         }
         rb.velocity = transform.TransformDirection(velocity);
-        if (target != null) {
-            Debug.Log(Vector3.Distance(transform.position, target.transform.position) +" "+ maxDist);
+        if (target != null)
             if (Vector3.Distance(transform.position, target.transform.position) > maxDist)
                 UnlockTarget();
-        }
     }
 
     void Run()
@@ -250,12 +248,10 @@ public class CC : MonoBehaviour
                 RefList[insID].SendMessage("UnEquip");
                 insID = 1;
                 RefList[insID].SendMessage("Equip");
-                Debug.Log("Instrument swapped into " + insID);
             } else if (insID == 1) {
                 RefList[insID].SendMessage("UnEquip");
                 insID = 0;
                 RefList[insID].SendMessage("Equip");
-                Debug.Log("Instrument swapped into " + insID);
             }
         }
     }

@@ -8,9 +8,9 @@ public class HPScript : MonoBehaviour
     [HideInInspector]
     public bool rooted = false;
     public Slider HPSlider;
-    public float hitpoints;
-    public float maxHitpoints;
-    public float regenAmount;
+    public int hitpoints;
+    public int maxHitpoints;
+    public int regenAmount;
     public float regenSpeed = 2;
     public bool iNeedUI;
     MenuScript menu;
@@ -33,7 +33,7 @@ public class HPScript : MonoBehaviour
 
     void Update()
     {
-        
+
         if (gameObject.transform.position.y < -50 || hitpoints <= 0) {
             Death();
             if (iNeedUI) {
@@ -43,20 +43,19 @@ public class HPScript : MonoBehaviour
 
         if (iNeedUI && !player.inCombat && hitpoints < 100) {
             regenSpeed -= Time.deltaTime;
-            if(regenSpeed <= 0) {
+            if (regenSpeed <= 0) {
                 RegenHP(regenAmount);
                 regenSpeed = 2;
-            } 
+            }
         }
 
-        if(vilkkuminen) {
+        if (vilkkuminen) {
             vilkkumisAika -= Time.deltaTime;
             mesh.material.color = Color.white;
             if (vilkkumisAika <= 0) {
-                if(iNeedUI) {
+                if (iNeedUI) {
                     mesh.material.color = Color.blue;
-                }
-                else
+                } else
                     mesh.material.color = Color.red;
 
                 vilkkuminen = false;
@@ -80,12 +79,18 @@ public class HPScript : MonoBehaviour
 
     private void UpdateHealthbar()
     {
-        if(iNeedUI)
+        if (iNeedUI)
             HPSlider.value = hitpoints;
 
     }
 
-    public void TakeDamage(float damage)
+    private void RegenHP(int regenAmount)
+    {
+        hitpoints += regenAmount;
+        UpdateHealthbar();
+    }
+
+    public void TakeDamage(int damage)
     {
         hitpoints -= damage;
         vilkkuminen = true;
@@ -94,17 +99,7 @@ public class HPScript : MonoBehaviour
         }
     }
 
-    private void RegenHP(float regenAmount) {
-        hitpoints += regenAmount;
-        UpdateHealthbar();
-    }
-
-    private void StartRoot(float duration)
-    {
-        StartCoroutine(Root(duration));
-    }
-
-    IEnumerator Root(float duration)
+    public IEnumerator Root(float duration)
     {
         rooted = true;
         GetComponent<NavMeshAgent>().Stop();
@@ -112,21 +107,16 @@ public class HPScript : MonoBehaviour
         rooted = false;
     }
 
-    private void StartDot(float[] bundle)
-    {
-        StartCoroutine(DamageOverTime(bundle[0], bundle[1]));
-    }
-
-    IEnumerator DamageOverTime(float tics, float damagePerTic)
+    public IEnumerator DOT(int duration, int damage)
     {
         int currentCount = 1;
         yield return new WaitForSeconds(.5f);
-        while (currentCount < tics) {
-            TakeDamage(damagePerTic);
+        while (currentCount < duration) {
+            TakeDamage(damage / duration);
             yield return new WaitForSeconds(1);
             currentCount++;
         }
-        TakeDamage(damagePerTic);
+        TakeDamage(damage / duration);
         yield return new WaitForSeconds(.5f);
     }
 }

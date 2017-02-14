@@ -56,8 +56,7 @@ public class Violin : MonoBehaviour
             ins.attack.Stamp = Time.time + ins.attack.Cooldown;
             yield return new WaitForSeconds(ins.attack.CastTime);
             foreach (GameObject go in Colliders[0].enemyList) {
-                try { go.SendMessageUpwards("TakeDamage", ins.attack.Damage, SendMessageOptions.DontRequireReceiver); Debug.Log(go.name + " takes " + ins.attack.Damage + "damage"); }
-                catch { Debug.Log("ATTACK FAILS!"); }
+                try { go.SendMessageUpwards("TakeDamage", ins.attack.Damage, SendMessageOptions.DontRequireReceiver); Debug.Log(go.name + " takes " + ins.attack.Damage + "damage"); } catch { Debug.Log("ATTACK FAILS!"); }
             }
             isProcessing = false;
         }
@@ -72,14 +71,12 @@ public class Violin : MonoBehaviour
             Debug.Log("Roots!");
             ins.skill.Stamp = Time.time + ins.skill.Cooldown;
             yield return new WaitForSeconds(ins.skill.CastTime);
-            foreach (GameObject go in Colliders[2].enemyList) {
-                float[] bundle = { 5f, ins.skill.Damage };
+            foreach (GameObject go in Colliders[1].enemyList) {
                 try {
-                    go.SendMessageUpwards("StartDot", bundle, SendMessageOptions.DontRequireReceiver);
-                    go.SendMessageUpwards("StartRoot", bundle[0], SendMessageOptions.DontRequireReceiver);
-                    Debug.Log(go.name + " takes " + ins.skill.Damage + "damage");
-                }
-                catch { Debug.Log("SKILL FAILS!"); }
+                    go.GetComponent<HPScript>().DOT(5, ins.skill.Damage);
+                    go.GetComponent<HPScript>().Root(5f);
+                    Debug.Log(go.name + " takes " + ins.skill.Damage / 5 + "damage");
+                } catch { Debug.Log("SKILL FAILS!"); }
             }
             isProcessing = false;
         }
@@ -95,10 +92,12 @@ public class Violin : MonoBehaviour
             ins.spell.Stamp = Time.time + ins.spell.Cooldown;
             yield return new WaitForSeconds(ins.spell.CastTime);
             while (isChanneling) {
-                yield return new WaitForSeconds(.25f);
-                foreach (GameObject go in Colliders[1].enemyList) {
-                    try { go.SendMessageUpwards("TakeDamage", ins.spell.Damage/4, SendMessageOptions.DontRequireReceiver); Debug.Log(go.name + " takes " + ins.spell.Damage + "damage"); }
-                    catch { Debug.Log("SPELL FAILS!"); }
+                yield return new WaitForSeconds(.5f);
+                foreach (GameObject go in Colliders[2].enemyList) {
+                    try {
+                        go.GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
+                        Debug.Log(go.name + " takes " + ins.spell.Damage / 2 + "damage");
+                    } catch { Debug.Log("SPELL FAILS!"); }
                 }
             }
             Debug.Log("Channelaus Loppuu");
