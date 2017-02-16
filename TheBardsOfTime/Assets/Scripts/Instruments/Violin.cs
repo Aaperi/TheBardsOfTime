@@ -5,26 +5,13 @@ public class Violin : MonoBehaviour
 {
     private Instrument ins;
     private Transform player;
-    private HitDetection[] Colliders;
     private bool isProcessing = false;
     private bool isChanneling = false;
-    private bool isEquipped = false;
 
     void Start()
     {
         ins = Resources.Load("Data/ViolinSO") as Instrument;
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        Colliders = gameObject.GetComponentsInChildren<HitDetection>();
-    }
-
-    void Equip()
-    {
-        isEquipped = true;
-    }
-
-    void UnEquip()
-    {
-        isEquipped = false;
     }
 
     void Attack()
@@ -48,7 +35,7 @@ public class Violin : MonoBehaviour
         }
     }
 
-    bool hitCheck(GameObject target, float range, float radius)
+    bool HitCheck(GameObject target, float range, float radius)
     {
         if (Vector3.Distance(player.position, target.transform.position) <= range) {
             Vector3 targetDir = target.transform.position - player.position;
@@ -66,11 +53,12 @@ public class Violin : MonoBehaviour
             isChanneling = false;
         else {
             isProcessing = true;
+            Debug.Log("Viulu isku, hijaaa!");
             ins.attack.Stamp = Time.time + ins.attack.Cooldown;
             yield return new WaitForSeconds(ins.attack.CastTime);
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (GameObject go in enemies)
-                if (hitCheck(go, ins.attack.Range, ins.attack.Radius))
+                if (HitCheck(go, ins.attack.Range, ins.attack.Radius))
                     go.GetComponent<HPScript>().TakeDamage(ins.attack.Damage);
             isProcessing = false;
         }
@@ -82,11 +70,12 @@ public class Violin : MonoBehaviour
             isChanneling = false;
         else {
             isProcessing = true;
+            Debug.Log("ROOTS!");
             ins.skill.Stamp = Time.time + ins.skill.Cooldown;
             yield return new WaitForSeconds(ins.skill.CastTime);
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (GameObject go in enemies)
-                if (hitCheck(go, ins.skill.Range, ins.skill.Radius)) {
+                if (HitCheck(go, ins.skill.Range, ins.skill.Radius)) {
                     StartCoroutine(go.GetComponent<HPScript>().DOT(ins.skill.Duration, ins.skill.Damage));
                     StartCoroutine(go.GetComponent<HPScript>().Root(ins.skill.Duration));
                 }
@@ -108,8 +97,10 @@ public class Violin : MonoBehaviour
                 yield return new WaitForSeconds(.5f);
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 foreach (GameObject go in enemies)
-                    if (hitCheck(go, ins.spell.Range, ins.spell.Radius))
+                    if (HitCheck(go, ins.spell.Range, ins.spell.Radius)) {
                         go.GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
+                        StartCoroutine(go.GetComponent<HPScript>().Slow(ins.spell.Duration, ins.spell.Potency));
+                    }
             }
             Debug.Log("Channelaus Loppuu");
         }
