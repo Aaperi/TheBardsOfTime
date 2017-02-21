@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Flute : MonoBehaviour
 {
     private CC CCref;
     private Instrument ins;
+    private Transform player;
     private bool isProcessing = false;
     private bool isChanneling = false;
 
@@ -12,18 +14,19 @@ public class Flute : MonoBehaviour
     {
         CCref = FindObjectOfType<CC>();
         ins = Resources.Load("Data/FluteSO") as Instrument;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     void OnEnable()
     {
         if (CCref != null)
-            CCref.moveSetting.forwardVel *= 1.5f;
+            CCref.moveSetting.forwardVel *= 1.2f;
     }
 
     void OnDisable()
     {
         if (CCref != null)
-            CCref.moveSetting.forwardVel /= 1.5f;
+            CCref.moveSetting.forwardVel /= 1.2f;
     }
 
     void Attack()
@@ -45,6 +48,18 @@ public class Flute : MonoBehaviour
         if (!isProcessing && Time.time > ins.spell.Stamp) {
             StartCoroutine(SpellCou());
         }
+    }
+
+    bool HitCheck(GameObject target, float range, float radius)
+    {
+        if (Vector3.Distance(player.position, target.transform.position) <= range) {
+            Vector3 targetDir = target.transform.position - player.position;
+            if (Vector3.Angle(targetDir, player.forward) <= radius / 2) {
+                return true;
+            } else
+                return false;
+        } else
+            return false;
     }
 
     IEnumerator AttackCou()
@@ -82,7 +97,6 @@ public class Flute : MonoBehaviour
     {
         if (isChanneling)
             isChanneling = false;
-<<<<<<< HEAD
         else {
             isChanneling = true;
             Debug.Log("Castaaminen Alkaa");
@@ -106,10 +120,6 @@ public class Flute : MonoBehaviour
             }
             Debug.Log("Channelaus Loppuu");
         }
-=======
-        yield return true;
-        Debug.Log("Flute Spell");
->>>>>>> parent of 9d0f1ee... rupesin tekeen huiluu
     }
 
 }

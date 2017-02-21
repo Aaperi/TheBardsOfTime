@@ -99,11 +99,7 @@ public class Violin : MonoBehaviour
                 foreach (GameObject go in enemies)
                     if (HitCheck(go, ins.spell.Range, ins.spell.Radius)) {
                         go.GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
-<<<<<<< HEAD
                         Debug.Log("vinku vonku");
-=======
-                        StartCoroutine(go.GetComponent<HPScript>().Slow(ins.spell.Duration, ins.spell.Potency));
->>>>>>> parent of 9d0f1ee... rupesin tekeen huiluu
                     }
             }
             Debug.Log("Channelaus Loppuu");
