@@ -5,6 +5,7 @@ public class CastingState : IBossState {
     private readonly StatePatternBoss boss;
     private HPScript hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
     private Transform player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+    private bool interrupted;
     public float castSpell;
 
     public CastingState(StatePatternBoss statePatternBoss) {
@@ -15,6 +16,7 @@ public class CastingState : IBossState {
         if (boss.startCasting) {
             Casting();
         }
+        
         
     }
 
@@ -47,6 +49,14 @@ public class CastingState : IBossState {
             boss.startCasting = false;
             boss.cd = boss.bossData.spell.timeToCasting; // cd = koska bossi aloittaa seuraavan castingin
             castSpell = boss.bossData.spell.CastTime;
+        }
+        else {
+            if(interrupted) {
+                boss.startCasting = false;
+                boss.cd = boss.bossData.spell.timeToCasting;
+                castSpell = boss.bossData.spell.CastTime;
+                ToChaseState();
+            }
         }
 
     }

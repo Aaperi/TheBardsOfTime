@@ -31,8 +31,6 @@ public class StatePatternEnemy : MonoBehaviour {
     [HideInInspector]
     public NavMeshAgent navMeshAgent;
     [HideInInspector]
-    public NavMeshObstacle navObstacle;
-    [HideInInspector]
     public bool withinRange = false;
     [HideInInspector]
     private HPScript hps;
@@ -46,9 +44,6 @@ public class StatePatternEnemy : MonoBehaviour {
         hps = GetComponent<HPScript>();
 
         navMeshAgent = GetComponent<NavMeshAgent>();
-        navObstacle = GetComponent<NavMeshObstacle>();
-
-        navObstacle.enabled = false;
     }
 
     // Use this for initialization
