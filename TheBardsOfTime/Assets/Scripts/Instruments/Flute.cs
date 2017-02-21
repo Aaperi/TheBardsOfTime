@@ -74,8 +74,23 @@ public class Flute : MonoBehaviour
     {
         if (isChanneling)
             isChanneling = false;
-        yield return true;
-        Debug.Log("Flute Skill");
+        else {
+            float dur = 0;
+            Debug.Log("Hiirulaiset!");
+            ins.skill.Stamp = Time.time + ins.skill.Cooldown + ins.skill.Duration;
+            while (dur < ins.skill.Duration) {
+                Debug.Log("Squeek!");
+                GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+                foreach (GameObject go in enemies)
+                    if (HitCheck(go, ins.skill.Range, ins.skill.Radius)) {
+                        go.GetComponent<HPScript>().TakeDamage(ins.skill.Damage / 2);
+                        StartCoroutine(go.GetComponent<HPScript>().Slow(.5f, ins.skill.Potency));
+                    }
+                yield return new WaitForSeconds(.5f);
+                dur += .5f;
+            }
+            Debug.Log("Hei hei hiiret");
+        }
     }
 
     IEnumerator SpellCou()
@@ -93,16 +108,15 @@ public class Flute : MonoBehaviour
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 List<GameObject> temp = new List<GameObject>();
                 foreach (GameObject go in enemies)
-                    if (HitCheck(go, ins.spell.Range, ins.spell.Radius)) {
+                    if (HitCheck(go, ins.spell.Range, ins.spell.Radius))
                         temp.Add(go);
-                    }
                 temp.Sort(delegate (GameObject a, GameObject b) {
                     float distA = Vector3.Distance(a.transform.position, player.transform.position);
                     float distB = Vector3.Distance(b.transform.position, player.transform.position);
                     return distA.CompareTo(distB);
                 });
                 if (temp.Count > 0)
-                    temp[0].GetComponent<HPScript>().TakeDamage(ins.spell.Damage);
+                    temp[0].GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
             }
             Debug.Log("Channelaus Loppuu");
         }

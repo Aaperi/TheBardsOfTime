@@ -99,7 +99,6 @@ public class Violin : MonoBehaviour
                 foreach (GameObject go in enemies)
                     if (HitCheck(go, ins.spell.Range, ins.spell.Radius)) {
                         go.GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
-                        StartCoroutine(go.GetComponent<HPScript>().Slow(ins.spell.Duration, ins.spell.Potency));
                         Debug.Log("vinku vonku");
                     }
             }
