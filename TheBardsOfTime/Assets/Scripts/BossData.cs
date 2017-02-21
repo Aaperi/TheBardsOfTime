@@ -15,6 +15,7 @@ public class BossData : ScriptableObject {
     public class SpellSettings {
         public float castingRange;
         public float castingRadius;
+        public float timeToCasting;
         public float CastTime;
         public int Damage;
     }

@@ -4,7 +4,6 @@ using System.Collections;
 public class StatePatternBoss : MonoBehaviour {
     public float turnSpeed;
     public float sightRange;
-    public float timeToCasting;
     public Vector3 offset = new Vector3(0, .5f, 0);
     public LayerMask mask;
 
@@ -48,7 +47,7 @@ public class StatePatternBoss : MonoBehaviour {
         combatState.attcd = attackCoolDown;
         castingState.castSpell = bossData.spell.CastTime;
         currentState = chaseState;
-        cd = timeToCasting;
+        cd = bossData.spell.timeToCasting;
         chaseTarget = player.transform;
         navMeshAgent.destination = chaseTarget.position;
     }

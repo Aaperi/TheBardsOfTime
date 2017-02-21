@@ -45,7 +45,7 @@ public class CastingState : IBossState {
             
             Cast();
             boss.startCasting = false;
-            boss.cd = boss.timeToCasting;
+            boss.cd = boss.bossData.spell.timeToCasting; // cd = koska bossi aloittaa seuraavan castingin
             castSpell = boss.bossData.spell.CastTime;
         }
 

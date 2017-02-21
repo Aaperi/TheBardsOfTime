@@ -4,31 +4,26 @@ using System.Collections;
 public class Flute : MonoBehaviour
 {
     private CC CCref;
-    private float normalSpeed;
     private Instrument ins;
-    private HitDetection[] Colliders;
     private bool isProcessing = false;
     private bool isChanneling = false;
-    private bool isEquipped = false;
 
     void Start()
     {
         CCref = FindObjectOfType<CC>();
-        normalSpeed = CCref.moveSetting.forwardVel;
         ins = Resources.Load("Data/FluteSO") as Instrument;
-        Colliders = gameObject.GetComponentsInChildren<HitDetection>();
     }
 
-    void Equip()
+    void OnEnable()
     {
-        isEquipped = true;
-        CCref.moveSetting.forwardVel *= 1.2f;
+        if (CCref != null)
+            CCref.moveSetting.forwardVel *= 1.5f;
     }
 
-    void UnEquip()
+    void OnDisable()
     {
-        isEquipped = false;
-        CCref.moveSetting.forwardVel *= .8f;
+        if (CCref != null)
+            CCref.moveSetting.forwardVel /= 1.5f;
     }
 
     void Attack()
