@@ -49,9 +49,10 @@ public class Violin : MonoBehaviour
 
     IEnumerator AttackCou()
     {
-        if (isChanneling)
+        if (isChanneling) {
             isChanneling = false;
-        else {
+            yield return true;
+        } else {
             isProcessing = true;
             Debug.Log("Viulu isku, hijaaa!");
             ins.attack.Stamp = Time.time + ins.attack.Cooldown;
@@ -66,9 +67,10 @@ public class Violin : MonoBehaviour
 
     IEnumerator SkillCou()
     {
-        if (isChanneling)
+        if (isChanneling) {
             isChanneling = false;
-        else {
+            yield return true;
+        } else {
             isProcessing = true;
             Debug.Log("ROOTS!");
             ins.skill.Stamp = Time.time + ins.skill.Cooldown;
@@ -85,9 +87,10 @@ public class Violin : MonoBehaviour
 
     IEnumerator SpellCou()
     {
-        if (isChanneling)
+        if (isChanneling) {
             isChanneling = false;
-        else {
+            yield return true;
+        } else {
             isChanneling = true;
             Debug.Log("Castaaminen Alkaa");
             ins.spell.Stamp = Time.time + ins.spell.Cooldown;

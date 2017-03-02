@@ -64,17 +64,21 @@ public class Flute : MonoBehaviour
 
     IEnumerator AttackCou()
     {
-        if (isChanneling)
+        if (isChanneling) {
             isChanneling = false;
-        yield return true;
-        Debug.Log("Flute Attack");
+            yield return true;
+        } else {
+            yield return true;
+            Debug.Log("Flute Attack");
+        }
     }
 
     IEnumerator SkillCou()
     {
-        if (isChanneling)
+        if (isChanneling) {
             isChanneling = false;
-        else {
+            yield return true;
+        } else {
             float dur = 0;
             Debug.Log("Hiirulaiset!");
             ins.skill.Stamp = Time.time + ins.skill.Cooldown + ins.skill.Duration;
@@ -95,9 +99,10 @@ public class Flute : MonoBehaviour
 
     IEnumerator SpellCou()
     {
-        if (isChanneling)
+        if (isChanneling) {
             isChanneling = false;
-        else {
+            yield return true;
+        } else {
             isChanneling = true;
             Debug.Log("Castaaminen Alkaa");
             ins.spell.Stamp = Time.time + ins.spell.Cooldown;
