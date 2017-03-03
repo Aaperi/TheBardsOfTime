@@ -6,8 +6,6 @@ using System.Collections.Generic;
 public class HPScript : MonoBehaviour
 {
     [HideInInspector]
-    public bool rooted = false;
-    [HideInInspector]
     public bool iNeedUI;
     [HideInInspector]
     public int hitpoints;
@@ -15,10 +13,12 @@ public class HPScript : MonoBehaviour
     public int maxHitpoints;
     public int regenAmount;
     public float regenSpeed = 2;
+    public float amp = 1;
     MenuScript menu;
     CC player;
     MeshRenderer mesh;
 
+    bool statusEffect = false;
     bool vilkkuminen = false;
     float vilkkumisAika;
 
@@ -63,6 +63,12 @@ public class HPScript : MonoBehaviour
                 vilkkumisAika = .25f;
             }
         }
+        if (gameObject.tag == "Enemy") {
+            if (statusEffect)
+                mesh.material.color = Color.grey;
+            else
+                mesh.material.color = Color.red;
+        }
     }
 
     void Death()
@@ -94,8 +100,8 @@ public class HPScript : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Debug.Log(gameObject.name + " took: " + damage + "damage");
-        hitpoints -= damage;
+        Debug.Log(gameObject.name + " took: " + (int)(damage * amp) + "damage");
+        hitpoints -= (int)(damage * amp);
         vilkkuminen = true;
         if (iNeedUI) {
             UpdateHealthbar();
@@ -104,23 +110,51 @@ public class HPScript : MonoBehaviour
 
     public IEnumerator Slow(float duration, float percentage)
     {
+        statusEffect = true;
         Debug.Log(gameObject.name + " slowed down by " + percentage + "%");
         GetComponent<NavMeshAgent>().speed *= (100 - percentage) / 100;
         yield return new WaitForSeconds(duration);
         GetComponent<NavMeshAgent>().speed /= (100 - percentage) / 100;
+        statusEffect = false;
     }
 
     public IEnumerator Root(float duration)
     {
+        statusEffect = true;
         Debug.Log(gameObject.name + " became rooted in place");
         float temp = GetComponent<NavMeshAgent>().speed;
         GetComponent<NavMeshAgent>().speed = 0f;
         yield return new WaitForSeconds(duration);
         GetComponent<NavMeshAgent>().speed = temp;
+        statusEffect = false;
+    }
+
+    public IEnumerator Stun(float duration)
+    {
+        statusEffect = true;
+        Debug.Log(gameObject.name + " got stunned");
+        if (gameObject.tag == "Enemy") {
+            StatePatternEnemy temp = GetComponent<StatePatternEnemy>();
+            temp.enabled = false;
+            yield return new WaitForSeconds(duration);
+            temp.enabled = true;
+        }
+        statusEffect = false;
+    }
+
+    public IEnumerator Amplify(float duration, float amplifier)
+    {
+        statusEffect = true;
+        amp = amplifier;
+        Debug.Log("Uaargh, " + gameObject.name + " takes " + amplifier + "x damage");
+        yield return new WaitForSeconds(duration);
+        amp = 1;
+        statusEffect = false;
     }
 
     public IEnumerator DOT(float duration, int damage)
     {
+        statusEffect = true;
         Debug.Log(gameObject.name + " started burning");
         int currentCount = 1;
         int ticDamage = damage / (int)duration;
@@ -132,5 +166,6 @@ public class HPScript : MonoBehaviour
         }
         TakeDamage(ticDamage);
         yield return new WaitForSeconds(.5f);
+        statusEffect = false;
     }
 }

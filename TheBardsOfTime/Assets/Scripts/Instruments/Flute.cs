@@ -50,8 +50,13 @@ public class Flute : MonoBehaviour
         }
     }
 
-    bool HitCheck(GameObject target, float range, float radius)
+    bool HitCheck(GameObject target, string type)
     {
+        float range = 0; float radius = 0;
+        if (type == "Attack") { range = ins.attack.Range; radius = ins.attack.Radius; }
+        if (type == "Skill") { range = ins.skill.Range; radius = ins.skill.Radius; }
+        if (type == "Spell") { range = ins.spell.Range; radius = ins.spell.Radius; }
+
         if (Vector3.Distance(player.position, target.transform.position) <= range) {
             Vector3 targetDir = target.transform.position - player.position;
             if (Vector3.Angle(targetDir, player.forward) <= radius / 2) {
@@ -64,13 +69,7 @@ public class Flute : MonoBehaviour
 
     IEnumerator AttackCou()
     {
-        if (isChanneling) {
-            isChanneling = false;
-            yield return true;
-        } else {
-            yield return true;
-            Debug.Log("Flute Attack");
-        }
+        yield return true;
     }
 
     IEnumerator SkillCou()
@@ -79,14 +78,16 @@ public class Flute : MonoBehaviour
             isChanneling = false;
             yield return true;
         } else {
-            float dur = 0;
+            Debug.Log("Flute Skill");
+            yield return new WaitForSeconds(ins.skill.CastTime);
             Debug.Log("Hiirulaiset!");
             ins.skill.Stamp = Time.time + ins.skill.Cooldown + ins.skill.Duration;
+            float dur = 0;
             while (dur < ins.skill.Duration) {
                 Debug.Log("Squeek!");
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 foreach (GameObject go in enemies)
-                    if (HitCheck(go, ins.skill.Range, ins.skill.Radius)) {
+                    if (HitCheck(go, "Skill")) {
                         go.GetComponent<HPScript>().TakeDamage(ins.skill.Damage / 2);
                         StartCoroutine(go.GetComponent<HPScript>().Slow(.5f, ins.skill.Potency));
                     }
@@ -104,16 +105,16 @@ public class Flute : MonoBehaviour
             yield return true;
         } else {
             isChanneling = true;
-            Debug.Log("Castaaminen Alkaa");
+            Debug.Log("Flute Spell");
             ins.spell.Stamp = Time.time + ins.spell.Cooldown;
             yield return new WaitForSeconds(ins.spell.CastTime);
-            Debug.Log("Channelaus Alkaa");
+            Debug.Log("Huilutus Alkaa");
             while (isChanneling) {
                 yield return new WaitForSeconds(.5f);
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 List<GameObject> temp = new List<GameObject>();
                 foreach (GameObject go in enemies)
-                    if (HitCheck(go, ins.spell.Range, ins.spell.Radius))
+                    if (HitCheck(go, "Spell"))
                         temp.Add(go);
                 temp.Sort(delegate (GameObject a, GameObject b) {
                     float distA = Vector3.Distance(a.transform.position, player.transform.position);
@@ -123,7 +124,7 @@ public class Flute : MonoBehaviour
                 if (temp.Count > 0)
                     temp[0].GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
             }
-            Debug.Log("Channelaus Loppuu");
+            Debug.Log("Huilutus Loppuu");
         }
     }
 

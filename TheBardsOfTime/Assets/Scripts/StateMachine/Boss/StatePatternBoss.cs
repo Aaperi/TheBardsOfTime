@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StatePatternBoss : MonoBehaviour {
+public class StatePatternBoss : MonoBehaviour
+{
     public float turnSpeed;
     public float sightRange;
     public Vector3 offset = new Vector3(0, .5f, 0);
@@ -30,7 +31,8 @@ public class StatePatternBoss : MonoBehaviour {
 
     private HPScript hps;
 
-    private void Awake() {
+    private void Awake()
+    {
         combatState = new BossCombatState(this);
         castingState = new CastingState(this);
         chaseState = new BossChaseState(this);
@@ -43,7 +45,8 @@ public class StatePatternBoss : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
         combatState.attcd = attackCoolDown;
         castingState.castSpell = bossData.spell.CastTime;
         currentState = chaseState;
@@ -53,23 +56,22 @@ public class StatePatternBoss : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
         Debug.DrawRay(transform.position, transform.forward * bossData.spell.castingRange, Color.red);
+        currentState.UpdateState();
 
-        if (!hps.rooted) {
-            currentState.UpdateState();
-        }
-  
         cd -= Time.deltaTime;
-        if(cd <= 0) {
+        if (cd <= 0) {
             startCasting = true;
         }
 
-        if(!startCasting)
+        if (!startCasting)
             navMeshAgent.destination = chaseTarget.position;
     }
 
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other)
+    {
         currentState.OnTriggerEnter(other);
     }
 }

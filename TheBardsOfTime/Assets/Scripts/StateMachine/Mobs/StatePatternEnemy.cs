@@ -54,9 +54,7 @@ public class StatePatternEnemy : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         Debug.DrawRay(eyes.position, eyes.forward * sightRange, Color.red);
-        if (!hps.rooted) {
-            currentState.UpdateState();
-        }
+        currentState.UpdateState();
     }
 
     private void OnTriggerEnter(Collider other) {

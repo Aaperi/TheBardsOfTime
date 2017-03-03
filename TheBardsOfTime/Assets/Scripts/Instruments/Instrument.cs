@@ -15,9 +15,10 @@ public class Instrument : ScriptableObject
         public float Radius;
         public float CastTime;
         public float Cooldown;
+        public int Damage;
         public float Duration;
         public float Potency;
-        public int Damage;
+        public float Amplifier;
     }
 
     [System.Serializable]
@@ -29,9 +30,10 @@ public class Instrument : ScriptableObject
         public float Radius;
         public float CastTime;
         public float Cooldown;
+        public int Damage;
         public float Duration;
         public float Potency;
-        public int Damage;
+        public float Amplifier;
     }
 
     [System.Serializable]
@@ -43,9 +45,10 @@ public class Instrument : ScriptableObject
         public float Radius;
         public float CastTime;
         public float Cooldown;
+        public int Damage;
         public float Duration;
         public float Potency;
-        public int Damage;
+        public float Amplifier;
     }
 
     public AttackSettings attack = new AttackSettings();

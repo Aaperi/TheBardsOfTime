@@ -35,8 +35,13 @@ public class Violin : MonoBehaviour
         }
     }
 
-    bool HitCheck(GameObject target, float range, float radius)
+    bool HitCheck(GameObject target, string type)
     {
+        float range = 0; float radius = 0;
+        if (type == "Attack") { range = ins.attack.Range; radius = ins.attack.Radius; }
+        if (type == "Skill") { range = ins.skill.Range; radius = ins.skill.Radius; }
+        if (type == "Spell") { range = ins.spell.Range; radius = ins.spell.Radius; }
+
         if (Vector3.Distance(player.position, target.transform.position) <= range) {
             Vector3 targetDir = target.transform.position - player.position;
             if (Vector3.Angle(targetDir, player.forward) <= radius / 2) {
@@ -54,13 +59,14 @@ public class Violin : MonoBehaviour
             yield return true;
         } else {
             isProcessing = true;
-            Debug.Log("Viulu isku, hijaaa!");
-            ins.attack.Stamp = Time.time + ins.attack.Cooldown;
+            Debug.Log("Violin Attack");
             yield return new WaitForSeconds(ins.attack.CastTime);
+            Debug.Log("Viulu isku, hijaaa!");
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (GameObject go in enemies)
-                if (HitCheck(go, ins.attack.Range, ins.attack.Radius))
+                if (HitCheck(go, "Attack"))
                     go.GetComponent<HPScript>().TakeDamage(ins.attack.Damage);
+            ins.attack.Stamp = Time.time + ins.attack.Cooldown;
             isProcessing = false;
         }
     }
@@ -72,15 +78,16 @@ public class Violin : MonoBehaviour
             yield return true;
         } else {
             isProcessing = true;
-            Debug.Log("ROOTS!");
-            ins.skill.Stamp = Time.time + ins.skill.Cooldown;
+            Debug.Log("Violin Skill");
             yield return new WaitForSeconds(ins.skill.CastTime);
+            Debug.Log("ROOTS!");
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (GameObject go in enemies)
-                if (HitCheck(go, ins.skill.Range, ins.skill.Radius)) {
+                if (HitCheck(go, "Skill")) {
                     StartCoroutine(go.GetComponent<HPScript>().DOT(ins.skill.Duration, ins.skill.Damage));
                     StartCoroutine(go.GetComponent<HPScript>().Root(ins.skill.Duration));
                 }
+            ins.skill.Stamp = Time.time + ins.skill.Cooldown;
             isProcessing = false;
         }
     }
@@ -92,19 +99,19 @@ public class Violin : MonoBehaviour
             yield return true;
         } else {
             isChanneling = true;
-            Debug.Log("Castaaminen Alkaa");
-            ins.spell.Stamp = Time.time + ins.spell.Cooldown;
+            Debug.Log("Violin Spell");
             yield return new WaitForSeconds(ins.spell.CastTime);
             Debug.Log("Channelaus Alkaa");
             while (isChanneling) {
                 yield return new WaitForSeconds(.5f);
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 foreach (GameObject go in enemies)
-                    if (HitCheck(go, ins.spell.Range, ins.spell.Radius)) {
+                    if (HitCheck(go, "Spell")) {
                         go.GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
                         Debug.Log("vinku vonku");
                     }
             }
+            ins.spell.Stamp = Time.time + ins.spell.Cooldown;
             Debug.Log("Channelaus Loppuu");
         }
     }
