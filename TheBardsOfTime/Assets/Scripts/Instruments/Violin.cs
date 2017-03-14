@@ -83,8 +83,8 @@ public class Violin : MonoBehaviour
                     StartCoroutine(go.GetComponent<HPScript>().DOT(ins.skill.Duration, ins.skill.Damage));
                     StartCoroutine(go.GetComponent<HPScript>().Root(ins.skill.Duration));
 
-                    if (go.GetComponent<StatePatternBoss>() != null) {
-                        if (go.GetComponent<StatePatternBoss>().weakness.name == "ViolinSO") {
+                    if (ins.skill.Interrupt && go.GetComponent<StatePatternBoss>() != null) {
+                        if (go.GetComponent<StatePatternBoss>().weakness.name == ins.name) {
                             go.GetComponent<StatePatternBoss>().castingState.Interrupt();
                         }
                     }
@@ -111,6 +111,12 @@ public class Violin : MonoBehaviour
                     if (HitCheck(go, ins.spell.Range, ins.spell.Radius)) {
                         go.GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
                         Debug.Log("vinku vonku");
+
+                        if (ins.spell.Interrupt && go.GetComponent<StatePatternBoss>() != null) {
+                            if (go.GetComponent<StatePatternBoss>().weakness.name == ins.name) {
+                                go.GetComponent<StatePatternBoss>().castingState.Interrupt();
+                            }
+                        }
                     }
             }
             Debug.Log("Channelaus Loppuu");

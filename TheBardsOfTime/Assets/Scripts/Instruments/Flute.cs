@@ -2,56 +2,48 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Flute : MonoBehaviour
-{
+public class Flute : MonoBehaviour {
     private CC CCref;
     private Instrument ins;
     private Transform player;
     private bool isProcessing = false;
     private bool isChanneling = false;
 
-    void Start()
-    {
+    void Start() {
         CCref = FindObjectOfType<CC>();
         ins = Resources.Load("Data/FluteSO") as Instrument;
         player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
-    void OnEnable()
-    {
+    void OnEnable() {
         if (CCref != null)
             CCref.moveSetting.forwardVel *= 1.2f;
     }
 
-    void OnDisable()
-    {
+    void OnDisable() {
         if (CCref != null)
             CCref.moveSetting.forwardVel /= 1.2f;
     }
 
-    void Attack()
-    {
+    void Attack() {
         if (!isProcessing && Time.time > ins.attack.Stamp) {
             StartCoroutine(AttackCou());
         }
     }
 
-    void Skill()
-    {
+    void Skill() {
         if (!isProcessing && Time.time > ins.skill.Stamp) {
             StartCoroutine(SkillCou());
         }
     }
 
-    void Spell()
-    {
+    void Spell() {
         if (!isProcessing && Time.time > ins.spell.Stamp) {
             StartCoroutine(SpellCou());
         }
     }
 
-    bool HitCheck(GameObject target, float range, float radius)
-    {
+    bool HitCheck(GameObject target, float range, float radius) {
         if (Vector3.Distance(player.position, target.transform.position) <= range) {
             Vector3 targetDir = target.transform.position - player.position;
             if (Vector3.Angle(targetDir, player.forward) <= radius / 2) {
@@ -62,8 +54,7 @@ public class Flute : MonoBehaviour
             return false;
     }
 
-    IEnumerator AttackCou()
-    {
+    IEnumerator AttackCou() {
         if (isChanneling) {
             isChanneling = false;
             yield return true;
@@ -73,8 +64,7 @@ public class Flute : MonoBehaviour
         }
     }
 
-    IEnumerator SkillCou()
-    {
+    IEnumerator SkillCou() {
         if (isChanneling) {
             isChanneling = false;
             yield return true;
@@ -90,11 +80,12 @@ public class Flute : MonoBehaviour
                         go.GetComponent<HPScript>().TakeDamage(ins.skill.Damage / 2);
                         StartCoroutine(go.GetComponent<HPScript>().Slow(.5f, ins.skill.Potency));
 
-                        if(go.GetComponent<StatePatternBoss>() != null) {
-                            if(go.GetComponent<StatePatternBoss>().weakness.name == "FluteSO") {
+                        if (ins.skill.Interrupt && go.GetComponent<StatePatternBoss>() != null) {
+                            if (go.GetComponent<StatePatternBoss>().weakness.name == ins.name) {
                                 go.GetComponent<StatePatternBoss>().castingState.Interrupt();
                             }
                         }
+
                     }
 
                 yield return new WaitForSeconds(.5f);
@@ -104,8 +95,8 @@ public class Flute : MonoBehaviour
         }
     }
 
-    IEnumerator SpellCou()
-    {
+
+    IEnumerator SpellCou() {
         if (isChanneling) {
             isChanneling = false;
             yield return true;
@@ -120,18 +111,26 @@ public class Flute : MonoBehaviour
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 List<GameObject> temp = new List<GameObject>();
                 foreach (GameObject go in enemies)
-                    if (HitCheck(go, ins.spell.Range, ins.spell.Radius))
+                    if (HitCheck(go, ins.spell.Range, ins.spell.Radius)) {
                         temp.Add(go);
-                temp.Sort(delegate (GameObject a, GameObject b) {
-                    float distA = Vector3.Distance(a.transform.position, player.transform.position);
-                    float distB = Vector3.Distance(b.transform.position, player.transform.position);
-                    return distA.CompareTo(distB);
-                });
-                if (temp.Count > 0)
-                    temp[0].GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
-            }
-            Debug.Log("Channelaus Loppuu");
-        }
-    }
 
+                        if (ins.spell.Interrupt && go.GetComponent<StatePatternBoss>() != null) {
+                            if (go.GetComponent<StatePatternBoss>().weakness.name == ins.name) {
+                                go.GetComponent<StatePatternBoss>().castingState.Interrupt();
+                            }
+                        }
+
+                        temp.Sort(delegate (GameObject a, GameObject b) {
+                            float distA = Vector3.Distance(a.transform.position, player.transform.position);
+                            float distB = Vector3.Distance(b.transform.position, player.transform.position);
+                            return distA.CompareTo(distB);
+                        });
+                        if (temp.Count > 0)
+                            temp[0].GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
+                    }
+                Debug.Log("Channelaus Loppuu");
+            }
+        }
+
+    }
 }
