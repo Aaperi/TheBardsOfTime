@@ -89,7 +89,14 @@ public class Flute : MonoBehaviour
                     if (HitCheck(go, ins.skill.Range, ins.skill.Radius)) {
                         go.GetComponent<HPScript>().TakeDamage(ins.skill.Damage / 2);
                         StartCoroutine(go.GetComponent<HPScript>().Slow(.5f, ins.skill.Potency));
+
+                        if(go.GetComponent<StatePatternBoss>() != null) {
+                            if(go.GetComponent<StatePatternBoss>().weakness.name == "FluteSO") {
+                                go.GetComponent<StatePatternBoss>().castingState.Interrupt();
+                            }
+                        }
                     }
+
                 yield return new WaitForSeconds(.5f);
                 dur += .5f;
             }

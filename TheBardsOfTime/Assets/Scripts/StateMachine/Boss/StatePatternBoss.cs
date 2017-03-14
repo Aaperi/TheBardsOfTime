@@ -6,6 +6,7 @@ public class StatePatternBoss : MonoBehaviour {
     public float sightRange;
     public Vector3 offset = new Vector3(0, .5f, 0);
     public LayerMask mask;
+    public Instrument weakness;
 
     [HideInInspector]
     public Transform chaseTarget;
