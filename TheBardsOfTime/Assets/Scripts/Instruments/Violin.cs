@@ -59,8 +59,10 @@ public class Violin : MonoBehaviour
             yield return new WaitForSeconds(ins.attack.CastTime);
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (GameObject go in enemies)
-                if (HitCheck(go, ins.attack.Range, ins.attack.Radius))
+                if (HitCheck(go, ins.attack.Range, ins.attack.Radius)) {
                     go.GetComponent<HPScript>().TakeDamage(ins.attack.Damage);
+                }
+                    
             isProcessing = false;
         }
     }
@@ -80,6 +82,12 @@ public class Violin : MonoBehaviour
                 if (HitCheck(go, ins.skill.Range, ins.skill.Radius)) {
                     StartCoroutine(go.GetComponent<HPScript>().DOT(ins.skill.Duration, ins.skill.Damage));
                     StartCoroutine(go.GetComponent<HPScript>().Root(ins.skill.Duration));
+
+                    if (ins.skill.Interrupt && go.GetComponent<StatePatternBoss>() != null) {
+                        if (go.GetComponent<StatePatternBoss>().weakness.name == ins.name) {
+                            go.GetComponent<StatePatternBoss>().castingState.Interrupt();
+                        }
+                    }
                 }
             isProcessing = false;
         }
@@ -103,6 +111,12 @@ public class Violin : MonoBehaviour
                     if (HitCheck(go, ins.spell.Range, ins.spell.Radius)) {
                         go.GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
                         Debug.Log("vinku vonku");
+
+                        if (ins.spell.Interrupt && go.GetComponent<StatePatternBoss>() != null) {
+                            if (go.GetComponent<StatePatternBoss>().weakness.name == ins.name) {
+                                go.GetComponent<StatePatternBoss>().castingState.Interrupt();
+                            }
+                        }
                     }
             }
             Debug.Log("Channelaus Loppuu");
