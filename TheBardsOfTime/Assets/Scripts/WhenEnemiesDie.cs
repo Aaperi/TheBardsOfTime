@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class WhenEnemiesDie : MonoBehaviour {
 
@@ -13,16 +14,24 @@ public class WhenEnemiesDie : MonoBehaviour {
         if(EnemiesAlive.Count > 0) {
             gameObject.SetActive(true);
         } else {
-            gameObject.SetActive(false);
+            sceneComplete();
         }
     }
 
-    private void SearchForEnemies()
+    void SearchForEnemies()
     {
         GameObject[] temp = GameObject.FindGameObjectsWithTag("Enemy");
         EnemiesAlive.Clear();
         foreach(GameObject go in temp) {
             EnemiesAlive.Add(go);
         }
+    }
+
+    void sceneComplete()
+    {
+        gameObject.SetActive(false);
+        GameManager gm = FindObjectOfType<GameManager>();
+        gm.levels[SceneManager.GetActiveScene().name] = true;
+        Debug.Log(gm.levels[SceneManager.GetActiveScene().name]);
     }
 }

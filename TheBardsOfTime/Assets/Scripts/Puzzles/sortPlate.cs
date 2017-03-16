@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 
 public class sortPlate : MonoBehaviour
@@ -54,8 +55,16 @@ public class sortPlate : MonoBehaviour
         }
         if (succesrate >= otherPlates.Length) {
             Debug.Log(otherPlates.Length + " " + succesrate);
-            try { Destroy(Obstacle); }
+            try { puzzleCompleted(); }
             catch { }
         }
+    }
+
+    void puzzleCompleted()
+    {
+        Obstacle.SetActive(false);
+        GameManager gm = FindObjectOfType<GameManager>();
+        gm.levels[SceneManager.GetActiveScene().name] = true;
+        Debug.Log(gm.levels[SceneManager.GetActiveScene().name]);
     }
 }

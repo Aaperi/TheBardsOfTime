@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEngine.SceneManagement;
 
 public class pressurePlate : MonoBehaviour {
-
 
     public int totalWeight = 5;
     public int currentWeight;
@@ -36,7 +35,14 @@ public class pressurePlate : MonoBehaviour {
         }
 
         if (totalWeight == currentWeight) {
-            Destroy(Obstacle);
+            puzzleCompleted();
         }
+    }
+
+    void puzzleCompleted()
+    {
+        Obstacle.SetActive(false);
+        GameManager gm = FindObjectOfType<GameManager>();
+        gm.levels[SceneManager.GetActiveScene().name] = true;
     }
 }
