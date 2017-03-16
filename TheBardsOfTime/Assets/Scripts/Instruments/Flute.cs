@@ -9,12 +9,20 @@ public class Flute : MonoBehaviour
     private Transform player;
     private bool isProcessing = false;
     private bool isChanneling = false;
+    [HideInInspector]
+    public ParticleSystem psys;
+    private ParticleSystem.ShapeModule sh;
+
+    void Awake() {
+        psys = GameObject.Find("Player").GetComponentInChildren<ParticleSystem>();
+    }
 
     void Start()
     {
         CCref = FindObjectOfType<CC>();
         ins = Resources.Load("Data/FluteSO") as Instrument;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        sh = psys.shape;
     }
 
     void OnEnable()
@@ -74,12 +82,18 @@ public class Flute : MonoBehaviour
 
     IEnumerator SkillCou()
     {
+        sh.shapeType = ParticleSystemShapeType.Circle;
+        sh.arc = ins.skill.Radius;
+        sh.radius = ins.skill.Range;
+        psys.transform.localEulerAngles = new Vector3(90, 0, 0);
+
         if (isChanneling) {
             isChanneling = false;
             yield return true;
         } else {
             Debug.Log("Flute Skill");
             yield return new WaitForSeconds(ins.skill.CastTime);
+            psys.Play();
             Debug.Log("Hiirulaiset!");
             ins.skill.Stamp = Time.time + ins.skill.Cooldown + ins.skill.Duration;
             float dur = 0;
@@ -100,12 +114,18 @@ public class Flute : MonoBehaviour
                 yield return new WaitForSeconds(.5f);
                 dur += .5f;
             }
+            psys.Stop();
             Debug.Log("Hei hei hiiret");
         }
     }
 
     IEnumerator SpellCou()
     {
+        sh.shapeType = ParticleSystemShapeType.Circle;
+        sh.arc = 0;
+        sh.radius = ins.spell.Range;
+        psys.transform.localEulerAngles = new Vector3(0, -90, 0);
+
         if (isChanneling) {
             isChanneling = false;
             yield return true;
@@ -114,6 +134,7 @@ public class Flute : MonoBehaviour
             Debug.Log("Flute Spell");
             ins.spell.Stamp = Time.time + ins.spell.Cooldown;
             yield return new WaitForSeconds(ins.spell.CastTime);
+            psys.Play();
             Debug.Log("Huilutus Alkaa");
             while (isChanneling) {
                 yield return new WaitForSeconds(.5f);
@@ -138,6 +159,7 @@ public class Flute : MonoBehaviour
                 if (temp.Count > 0)
                     temp[0].GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
             }
+            psys.Stop();
             Debug.Log("Huilutus Loppuu");
         }
     }

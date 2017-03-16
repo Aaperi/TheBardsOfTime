@@ -84,8 +84,6 @@ public class StatePatternBoss : MonoBehaviour
             ps.Stop();
         }
 
-        Debug.Log(ps.isPlaying);
-
     }
 
     private void OnTriggerEnter(Collider other)
