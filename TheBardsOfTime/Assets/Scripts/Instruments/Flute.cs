@@ -14,7 +14,9 @@ public class Flute : MonoBehaviour
     private ParticleSystem.ShapeModule sh;
 
     void Awake() {
-        psys = GameObject.Find("Player").GetComponentInChildren<ParticleSystem>();
+        try {
+            psys = GameObject.Find("Player").GetComponentInChildren<ParticleSystem>();
+        } catch { }
     }
 
     void Start()

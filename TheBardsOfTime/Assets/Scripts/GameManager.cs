@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 
     static GameManager gm;
     public Dictionary<string, bool> levels = new Dictionary<string, bool>();
@@ -18,12 +19,21 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void OnEnable()
+    void Update()
     {
-        foreach(UnityEditor.EditorBuildSettingsScene S in UnityEditor.EditorBuildSettings.scenes) {
-            string name = S.path.Substring(S.path.LastIndexOf('/') + 1);
-            name = name.Substring(0, name.Length - 6);
-            levels.Add(name, false);
-        }
+        if (!levels.ContainsKey(SceneManager.GetActiveScene().name))
+            levels.Add(SceneManager.GetActiveScene().name, false);
     }
+
+    /*void getSceneNames()
+    {
+
+        try {
+            foreach (UnityEditor.EditorBuildSettingsScene S in UnityEditor.EditorBuildSettings.scenes) {
+                string name = S.path.Substring(S.path.LastIndexOf('/') + 1);
+                name = name.Substring(0, name.Length - 6);
+                levels.Add(name, false);
+            }
+        } catch { }
+    }*/
 }

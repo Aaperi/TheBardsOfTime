@@ -8,6 +8,8 @@ public class Unloader : MonoBehaviour{
     {
         if (FindObjectOfType<GameManager>() != null) {
             GameManager gm = FindObjectOfType<GameManager>();
+            if (!gm.levels.ContainsKey(SceneManager.GetActiveScene().name))
+                gm.levels.Add(SceneManager.GetActiveScene().name, false);
             if (gm.levels[SceneManager.GetActiveScene().name])
                 gameObject.SetActive(false);
         }
