@@ -90,6 +90,12 @@ public class Flute : MonoBehaviour
                     if (HitCheck(go, "Skill")) {
                         go.GetComponent<HPScript>().TakeDamage(ins.skill.Damage / 2);
                         StartCoroutine(go.GetComponent<HPScript>().Slow(.5f, ins.skill.Potency));
+
+                        if (ins.skill.Interrupt && go.GetComponent<StatePatternBoss>() != null) {
+                            if (go.GetComponent<StatePatternBoss>().weakness.name == ins.name) {
+                                go.GetComponent<StatePatternBoss>().castingState.Interrupt();
+                            }
+                        }
                     }
                 yield return new WaitForSeconds(.5f);
                 dur += .5f;
@@ -114,8 +120,16 @@ public class Flute : MonoBehaviour
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 List<GameObject> temp = new List<GameObject>();
                 foreach (GameObject go in enemies)
-                    if (HitCheck(go, "Spell"))
+                    if (HitCheck(go, "Spell")) {
                         temp.Add(go);
+
+                        if (ins.spell.Interrupt && go.GetComponent<StatePatternBoss>() != null) {
+                            if (go.GetComponent<StatePatternBoss>().weakness.name == ins.name) {
+                                go.GetComponent<StatePatternBoss>().castingState.Interrupt();
+                            }
+                        }
+                    }
+
                 temp.Sort(delegate (GameObject a, GameObject b) {
                     float distA = Vector3.Distance(a.transform.position, player.transform.position);
                     float distB = Vector3.Distance(b.transform.position, player.transform.position);

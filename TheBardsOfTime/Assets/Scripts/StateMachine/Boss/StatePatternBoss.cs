@@ -29,8 +29,11 @@ public class StatePatternBoss : MonoBehaviour
     public bool startCasting;
     [HideInInspector]
     public float cd, attackCoolDown;
+    [HideInInspector]
+    public ParticleSystem ps;
 
     private HPScript hps;
+    
 
     private void Awake()
     {
@@ -43,6 +46,7 @@ public class StatePatternBoss : MonoBehaviour
         hps = GetComponent<HPScript>();
 
         navMeshAgent = GetComponent<NavMeshAgent>();
+        ps = GetComponentInChildren<ParticleSystem>();
     }
 
     // Use this for initialization
@@ -54,6 +58,12 @@ public class StatePatternBoss : MonoBehaviour
         cd = bossData.spell.timeToCasting;
         chaseTarget = player.transform;
         navMeshAgent.destination = chaseTarget.position;
+
+        var sh = ps.shape;
+        sh.shapeType = ParticleSystemShapeType.Circle;
+        sh.enabled = true;
+        sh.arc = bossData.spell.castingRadius;
+        sh.radius = bossData.spell.castingRange;
     }
 
     // Update is called once per frame
@@ -66,9 +76,16 @@ public class StatePatternBoss : MonoBehaviour
         if (cd <= 0) {
             startCasting = true;
         }
+        if (startCasting)
+            ps.Play();
 
-        if (!startCasting)
+        if (!startCasting) {
             navMeshAgent.destination = chaseTarget.position;
+            ps.Stop();
+        }
+
+        Debug.Log(ps.isPlaying);
+
     }
 
     private void OnTriggerEnter(Collider other)
