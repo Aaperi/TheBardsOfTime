@@ -86,6 +86,12 @@ public class Violin : MonoBehaviour
                 if (HitCheck(go, "Skill")) {
                     StartCoroutine(go.GetComponent<HPScript>().DOT(ins.skill.Duration, ins.skill.Damage));
                     StartCoroutine(go.GetComponent<HPScript>().Root(ins.skill.Duration));
+
+                    if (ins.skill.Interrupt && go.GetComponent<StatePatternBoss>() != null) {
+                        if (go.GetComponent<StatePatternBoss>().weakness.name == ins.name) {
+                            go.GetComponent<StatePatternBoss>().castingState.Interrupt();
+                        }
+                    }
                 }
             ins.skill.Stamp = Time.time + ins.skill.Cooldown;
             isProcessing = false;
@@ -109,6 +115,12 @@ public class Violin : MonoBehaviour
                     if (HitCheck(go, "Spell")) {
                         go.GetComponent<HPScript>().TakeDamage(ins.spell.Damage / 2);
                         Debug.Log("vinku vonku");
+
+                        if (ins.spell.Interrupt && go.GetComponent<StatePatternBoss>() != null) {
+                            if (go.GetComponent<StatePatternBoss>().weakness.name == ins.name) {
+                                go.GetComponent<StatePatternBoss>().castingState.Interrupt();
+                            }
+                        }
                     }
             }
             ins.spell.Stamp = Time.time + ins.spell.Cooldown;

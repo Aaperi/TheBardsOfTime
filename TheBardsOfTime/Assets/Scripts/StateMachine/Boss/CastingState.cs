@@ -13,10 +13,9 @@ public class CastingState : IBossState {
 
     public void UpdateState() {
         if (boss.startCasting) {
+            boss.ps.Play();
             Casting();
-        }
-        
-        
+        } 
     }
 
     public void OnTriggerEnter(Collider other) {
@@ -43,7 +42,6 @@ public class CastingState : IBossState {
         boss.navMeshAgent.Stop();
         castSpell -= Time.deltaTime;
         if(castSpell <= 0) {
-            
             Cast();
             boss.startCasting = false;
             boss.cd = boss.bossData.spell.timeToCasting; // cd = koska bossi aloittaa seuraavan castingin
@@ -65,6 +63,7 @@ public class CastingState : IBossState {
             boss.startCasting = false;
             boss.cd = boss.bossData.spell.timeToCasting;
             castSpell = boss.bossData.spell.CastTime;
+            boss.ps.Stop();
             ToChaseState();
         }
     }

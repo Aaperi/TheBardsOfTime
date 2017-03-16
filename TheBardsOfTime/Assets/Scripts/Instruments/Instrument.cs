@@ -34,6 +34,7 @@ public class Instrument : ScriptableObject
         public float Duration;
         public float Potency;
         public float Amplifier;
+        public bool Interrupt;
     }
 
     [System.Serializable]
@@ -49,6 +50,7 @@ public class Instrument : ScriptableObject
         public float Duration;
         public float Potency;
         public float Amplifier;
+        public bool Interrupt;
     }
 
     public AttackSettings attack = new AttackSettings();
