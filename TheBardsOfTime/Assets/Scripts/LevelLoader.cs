@@ -5,6 +5,7 @@ using System.Collections;
 public class LevelLoader : MonoBehaviour {
 
     Object player;
+    public int lvlID;
 
     void Start()
     {
@@ -14,7 +15,7 @@ public class LevelLoader : MonoBehaviour {
     void OnTriggerEnter (Collider col)
     {
         if(col.gameObject.name == player.name) {
-            SceneManager.LoadScene(int.Parse(gameObject.name));
+            SceneManager.LoadScene(lvlID);
         }
     }
 }
