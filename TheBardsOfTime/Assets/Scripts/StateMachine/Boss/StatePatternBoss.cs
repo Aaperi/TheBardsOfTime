@@ -47,6 +47,7 @@ public class StatePatternBoss : MonoBehaviour
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         ps = GetComponentInChildren<ParticleSystem>();
+        ps.Stop();
     }
 
     // Use this for initialization

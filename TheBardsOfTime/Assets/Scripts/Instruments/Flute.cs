@@ -35,6 +35,7 @@ public class Flute : MonoBehaviour
 
     void OnDisable()
     {
+        psys.Stop();
         if (CCref != null)
             CCref.moveSetting.forwardVel /= 1.2f;
     }
@@ -77,6 +78,29 @@ public class Flute : MonoBehaviour
             return false;
     }
 
+    void SetParticles(string type) {
+        sh.shapeType = ParticleSystemShapeType.Circle;
+
+        if (type == "Attack") {
+            sh.arc = ins.attack.Radius;
+            sh.radius = ins.attack.Range;
+            psys.transform.localEulerAngles = new Vector3(90, (-90 + ins.attack.Radius / 2), 0);
+        }
+
+        if (type == "Skill") {
+            sh.arc = ins.skill.Radius;
+            sh.radius = ins.skill.Range;
+            psys.transform.localEulerAngles = new Vector3(90, (-90 + ins.skill.Radius / 2), 0);
+        }
+
+        if (type == "Spell") {
+            sh.arc = ins.spell.Radius;
+            sh.radius = ins.spell.Range;
+            psys.transform.localEulerAngles = new Vector3(90, (-90 + ins.spell.Radius / 2), 0);
+        }
+
+    }
+
     IEnumerator AttackCou()
     {
         yield return true;
@@ -84,10 +108,7 @@ public class Flute : MonoBehaviour
 
     IEnumerator SkillCou()
     {
-        sh.shapeType = ParticleSystemShapeType.Circle;
-        sh.arc = ins.skill.Radius;
-        sh.radius = ins.skill.Range;
-        psys.transform.localEulerAngles = new Vector3(90, 0, 0);
+        SetParticles("Skill");
 
         if (isChanneling) {
             isChanneling = false;
@@ -123,10 +144,7 @@ public class Flute : MonoBehaviour
 
     IEnumerator SpellCou()
     {
-        sh.shapeType = ParticleSystemShapeType.Circle;
-        sh.arc = 0;
-        sh.radius = ins.spell.Range;
-        psys.transform.localEulerAngles = new Vector3(0, -90, 0);
+        SetParticles("Spell");
 
         if (isChanneling) {
             isChanneling = false;

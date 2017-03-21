@@ -7,11 +7,24 @@ public class Violin : MonoBehaviour
     private Transform player;
     private bool isProcessing = false;
     private bool isChanneling = false;
+    public ParticleSystem psys;
+    private ParticleSystem.ShapeModule sh;
+
+    void OnDisable() {
+        psys.Stop();
+    }
+
+    void Awake() {
+        try {
+            psys = GameObject.Find("Player").GetComponentInChildren<ParticleSystem>();
+        } catch { }
+    }
 
     void Start()
     {
         ins = Resources.Load("Data/ViolinSO") as Instrument;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        sh = psys.shape;
     }
 
     void Attack()
@@ -52,6 +65,29 @@ public class Violin : MonoBehaviour
             return false;
     }
 
+    void SetParticles(string type) {
+        sh.shapeType = ParticleSystemShapeType.Circle;
+
+        if (type == "Attack") {
+            sh.arc = ins.attack.Radius;
+            sh.radius = ins.attack.Range;
+            psys.transform.localEulerAngles = new Vector3(90, (-90 + ins.attack.Radius / 2), 0);
+        }
+
+        if (type == "Skill") {
+            sh.arc = ins.skill.Radius;
+            sh.radius = ins.skill.Range;
+            psys.transform.localEulerAngles = new Vector3(90, (-90 + ins.skill.Radius / 2), 0);
+        }
+
+        if (type == "Spell") {
+            sh.arc = ins.spell.Radius;
+            sh.radius = ins.spell.Range;
+            psys.transform.localEulerAngles = new Vector3(90, (-90 + ins.spell.Radius / 2), 0);
+        }
+
+    }
+
     IEnumerator AttackCou()
     {
         if (isChanneling) {
@@ -73,6 +109,11 @@ public class Violin : MonoBehaviour
 
     IEnumerator SkillCou()
     {
+        sh.shapeType = ParticleSystemShapeType.Circle;
+        sh.arc = ins.skill.Radius;
+        sh.radius = ins.skill.Range;
+        psys.transform.localEulerAngles = new Vector3(90, (-90 + ins.spell.Radius / 2), 0);
+
         if (isChanneling) {
             isChanneling = false;
             yield return true;
@@ -80,6 +121,7 @@ public class Violin : MonoBehaviour
             isProcessing = true;
             Debug.Log("Violin Skill");
             yield return new WaitForSeconds(ins.skill.CastTime);
+            psys.Play();
             Debug.Log("ROOTS!");
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (GameObject go in enemies)
@@ -94,12 +136,18 @@ public class Violin : MonoBehaviour
                     }
                 }
             ins.skill.Stamp = Time.time + ins.skill.Cooldown;
+            psys.Stop();
             isProcessing = false;
         }
     }
 
     IEnumerator SpellCou()
     {
+        sh.shapeType = ParticleSystemShapeType.Circle;
+        sh.arc = ins.spell.Radius;
+        sh.radius = ins.spell.Range;
+        psys.transform.localEulerAngles = new Vector3(90, (-90 + ins.spell.Radius / 2), 0);
+
         if (isChanneling) {
             isChanneling = false;
             yield return true;
@@ -107,6 +155,7 @@ public class Violin : MonoBehaviour
             isChanneling = true;
             Debug.Log("Violin Spell");
             yield return new WaitForSeconds(ins.spell.CastTime);
+            psys.Play();
             Debug.Log("Channelaus Alkaa");
             while (isChanneling) {
                 yield return new WaitForSeconds(.5f);
@@ -124,6 +173,7 @@ public class Violin : MonoBehaviour
                     }
             }
             ins.spell.Stamp = Time.time + ins.spell.Cooldown;
+            psys.Stop();
             Debug.Log("Channelaus Loppuu");
         }
     }
