@@ -90,6 +90,7 @@ public class Violin : MonoBehaviour
 
     IEnumerator AttackCou()
     {
+        SetParticles("Attack");
         if (isChanneling) {
             isChanneling = false;
             yield return true;
@@ -97,22 +98,21 @@ public class Violin : MonoBehaviour
             isProcessing = true;
             Debug.Log("Violin Attack");
             yield return new WaitForSeconds(ins.attack.CastTime);
+            psys.Play();
             Debug.Log("Viulu isku, hijaaa!");
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (GameObject go in enemies)
                 if (HitCheck(go, "Attack"))
                     go.GetComponent<HPScript>().TakeDamage(ins.attack.Damage);
             ins.attack.Stamp = Time.time + ins.attack.Cooldown;
+            psys.Stop();
             isProcessing = false;
         }
     }
 
     IEnumerator SkillCou()
     {
-        sh.shapeType = ParticleSystemShapeType.Circle;
-        sh.arc = ins.skill.Radius;
-        sh.radius = ins.skill.Range;
-        psys.transform.localEulerAngles = new Vector3(90, (-90 + ins.spell.Radius / 2), 0);
+        SetParticles("Skill");
 
         if (isChanneling) {
             isChanneling = false;
@@ -143,10 +143,7 @@ public class Violin : MonoBehaviour
 
     IEnumerator SpellCou()
     {
-        sh.shapeType = ParticleSystemShapeType.Circle;
-        sh.arc = ins.spell.Radius;
-        sh.radius = ins.spell.Range;
-        psys.transform.localEulerAngles = new Vector3(90, (-90 + ins.spell.Radius / 2), 0);
+        SetParticles("Spell");
 
         if (isChanneling) {
             isChanneling = false;

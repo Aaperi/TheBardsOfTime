@@ -128,41 +128,47 @@ public class CC : MonoBehaviour
 
     void Run()
     {
-        if (Mathf.Abs(forwardInput) > inputSetting.inputDelay) {
-            //move
-            velocity.z = moveSetting.forwardVel * forwardInput;
+        if (Grounded()) {
+            if (Mathf.Abs(forwardInput) > inputSetting.inputDelay) {
+                //move
+                velocity.z = moveSetting.forwardVel * forwardInput;
 
-        } else {
-            //no velocity
-            velocity.z = 0;
-        }
+            } else {
+                //no velocity
+                velocity.z = 0;
+            }
 
-        if (Mathf.Abs(sideInput) > inputSetting.inputDelay && targetIsLocked) {
-            //strafe
-            velocity.x = moveSetting.forwardVel * sideInput;
-        } else {
-            //no velocity
-            velocity.x = 0;
+            if (Mathf.Abs(sideInput) > inputSetting.inputDelay && targetIsLocked) {
+                //strafe
+                velocity.x = moveSetting.forwardVel * sideInput;
+            } else {
+                //no velocity
+                velocity.x = 0;
+            }
         }
+        
     }
 
 
     void Turn()
     {
-        if (Mathf.Abs(sideInput) > inputSetting.inputDelay && !targetIsLocked) {
-            float direction = forwardInput;
-            if (direction == 0)
-                direction = 1;
-            targetRotation *= Quaternion.AngleAxis(moveSetting.rotateVel * sideInput * direction * Time.deltaTime, Vector3.up);
-            transform.rotation = targetRotation;
-        } else {
-            rb.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+        if (Grounded()) {
+            if (Mathf.Abs(sideInput) > inputSetting.inputDelay && !targetIsLocked) {
+                float direction = forwardInput;
+                if (direction == 0)
+                    direction = 1;
+                targetRotation *= Quaternion.AngleAxis(moveSetting.rotateVel * sideInput * direction * Time.deltaTime, Vector3.up);
+                transform.rotation = targetRotation;
+            } else {
+                rb.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
+            }
+            if (targetIsLocked) {
+                var targetPosition = target.transform.position;
+                targetPosition.y = transform.position.y;
+                transform.LookAt(targetPosition);
+            }
         }
-        if (targetIsLocked) {
-            var targetPosition = target.transform.position;
-            targetPosition.y = transform.position.y;
-            transform.LookAt(targetPosition);
-        }
+        
     }
 
     void DoubleJump()
