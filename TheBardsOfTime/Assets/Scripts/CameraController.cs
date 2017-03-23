@@ -117,8 +117,8 @@ public class CameraController : MonoBehaviour {
         LookAtTarget();
         OrbitTarget();
 
-        if(CCref.targetIsLocked)
-            LockedCamera();
+        /*if(CCref.targetIsLocked)
+            LockedCamera();*/
 
         collision.UpdateCameraClipPoints(transform.position, transform.rotation, 
             ref collision.adjustedCameraClipPoints);

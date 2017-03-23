@@ -76,11 +76,6 @@ public class HPScript : MonoBehaviour
         Debug.Log(gameObject.name + " has died. lol!");
 
         hitpoints = 0;
-        HitDetection[] temp = FindObjectsOfType<HitDetection>();
-        foreach (HitDetection HD in temp)
-            HD.enemyList.Remove(gameObject);
-        TargetManager tamp = FindObjectOfType<TargetManager>();
-        tamp.RemoveTarget(gameObject);
         gameObject.SetActive(false);
 
         player.inCombat = false;

@@ -75,9 +75,9 @@ public class CC : MonoBehaviour
     {
         targetRotation = transform.rotation;
         rb = GetComponent<Rigidbody>();
-        tam = GameObject.Find("TargetDetection").GetComponent<TargetManager>();
         dia = FindObjectOfType<DialogueScript>();
         MSref = FindObjectOfType<MenuScript>();
+        tam = GetComponent<TargetManager>();
 
         forwardInput = sideInput = 0;
         attackInput = skillInput = spellInput = swapInput = targetLock = jumpInput = false;
@@ -122,8 +122,8 @@ public class CC : MonoBehaviour
         Interaction();
         rb.velocity = transform.TransformDirection(velocity);
         if (target != null)
-            if (Vector3.Distance(transform.position, target.transform.position) > maxDist)
-                UnlockTarget();
+            if (Vector3.Distance(transform.position, target.transform.position) > tam.range)
+                targetIsLocked = false;
     }
 
     void Run()
@@ -146,7 +146,7 @@ public class CC : MonoBehaviour
                 velocity.x = 0;
             }
         }
-        
+
     }
 
 
@@ -159,16 +159,17 @@ public class CC : MonoBehaviour
                     direction = 1;
                 targetRotation *= Quaternion.AngleAxis(moveSetting.rotateVel * sideInput * direction * Time.deltaTime, Vector3.up);
                 transform.rotation = targetRotation;
-            } else {
-                rb.angularVelocity = new Vector3(0.0f, 0.0f, 0.0f);
-            }
-            if (targetIsLocked) {
+            } else
+                rb.angularVelocity = Vector3.zero;
+
+            if (targetIsLocked && target != null) {
                 var targetPosition = target.transform.position;
                 targetPosition.y = transform.position.y;
                 transform.LookAt(targetPosition);
-            }
+            } else
+                targetIsLocked = false;
         }
-        
+
     }
 
     void DoubleJump()
@@ -193,20 +194,9 @@ public class CC : MonoBehaviour
 
     void LockTarget()
     {
-        target = null;
-        tam.changeTarget("First");
-        if (target != null) {
+        target = tam.getTarget("First");
+        if (target != null)
             targetIsLocked = true;
-        } else {
-            targetIsLocked = false;
-            target = null;
-        }
-    }
-
-    void UnlockTarget()
-    {
-        target = null;
-        targetIsLocked = false;
     }
 
     void EquipByID(int ID)
@@ -222,31 +212,27 @@ public class CC : MonoBehaviour
 
     void Combat()
     {
-        if (attackInput) {
+        if (attackInput)
             Instruments[insID].SendMessage("Attack");
-        }
 
-        if (skillInput) {
+        if (skillInput)
             Instruments[insID].SendMessage("Skill");
-        }
 
-        if (spellInput) {
+        if (spellInput)
             Instruments[insID].SendMessage("Spell");
-        }
 
         if (targetLock) {
             if (!targetIsLocked) {
-                LockTarget();
-            } else {
-                UnlockTarget();
-            }
+                target = tam.getTarget("First");
+                if (target != null)
+                    targetIsLocked = true;
+            } else
+                targetIsLocked = false;
         }
 
-        if (nextTarget) {
-            if (targetIsLocked) {
-                tam.changeTarget("Next");
-            }
-        }
+        if (nextTarget)
+            if (targetIsLocked)
+                target = tam.getTarget("Another");
 
         if (swapInput) {
             insID++;
