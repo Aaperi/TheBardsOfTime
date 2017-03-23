@@ -1,70 +1,93 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class pickUpObject : MonoBehaviour {
+public class pickUpObject : MonoBehaviour
+{
 
-    private bool carrying;
-    private float smooth;
-    private GameObject carriedObject;
-    private MenuScript MSref;
+    bool carrying;
+    float smooth;
+    public float range = 6;
+    public float radius = 90;
+    public float strength = 200;
+
+    List<GameObject> objects = new List<GameObject>();
+    GameObject carriedObject;
+    MenuScript MSref;
 
     void Start()
     {
         MSref = FindObjectOfType<MenuScript>();
+        Pickupable[] temp = FindObjectsOfType<Pickupable>();
+        foreach (Pickupable p in temp)
+            objects.Add(p.gameObject);
     }
 
-	void Update () {
+    void Update()
+    {
 
-        if (Input.GetKeyDown(KeyCode.F) && carriedObject != null) {
-            if (!carrying) {
-                PickUp();
-            } else {
+        //tekee listan jossa on kaikki rangella olevat kannettavat jutut
+        List<GameObject> temp = new List<GameObject>();
+        foreach (GameObject g in objects)
+            if (HitCheck(g))
+                temp.Add(g);
+        temp.Sort(delegate (GameObject a, GameObject b) {
+            float distA = Vector3.Distance(a.transform.position, transform.position);
+            float distB = Vector3.Distance(b.transform.position, transform.position);
+            return distA.CompareTo(distB);
+        });
+
+        //kattoo ettÃ¤ millonka pitÃ¤Ã¤ olla viesti ruudulla
+        if (temp.Count > 0 && !carrying && !carriedObject && !MSref.actionGuide.activeSelf)
+            MSref.SendMessage("ShowGuide", "pickup " + temp[0].name);
+        else if (carrying)
+            MSref.SendMessage("HideGuide");
+
+        if (Input.GetKeyDown(KeyCode.E)) {
+            if (temp.Count > 0 && !carrying && carriedObject == null)
+                PickUp(temp[0]);
+            else if (carriedObject != null)
                 Drop();
-            }
-        }
- 
-        if (carrying && carriedObject != null) {
-            Carry();
         }
 
-        if(!carrying && !MSref.actionGuide.activeSelf && carriedObject != null) {
-            MSref.SendMessage("ShowGuide", "pickup " + carriedObject.name);
-        }
+        if (carrying && carriedObject != null)
+            Carry();
     }
 
 
-    void Carry() {
-        if (GameObject.Find("pickupPlace")) { 
+    void Carry()
+    {
+        if (GameObject.Find("pickupPlace")) {
             Vector3 temp = GameObject.Find("pickupPlace").transform.position;
             carriedObject.transform.position = new Vector3(temp.x, temp.y, temp.z);
         }
-    }
-
-
-    void OnTriggerEnter(Collider col) {
-        if(col.gameObject.tag == "pickup" && !carrying) {
-            carriedObject = col.gameObject;
-        }
-    }
-
-    void OnTriggerExit(Collider col) {
-        if(col.gameObject == carriedObject && !carrying) {
-            carriedObject = null;
-        }
-        MSref.SendMessage("HideGuide");
     }
 
     void Drop()
     {
         carrying = false;
         carriedObject.GetComponent<Rigidbody>().isKinematic = false;
+        carriedObject.GetComponent<Rigidbody>().AddForce(transform.forward * strength);
+        carriedObject = null;
     }
 
-    void PickUp()
+    void PickUp(GameObject target)
     {
         carrying = true;
+        carriedObject = target;
         carriedObject.GetComponent<Rigidbody>().isKinematic = true;
-        MSref.SendMessage("HideGuide");
+    }
+
+    bool HitCheck(GameObject target)
+    {
+        if (Vector3.Distance(transform.position, target.transform.position) <= range) {
+            Vector3 targetDir = target.transform.position - transform.position;
+            if (Vector3.Angle(targetDir, transform.forward) <= radius / 2) {
+                return true;
+            } else
+                return false;
+        } else
+            return false;
     }
 }
 
