@@ -112,8 +112,9 @@ public class CC : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (target == null)
-            targetIsLocked = false;
+        if (target != null)
+            if (!target.activeSelf)
+                targetIsLocked = false;
 
         Run();
         Jump();
@@ -226,8 +227,9 @@ public class CC : MonoBehaviour
                 target = tam.getTarget("First");
                 if (target != null)
                     targetIsLocked = true;
-            } else
-                targetIsLocked = false;
+                else
+                    targetIsLocked = false;
+            }
         }
 
         if (nextTarget)

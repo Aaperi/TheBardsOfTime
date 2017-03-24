@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class TargetManager : MonoBehaviour
 {
-
+    int pointer = 0;
     public float range = 60;
     public float radius = 120;
     public List<GameObject> enemyList;
@@ -12,12 +12,10 @@ public class TargetManager : MonoBehaviour
     void Update()
     {
         enemyList = new List<GameObject>();
-        List<StatePatternEnemy> temp = new List<StatePatternEnemy>(FindObjectsOfType<StatePatternEnemy>());
-        if (temp.Count != enemyList.Count) {
-            foreach (StatePatternEnemy S in temp) {
-                if (HitCheck(S.gameObject))
-                    enemyList.Add(S.gameObject);
-            }
+        List<GameObject> temp = new List<GameObject>(GameObject.FindGameObjectsWithTag("Enemy"));
+        foreach (GameObject go in temp) {
+            if (HitCheck(go))
+                enemyList.Add(go);
         }
     }
 
@@ -44,7 +42,6 @@ public class TargetManager : MonoBehaviour
 
     public GameObject getTarget(string FirstOrAnother)
     {
-        int pointer = 0;
         switch (FirstOrAnother) {
             case "First": {
                 if (enemyList.Count > 0) {
@@ -57,9 +54,11 @@ public class TargetManager : MonoBehaviour
             case "Another": {
                 pointer += 1;
                 if (pointer < enemyList.Count && enemyList.Count > 0) {
+                    SortByDistance(enemyList);
                     return enemyList[pointer];
                 } else {
                     pointer = 0;
+                    SortByDistance(enemyList);
                     return enemyList[pointer];
                 }
             }
