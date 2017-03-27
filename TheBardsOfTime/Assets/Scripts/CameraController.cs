@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
     public Transform target;
+    public bool inverted;
+    public bool playerControlled;
     private CC CCref;
 
     [System.Serializable]
@@ -144,10 +146,20 @@ public class CameraController : MonoBehaviour {
 
     void GetInput()
     {
-        vOrbitInput = Input.GetAxisRaw(input.ORBIT_VERTICAL);
-        hOrbitInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL);
-        hOrbitSnapInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL_SNAP);
-        zoomInput = Input.GetAxisRaw(input.ZOOM);
+        if (playerControlled) {
+            if (!inverted) {
+                vOrbitInput = Input.GetAxisRaw(input.ORBIT_VERTICAL);
+                hOrbitInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL);
+            } else {
+                vOrbitInput = -Input.GetAxisRaw(input.ORBIT_VERTICAL);
+                hOrbitInput = -Input.GetAxisRaw(input.ORBIT_HORIZONTAL);
+            }
+
+            hOrbitSnapInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL_SNAP);
+            zoomInput = Input.GetAxisRaw(input.ZOOM);
+        } else
+            return;
+        
     }
 
     void MoveToTarget()
