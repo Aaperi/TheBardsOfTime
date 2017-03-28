@@ -7,8 +7,8 @@ using System.IO;
 
 public class GameManager : MonoBehaviour
 {
-    int notes = 0;
-    int health = 0;
+    public int notes = 0;
+    public int health = 0;
     static GameManager gm;
     public Dictionary<string, bool> levels = new Dictionary<string, bool>();
     public bool invertEnabled = false, freeCamEnabled = false;

@@ -7,12 +7,14 @@ public class ItemCode : MonoBehaviour
     Quaternion rot;
     Vector3 Opos;
     Vector3 velocity = Vector3.zero;
+    GameManager gm;
     bool goingUP = true;
 
     // Use this for initialization
     void Start()
     {
         Opos = transform.position;
+        gm = FindObjectOfType<GameManager>();
     }
 
     // Update is called once per frame
@@ -29,5 +31,13 @@ public class ItemCode : MonoBehaviour
             if (transform.position.y < Opos.y)
                 goingUP = true;
         }
+    }
+
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.tag.Equals("Player") && col.gameObject != null) {
+            gm.notes++;
+        }
+        Destroy(gameObject.transform.root.gameObject);
     }
 }
