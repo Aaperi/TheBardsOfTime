@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour {
     public bool playerControlled;
     private CC CCref;
 
-    MenuScript menu;
+    GameManager game;
 
     [System.Serializable]
     public class PositionSettings
@@ -74,7 +74,7 @@ public class CameraController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        menu = FindObjectOfType<MenuScript>();
+        game = FindObjectOfType<GameManager>();
         SetCameraTarget(target);
         CCref = FindObjectOfType<CC>();
         vOrbitInput = hOrbitInput = zoomInput = hOrbitSnapInput = mouseOrbitInput = 0;
@@ -148,8 +148,8 @@ public class CameraController : MonoBehaviour {
 
     void GetInput()
     {
-        if (menu.freeCamEnabled) {
-            if (!menu.invertEnabled) {
+        if (game.freeCamEnabled) {
+            if (!game.invertEnabled) {
                 vOrbitInput = Input.GetAxisRaw(input.ORBIT_VERTICAL);
                 hOrbitInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL);
             } else {

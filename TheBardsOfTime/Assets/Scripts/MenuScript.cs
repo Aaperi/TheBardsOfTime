@@ -6,16 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class MenuScript : MonoBehaviour
 {
-    private static GameObject GameController;
-    public static MenuScript Instance {
-        get {
-            if (GameController == null) {
-                GameController = Instantiate(Resources.Load("Menu"), Vector3.zero, Quaternion.identity) as GameObject;
-            }
-            return GameController.GetComponent<MenuScript>();
-        }
-    }
-
     public Canvas
         mainMenuCanvas,
         exitMenuCanvas,
@@ -53,17 +43,19 @@ public class MenuScript : MonoBehaviour
     DialogueScript dia;
     HPScript hp;
     Text aText;
+    GameManager game;
 
     // Use this for initialization
     void Start()
     {
+        game = FindObjectOfType<GameManager>();
         init();
         GetButtonReferences();
         eventSystem = FindObjectOfType<EventSystem>();
         dia = FindObjectOfType<DialogueScript>();
 
-        freeCamEnabled = GameManager.Instance.freeCamEnabled;
-        invertEnabled = GameManager.Instance.invertEnabled;
+        freeCamEnabled = game.freeCamEnabled;
+        invertEnabled = game.invertEnabled;
 
         freeCam.isOn = freeCamEnabled;
         invertTog.isOn = invertEnabled;
@@ -329,12 +321,11 @@ public class MenuScript : MonoBehaviour
     }
 
     public void InvertToggleChanged() {
-        invertEnabled = invertTog.isOn;
-        Debug.Log(GameManager.Instance.invertEnabled);
+        game.invertEnabled = invertTog.isOn;
     }
 
     public void FreeCamToggleChanged() {
-        freeCamEnabled = freeCam.isOn;
+        game.freeCamEnabled = freeCam.isOn;
     }
 
     /* public void AfterDeadQuit() {
