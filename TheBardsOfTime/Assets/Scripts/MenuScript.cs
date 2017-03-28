@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class MenuScript : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class MenuScript : MonoBehaviour
 
     public GameObject
         play, exit, options, // mainMenu
-        back, // options
+        back, invert, freeCamera, // options
         exitYes, exitNo, // exitGameMenu
         cont, quit, // pauseMenu
         quitYes, quitNo, // quitToMenu
@@ -31,6 +32,10 @@ public class MenuScript : MonoBehaviour
         quitYesButton, quitNoButton, // quitToMenu
         restartButton, quitToMenuButton; // gameoverMenu
 
+    private Toggle
+        invertTog, freeCam;
+
+    [HideInInspector]
     public bool 
         paused, canvasOn,
         dialoguesPlaying;  //Used for the check whether an dialogue was playing before pausing.
@@ -55,7 +60,7 @@ public class MenuScript : MonoBehaviour
         catch { }
         DisableAll();
 
-        if (Application.loadedLevelName == "menuScene") {
+        if (SceneManager.GetActiveScene().name == "menuScene") {
             ShowMainMenu();
         }
 
@@ -89,128 +94,6 @@ public class MenuScript : MonoBehaviour
         actionGuide.SetActive(false);
     }
 
-    #region "Button clicks"
-    public void PlayClick()
-    {
-        DisableAll();
-        Application.LoadLevel(1); // should be in the build
-    }
-
-    public void ExitClick()
-    {
-        DisableAll();
-
-        mainMenuCanvas.enabled = true;
-
-        exitMenuCanvas.enabled = true;
-        exitYesButton.enabled = true;
-        exitNoButton.enabled = true;
-
-        SelectButton(exitNo);
-    }
-
-    public void ExitYes()
-    {
-        Application.Quit(); // should be in the build
-    }
-
-    public void ExitNo()
-    {
-        DisableAll();
-
-        ShowMainMenu();
-
-        SelectButton(play);
-    }
-
-    public void Options()
-    {
-        DisableAll();
-
-        optionsCanvas.enabled = true;
-        backButton.enabled = true;
-    }
-
-    public void OptionsBack()
-    {
-        DisableAll();
-
-        ShowMainMenu();
-
-        SelectButton(play);
-    }
-
-    public void ContinueButton()
-    {
-        paused = false;
-
-        DisableAll();
-    }
-
-    public void QuitButton()
-    {
-        DisableAll();
-
-        quitMenuCanvas.enabled = true;
-        quitYesButton.enabled = true;
-        quitNoButton.enabled = true;
-
-        SelectButton(quitNo);
-    }
-
-    public void QuitYesButton()
-    {
-        DisableAll();
-
-        ShowMainMenu();
-
-        SelectButton(play);
-
-        Application.LoadLevel(0);
-    }
-
-    public void QuitNoButton()
-    {
-        DisableAll();
-
-        if (hp.iNeedUI && hp.HPSlider.value > 0) {
-            ShowPauseMenu();
-        }
-
-        if (hp.iNeedUI && hp.HPSlider.value <= 0) {
-            ShowGameOver();
-        }
-
-        SelectButton(cont);
-    }
-
-    public void RestartButton()
-    {
-        DisableAll();
-
-        Application.LoadLevel(Application.loadedLevel);
-    }
-
-    /* public void AfterDeadQuit() {
-         DisableAll();
-
-         quitMenuCanvas.enabled = true;
-         quitYesButton.enabled = true;
-         quitNoButton.enabled = true;
-
-         SelectButton(quitNo);
-     }
-
-     public void AfterDeadQuitNo() {
-         DisableAll();
-
-         ShowGameOver();
-
-         SelectButton(restart);
-     }*/
-
-    #endregion "Button Clicks"
-
     void GetButtonReferences()
     {
         playButton = play.GetComponent<Button>();
@@ -225,6 +108,8 @@ public class MenuScript : MonoBehaviour
         restartButton = restart.GetComponent<Button>();
         quitToMenuButton = quitToMenu.GetComponent<Button>();
         backButton = back.GetComponent<Button>();
+        invertTog = invert.GetComponent<Toggle>();
+        freeCam = freeCamera.GetComponent<Toggle>();
     }
 
     bool AnyCanvasOn()
@@ -266,6 +151,12 @@ public class MenuScript : MonoBehaviour
         // GameOverMenu
         restartButton.enabled = false;
         quitToMenuButton.enabled = false;
+
+        // Options
+        backButton.enabled = false;
+        invertTog.enabled = false;
+        freeCam.enabled = false;
+
     }
 
     void DisableAll()
@@ -324,4 +215,122 @@ public class MenuScript : MonoBehaviour
         aText.text = aText.text.Substring(0, 13);
         actionGuide.SetActive(false);
     }
+
+    #region "Button clicks"
+    public void PlayClick() {
+        DisableAll();
+        SceneManager.LoadScene(1); // should be in the build
+    }
+
+    public void ExitClick() {
+        DisableAll();
+
+        mainMenuCanvas.enabled = true;
+
+        exitMenuCanvas.enabled = true;
+        exitYesButton.enabled = true;
+        exitNoButton.enabled = true;
+
+        SelectButton(exitNo);
+    }
+
+    public void ExitYes() {
+        Application.Quit(); // should be in the build
+    }
+
+    public void ExitNo() {
+        DisableAll();
+
+        ShowMainMenu();
+
+        SelectButton(play);
+    }
+
+    public void Options() {
+        DisableAll();
+
+        optionsCanvas.enabled = true;
+        invertTog.enabled = true;
+        freeCam.enabled = true;
+        backButton.enabled = true;
+    }
+
+    public void OptionsBack() {
+        DisableAll();
+
+        if (SceneManager.GetActiveScene().name == "MainMenu") {
+            ShowMainMenu();
+        } else {
+            ShowPauseMenu();
+        }
+
+
+        SelectButton(play);
+    }
+
+    public void ContinueButton() {
+        paused = false;
+
+        DisableAll();
+    }
+
+    public void QuitButton() {
+        DisableAll();
+
+        quitMenuCanvas.enabled = true;
+        quitYesButton.enabled = true;
+        quitNoButton.enabled = true;
+
+        SelectButton(quitNo);
+    }
+
+    public void QuitYesButton() {
+        DisableAll();
+
+        ShowMainMenu();
+
+        SelectButton(play);
+
+        SceneManager.LoadScene(0);
+    }
+
+    public void QuitNoButton() {
+        DisableAll();
+
+        if (hp.iNeedUI && hp.HPSlider.value > 0) {
+            ShowPauseMenu();
+        }
+
+        if (hp.iNeedUI && hp.HPSlider.value <= 0) {
+            ShowGameOver();
+        }
+
+        SelectButton(cont);
+    }
+
+    public void RestartButton() {
+        DisableAll();
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    /* public void AfterDeadQuit() {
+         DisableAll();
+
+         quitMenuCanvas.enabled = true;
+         quitYesButton.enabled = true;
+         quitNoButton.enabled = true;
+
+         SelectButton(quitNo);
+     }
+
+     public void AfterDeadQuitNo() {
+         DisableAll();
+
+         ShowGameOver();
+
+         SelectButton(restart);
+     }*/
+
+    #endregion "Button Clicks"
 }
