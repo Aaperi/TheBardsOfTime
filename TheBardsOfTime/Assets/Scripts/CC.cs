@@ -85,6 +85,14 @@ public class CC : MonoBehaviour
         foreach (Transform child in GameObject.Find("Instruments").transform)
             Instruments.Add(child.gameObject);
         EquipByID(0);
+
+        if (FindObjectOfType<GameManager>().lastPos != null) {
+            GameManager GM = FindObjectOfType<GameManager>();
+            transform.position = GM.lastPos.position;
+            transform.rotation = GM.lastPos.rotation;
+            GM.lastPos = null;
+            Debug.Log("I was here");
+        }
     }
 
     void GetInput()
