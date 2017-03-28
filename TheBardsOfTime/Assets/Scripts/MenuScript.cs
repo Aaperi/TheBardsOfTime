@@ -4,24 +4,28 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class MenuScript : MonoBehaviour
-{
-    public Canvas
-        mainMenuCanvas,
-        exitMenuCanvas,
-        pauseMenuCanvas,
-        quitMenuCanvas,
-        optionsCanvas,
-        gameoverCanvas;
-
+public class MenuScript : MonoBehaviour {
     public GameObject
         play, exit, options, // mainMenu
         back, invert, freeCamera, // options
         exitYes, exitNo, // exitGameMenu
         cont, quit, // pauseMenu
         quitYes, quitNo, // quitToMenu
-        restart, quitToMenu, // gameoverMenu
-        actionGuide; // is displayed when player is next to an item or npc
+        restart, quitToMenu,
+        actionGuide; // is displayed when player is next to an item or npc; // gameoverMenu
+
+    public bool
+    paused, canvasOn,
+    freeCamEnabled, invertEnabled,
+    dialoguesPlaying;  //Used for the check whether an dialogue was playing before pausing.
+
+    private Canvas
+        mainMenuCanvas,
+        exitMenuCanvas,
+        pauseMenuCanvas,
+        quitMenuCanvas,
+        optionsCanvas,
+        gameoverCanvas;
 
     private Button
         playButton, exitButton, optionsButton, // mainMenu
@@ -34,11 +38,6 @@ public class MenuScript : MonoBehaviour
     private Toggle
         invertTog, freeCam;
 
-    public bool 
-        paused, canvasOn,
-        freeCamEnabled, invertEnabled,
-        dialoguesPlaying;  //Used for the check whether an dialogue was playing before pausing.
-
     EventSystem eventSystem;
     DialogueScript dia;
     HPScript hp;
@@ -46,11 +45,11 @@ public class MenuScript : MonoBehaviour
     GameManager game;
 
     // Use this for initialization
-    void Start()
-    {
-        game = FindObjectOfType<GameManager>();
+    void Start() {
         init();
+        GetCanvases();
         GetButtonReferences();
+        game = FindObjectOfType<GameManager>();
         eventSystem = FindObjectOfType<EventSystem>();
         dia = FindObjectOfType<DialogueScript>();
 
@@ -62,20 +61,16 @@ public class MenuScript : MonoBehaviour
 
         try {
             hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
-        }
-        catch { }
+        } catch { }
         DisableAll();
 
         if (SceneManager.GetActiveScene().name == "menuScene") {
             ShowMainMenu();
         }
-
-
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         if (AnyCanvasOn() || paused)
             canvasOn = true;
         else
@@ -83,8 +78,7 @@ public class MenuScript : MonoBehaviour
 
         if (canvasOn || paused || dia.dialogueActive) {
             Time.timeScale = .000000001f;
-        }
-        else {
+        } else {
             Time.timeScale = 1f;
         }
 
@@ -93,15 +87,22 @@ public class MenuScript : MonoBehaviour
         }
     }
 
-    void init()
-    {
+    void init() {
         actionGuide = GameObject.Find("actionGuide");
         aText = GameObject.Find("aText").GetComponent<Text>();
         actionGuide.SetActive(false);
     }
 
-    void GetButtonReferences()
-    {
+    void GetCanvases() {
+        mainMenuCanvas = GameObject.Find("mainMenu").GetComponent<Canvas>();
+        exitMenuCanvas = GameObject.Find("exitMenu").GetComponent<Canvas>();
+        optionsCanvas = GameObject.Find("optionsMenu").GetComponent<Canvas>();
+        pauseMenuCanvas = GameObject.Find("pauseMenu").GetComponent<Canvas>();
+        gameoverCanvas = GameObject.Find("gameoverMenu").GetComponent<Canvas>();
+        quitMenuCanvas = GameObject.Find("quitMenu").GetComponent<Canvas>();
+    }
+
+    void GetButtonReferences() {
         playButton = play.GetComponent<Button>();
         exitButton = exit.GetComponent<Button>();
         exitYesButton = exitYes.GetComponent<Button>();
@@ -118,16 +119,14 @@ public class MenuScript : MonoBehaviour
         freeCam = freeCamera.GetComponent<Toggle>();
     }
 
-    bool AnyCanvasOn()
-    {
+    bool AnyCanvasOn() {
         if (pauseMenuCanvas.enabled || mainMenuCanvas.enabled || exitMenuCanvas.enabled || quitMenuCanvas.enabled
             || optionsCanvas.enabled || gameoverCanvas.enabled)
             return true;
         else return false;
     }
 
-    void DisableAllCanvases()
-    {
+    void DisableAllCanvases() {
         mainMenuCanvas.enabled = false;
         exitMenuCanvas.enabled = false;
         pauseMenuCanvas.enabled = false;
@@ -136,8 +135,7 @@ public class MenuScript : MonoBehaviour
         gameoverCanvas.enabled = false;
     }
 
-    void DisableAllButtons()
-    {
+    void DisableAllButtons() {
         // MainMenu
         playButton.enabled = false;
         exitButton.enabled = false;
@@ -165,19 +163,16 @@ public class MenuScript : MonoBehaviour
 
     }
 
-    void DisableAll()
-    {
+    void DisableAll() {
         DisableAllButtons();
         DisableAllCanvases();
     }
 
-    void SelectButton(GameObject button)
-    {
+    void SelectButton(GameObject button) {
         eventSystem.SetSelectedGameObject(button);
     }
 
-    void ShowMainMenu()
-    {
+    void ShowMainMenu() {
         mainMenuCanvas.enabled = true;
 
         playButton.enabled = true;
@@ -187,8 +182,7 @@ public class MenuScript : MonoBehaviour
         SelectButton(play);
     }
 
-    void ShowPauseMenu()
-    {
+    void ShowPauseMenu() {
         paused = true;
 
         pauseMenuCanvas.enabled = true;
@@ -199,8 +193,7 @@ public class MenuScript : MonoBehaviour
         SelectButton(cont);
     }
 
-    public void ShowGameOver()
-    {
+    public void ShowGameOver() {
         DisableAll();
 
         gameoverCanvas.enabled = true;
@@ -210,14 +203,12 @@ public class MenuScript : MonoBehaviour
         SelectButton(restart);
     }
 
-    public void ShowGuide(string message)
-    {
+    public void ShowGuide(string message) {
         actionGuide.SetActive(true);
         aText.text += message;
     }
 
-    public void HideGuide()
-    {
+    public void HideGuide() {
         aText.text = aText.text.Substring(0, 13);
         actionGuide.SetActive(false);
     }

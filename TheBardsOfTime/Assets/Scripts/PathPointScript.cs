@@ -13,16 +13,6 @@ public class PathPointScript : MonoBehaviour {
         }
     }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
     void OnDrawGizmos()
     {
         Gizmos.color = (Path.PathEnabled) ? Color.green : Color.gray;
