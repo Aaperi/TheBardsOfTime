@@ -13,6 +13,15 @@ public class GameManager : MonoBehaviour
     public Dictionary<string, bool> levels = new Dictionary<string, bool>();
     public bool invertEnabled = false, freeCamEnabled = false;
 
+    public static GameManager Instance {
+        get {
+            if (gm == null) {
+                gm = new GameObject("GameManager").AddComponent<GameManager>();
+            }
+            return gm;
+        }
+    }
+
     void Awake()
     {
         if (gm == null) {
