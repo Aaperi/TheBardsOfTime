@@ -2,10 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
-
+    int notes = 0;
+    int health = 0;
     static GameManager gm;
     public Dictionary<string, bool> levels = new Dictionary<string, bool>();
 
@@ -23,6 +26,39 @@ public class GameManager : MonoBehaviour
     {
         if (!levels.ContainsKey(SceneManager.GetActiveScene().name))
             levels.Add(SceneManager.GetActiveScene().name, false);
+    }
+
+    public void Save()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Open(Application.persistentDataPath + "/playerInfo.dat", FileMode.Open);
+
+        PlayerData data = new PlayerData();
+        data.health = health;
+        data.notes = notes;
+
+        bf.Serialize(file, data);
+        file.Close();
+    }
+
+    public void Load()
+    {
+        if (File.Exists(Application.persistentDataPath + "/playerInfo.dat")) {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/playerInfo.dat", FileMode.Open);
+            PlayerData data = (PlayerData)bf.Deserialize(file);
+            file.Close();
+
+            health = data.health;
+            notes = data.notes;
+        }
+    }
+
+    [SerializeField]
+    class PlayerData
+    {
+        public int health;
+        public int notes;
     }
 
     /*void getSceneNames()
