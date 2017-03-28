@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     int health = 0;
     static GameManager gm;
     public Dictionary<string, bool> levels = new Dictionary<string, bool>();
+    public bool invertEnabled = false, freeCamEnabled = false;
 
     void Awake()
     {

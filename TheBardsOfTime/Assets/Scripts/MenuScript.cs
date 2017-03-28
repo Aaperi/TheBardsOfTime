@@ -35,24 +35,31 @@ public class MenuScript : MonoBehaviour
     private Toggle
         invertTog, freeCam;
 
-    [HideInInspector]
     public bool 
         paused, canvasOn,
+        freeCamEnabled, invertEnabled,
         dialoguesPlaying;  //Used for the check whether an dialogue was playing before pausing.
 
     EventSystem eventSystem;
     DialogueScript dia;
     HPScript hp;
     Text aText;
+    GameManager game;
 
 
     // Use this for initialization
     void Start()
     {
+        game = FindObjectOfType<GameManager>();
         init();
         GetButtonReferences();
         eventSystem = FindObjectOfType<EventSystem>();
         dia = FindObjectOfType<DialogueScript>();
+        freeCamEnabled = game.freeCamEnabled;
+        invertEnabled = game.invertEnabled;
+
+        freeCam.isOn = freeCamEnabled;
+        invertTog.isOn = invertEnabled;
 
         try {
             hp = GameObject.FindGameObjectWithTag("Player").GetComponent<HPScript>();
@@ -312,6 +319,14 @@ public class MenuScript : MonoBehaviour
         DisableAll();
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void InvertToggleChanged() {
+        invertEnabled = invertTog.isOn;
+    }
+
+    public void FreeCamToggleChanged() {
+        freeCamEnabled = freeCam.isOn;
     }
 
     /* public void AfterDeadQuit() {
