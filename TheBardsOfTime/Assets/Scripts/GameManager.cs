@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
     {
         if (!levels.ContainsKey(SceneManager.GetActiveScene().name))
             levels.Add(SceneManager.GetActiveScene().name, false);
+
+        Debug.Log("notes: " + notes);
     }
 
     public void Save()
