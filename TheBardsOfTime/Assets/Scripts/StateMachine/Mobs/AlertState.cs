@@ -11,16 +11,16 @@ public class AlertState : IEnemyState {
     }
 
     public void UpdateState() {
-        Look();
-        Search();
+            Look();
+            Search();
     }
 
     public void OnTriggerEnter(Collider other) {
-
+        enemy.withinRange = true;
     }
 
     public void OnTriggerExit(Collider other) {
-        ToPatrolState();
+        enemy.withinRange = false;
     }
 
     public void ToPatrolState() {
@@ -44,19 +44,27 @@ public class AlertState : IEnemyState {
     }
 
     private void Look() {
+        if (enemy.withinRange) {
+            Vector3 targetDir = player.position - enemy.transform.position;
+            enemy.meshRendererFlag.material.color = Color.yellow;
+            enemy.navMeshAgent.Stop();
+            Vector3 newDir = Vector3.RotateTowards(enemy.transform.forward, targetDir, enemy.searchingTurnSpeed * Time.deltaTime, 0.0f);
+            enemy.transform.rotation = Quaternion.LookRotation(newDir);
+        }
+
         RaycastHit hit;
-        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange, enemy.mask) && hit.collider.CompareTag("Player")) {
+        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange, enemy.mask) && hit.collider.CompareTag("Player") && enemy.withinRange) {
             enemy.chaseTarget = hit.transform;
             ToChaseState();
         }
     }
 
     private void Search() {
-        Vector3 targetDir = player.position - enemy.transform.position;
-        enemy.meshRendererFlag.material.color = Color.yellow;
-        enemy.navMeshAgent.Stop();
-        Vector3 newDir = Vector3.RotateTowards(enemy.transform.forward, targetDir, enemy.searchingTurnSpeed * Time.deltaTime, 0.0f);
-        enemy.transform.rotation = Quaternion.LookRotation(newDir);
+        if (!enemy.withinRange) {
+            enemy.meshRendererFlag.material.color = Color.yellow;
+            enemy.navMeshAgent.Stop();
+            enemy.transform.Rotate(0, enemy.searchingTurnSpeed * 2 * (Time.deltaTime * enemy.searchingDuration), 0);
+        }
 
         searchTimer += Time.deltaTime;
 

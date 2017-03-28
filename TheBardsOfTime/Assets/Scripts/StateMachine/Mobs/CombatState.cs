@@ -56,13 +56,12 @@ public class CombatState : IEnemyState {
     }
 
     void Attack() {
-        float cd = enemy.attackCoolDown;
-        cd -= Time.deltaTime;
+        enemy.cd -= Time.deltaTime;
         RaycastHit hit;
         if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange, enemy.mask) && hit.collider.CompareTag("Player")) {
-            if (cd <= 0) {
+            if (enemy.cd <= 0) {
                 hp.TakeDamage(enemy.attackDamage);
-                cd = enemy.attackCoolDown;
+                enemy.cd = enemy.attackCoolDown;
             }
         }
 

@@ -34,6 +34,8 @@ public class StatePatternEnemy : MonoBehaviour {
     public bool withinRange = false;
     [HideInInspector]
     private HPScript hps;
+    [HideInInspector]
+    public float cd;
 
     private void Awake() {
         combatState = new CombatState(this);
@@ -44,6 +46,7 @@ public class StatePatternEnemy : MonoBehaviour {
         hps = GetComponent<HPScript>();
 
         navMeshAgent = GetComponent<NavMeshAgent>();
+        cd = attackCoolDown;
     }
 
     // Use this for initialization
@@ -59,5 +62,9 @@ public class StatePatternEnemy : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         currentState.OnTriggerEnter(other);
+    }
+
+    private void OnTriggerExit(Collider other) {
+        currentState.OnTriggerExit(other);
     }
 }
