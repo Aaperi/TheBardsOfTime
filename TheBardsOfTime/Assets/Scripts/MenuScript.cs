@@ -255,7 +255,7 @@ public class MenuScript : MonoBehaviour {
     public void OptionsBack() {
         DisableAll();
 
-        if (SceneManager.GetActiveScene().name == "MainMenu") {
+        if (SceneManager.GetActiveScene().name == "menuScene") {
             ShowMainMenu();
         } else {
             ShowPauseMenu();
