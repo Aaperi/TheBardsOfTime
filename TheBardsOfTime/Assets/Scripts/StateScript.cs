@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class StateScript : MonoBehaviour{
+public class Unloader : MonoBehaviour{
 
     void Start()
     {

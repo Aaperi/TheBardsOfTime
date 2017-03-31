@@ -86,12 +86,11 @@ public class CC : MonoBehaviour
             Instruments.Add(child.gameObject);
         EquipByID(0);
 
-        if (FindObjectOfType<GameManager>().lastPos != null) {
+        if (FindObjectOfType<GameManager>().lastPos.Length > 0) {
             GameManager GM = FindObjectOfType<GameManager>();
-            transform.position = GM.lastPos.position;
-            transform.rotation = GM.lastPos.rotation;
+            transform.position = new Vector3(GM.lastPos[0], GM.lastPos[1], GM.lastPos[2]);
+            transform.eulerAngles = new Vector3(0, GM.lastPos[3], 0);
             GM.lastPos = null;
-            Debug.Log("I was here");
         }
     }
 
@@ -268,8 +267,8 @@ public class CC : MonoBehaviour
                     MSref.HideGuide();
             }
         } catch {
-            if (MSref.actionGuide.activeSelf)
-                MSref.HideGuide();
+            /*if (MSref.actionGuide.activeSelf)
+                MSref.HideGuide();*/
         }
     }
 
