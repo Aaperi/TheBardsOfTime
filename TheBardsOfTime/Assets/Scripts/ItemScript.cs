@@ -6,15 +6,14 @@ public class ItemScript : MonoBehaviour
     Quaternion rot;
     Vector3 Opos;
     Transform CT;
-    GameManager gm;
+    GameManager GM;
     bool goingUP = true;
     bool pickd = false;
-
 
     void Start()
     {
         CT = gameObject.transform.GetChild(0).transform;
-        gm = FindObjectOfType<GameManager>();
+        GM = FindObjectOfType<GameManager>();
     }
 
     void Update()
@@ -37,9 +36,12 @@ public class ItemScript : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag.Equals("Player") && !pickd) {
-            gm.notes++;
+            GM.notes++;
             pickd = true;
-            Destroy(gameObject);
+            if (gameObject.GetComponent<Savable>())
+                GetComponent<Savable>().destroyOnLoad = true;
+            GM.SaveLevel();
+            gameObject.SetActive(false);
         }
     }
 }

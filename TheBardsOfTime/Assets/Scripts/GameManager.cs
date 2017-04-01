@@ -47,9 +47,8 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Saving the game...");
 
-        JsonData jeissoni;
+        //Tehään playerdata
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-
         PlayerData data = new PlayerData(
             player.GetComponent<HPScript>().hitpoints,
             notes,
@@ -58,15 +57,72 @@ public class GameManager : MonoBehaviour
             SceneManager.GetActiveScene().name
             );
 
+        //Tallennetaan Playerdata
+        JsonData jeissoni;
         jeissoni = JsonMapper.ToJson(data);
         File.WriteAllText(Application.dataPath + "/Saves/Player.json", jeissoni.ToString());
+
+        //Tallennetaan levelstate
+        SaveLevel();
 
         Debug.Log("Saving complete!");
     }
 
-    void SaveLevel()
+    public void SaveLevel()
     {
+        Debug.Log("Saving level...");
 
+        //Jos on vanha lista niin se haetaan
+        List<ObjectData> objects = new List<ObjectData>();
+        if (File.Exists(Application.dataPath + "/Saves/" + SceneManager.GetActiveScene().name + ".json")) {
+            string stringi = File.ReadAllText(Application.dataPath + "/Saves/" + SceneManager.GetActiveScene().name + ".json");
+            LevelState level = JsonUtility.FromJson<LevelState>(stringi);
+            if (level.objects.Length > 0) {
+                objects.AddRange(level.objects);
+            }
+        }
+
+        //Haetaan kaikki gameobjectit jokka pitää tallentaa
+        List<GameObject> temps = new List<GameObject>();
+        foreach (Savable s in FindObjectsOfType<Savable>())
+            temps.Add(s.gameObject);
+
+        //Tehään lista gameobjectien tiedoista
+        foreach (GameObject go in temps) {
+
+            //tehdään jäsen
+            ObjectData so = new ObjectData(
+                go.name,
+                new double[] { go.transform.position.x, go.transform.position.x, go.transform.position.x },
+                go.transform.rotation.eulerAngles.y,
+                go.GetComponent<Savable>().dormant,
+                go.GetComponent<Savable>().destroyOnLoad
+                );
+
+            //jos jäsen on jo listoilla niin edellinen entry korvataan
+            if(objects.Count > 0) {
+                for(int k = 0; k < objects.Count; k++)
+                    if(objects[k].name == so.name)
+                        objects[k] = so;
+            }
+            //jos jäsentä ei vielä ole listoilla niin se lisätään sinne
+            else
+                objects.Add(so);
+        }
+
+        //Tehdään levelstate
+        LevelState state = new LevelState(
+            SceneManager.GetActiveScene().name,
+            false,
+            objects.ToArray()
+            );
+
+        //Tallennetaan levelstate
+        JsonData jeissoni;
+        jeissoni = JsonMapper.ToJson(state);
+        File.WriteAllText(Application.dataPath + "/Saves/" + SceneManager.GetActiveScene().name + ".json", jeissoni.ToString());
+
+        Debug.Log("Saving complete!");
     }
 
     void Load()
@@ -74,10 +130,12 @@ public class GameManager : MonoBehaviour
         if (File.Exists(Application.dataPath + "/Saves/Player.json")) {
             Debug.Log("Loading the game...");
 
+            //Haetaan pelaajan tiedot ja tallenetaan ne uuteen classiin
             string stringi = File.ReadAllText(Application.dataPath + "/Saves/Player.json");
             PlayerData data = JsonUtility.FromJson<PlayerData>(stringi);
             GameObject player = GameObject.FindGameObjectWithTag("Player");
 
+            //Tehdään tallennustiedoilla juttuja
             player.GetComponent<HPScript>().hitpoints = data.health;
             notes = data.notes;
             lastPos = new float[] { (float)data.pos[0], (float)data.pos[1], (float)data.pos[2], (float)data.rot };
@@ -85,6 +143,31 @@ public class GameManager : MonoBehaviour
 
             SceneManager.LoadScene(data.lastLevel);
         }
+    }
+
+    public ObjectData GetObjectData(string name)
+    {
+        if (File.Exists(Application.dataPath + "/Saves/" + SceneManager.GetActiveScene().name + ".json")) {
+            Debug.Log("Loading object...");
+
+            //Haetaan kentän tiedot ja tallenetaan ne uuteen classiin
+            string stringi = File.ReadAllText(Application.dataPath + "/Saves/" + SceneManager.GetActiveScene().name + ".json");
+            LevelState level = JsonUtility.FromJson<LevelState>(stringi);
+            ObjectData data = null;
+
+            //jos on olemassa taulukko niin sieltä haetaan oikea objekti
+            if (level.objects.Length > 0)
+                foreach (ObjectData od in level.objects)
+                    if (od.name.Contains(name))
+                        data = od;
+
+            //Palautetaan dataa riippuen löydöistä
+            if (data != null)
+                return data;
+            else
+                return null;
+        } else
+            return null;
     }
 }
 
@@ -104,25 +187,13 @@ class PlayerData
     }
 }
 
-class SavableObject
-{
-    public string name;
-    public double[] pos;
-    public double rot;
-
-    public SavableObject(string n, double[] p, double r)
-    {
-        name = n; pos = p; rot = r;
-    }
-}
-
 class LevelState
 {
     public string levelName;
     public bool completed;
-    public SavableObject[] objects;
+    public ObjectData[] objects;
 
-    public LevelState(string n, bool c, SavableObject[] o)
+    public LevelState(string n, bool c, ObjectData[] o)
     {
         levelName = n; completed = c; objects = o;
     }
