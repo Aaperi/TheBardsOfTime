@@ -31,7 +31,7 @@ public class WhenEnemiesDie : MonoBehaviour {
     {
         gameObject.SetActive(false);
         GameManager gm = FindObjectOfType<GameManager>();
-        gm.levels[SceneManager.GetActiveScene().name] = true;
-        Debug.Log(gm.levels[SceneManager.GetActiveScene().name]);
+        //gm.levels[SceneManager.GetActiveScene().name] = true;
+        //Debug.Log(gm.levels[SceneManager.GetActiveScene().name]);
     }
 }

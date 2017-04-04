@@ -15,8 +15,6 @@ public class Savable : MonoBehaviour
 
         if (data != null) {
 
-            Debug.Log(data.name + " " + data.dormant + " " + data.destroyOnLoad);
-
             if (!data.dormant) {
                 transform.position = new Vector3((float)data.pos[0], (float)data.pos[1], (float)data.pos[2]);
                 transform.eulerAngles = new Vector3(0, (float)data.rot, 0);

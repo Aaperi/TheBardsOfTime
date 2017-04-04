@@ -9,10 +9,10 @@ using LitJson;
 public class GameManager : MonoBehaviour
 {
     Text noteCount;
+    List<LevelState> leveltemps = new List<LevelState>();
+    static GameManager GM;
     public int notes = 0;
     public float[] lastPos;
-    static GameManager GM;
-    public Dictionary<string, bool> levels = new Dictionary<string, bool>();
     public bool invertEnabled = false, freeCamEnabled = false;
 
     //Singleton
@@ -28,25 +28,20 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (!levels.ContainsKey(SceneManager.GetActiveScene().name))
-            levels.Add(SceneManager.GetActiveScene().name, false);
+        try {
+            Text noteCount = GameObject.Find("noteCount").GetComponent<Text>();
+            noteCount.text = noteCount.text.Substring(0, 7) + notes;
+        } catch { }
 
-        Text noteCount = GameObject.Find("noteCount").GetComponent<Text>();
-        noteCount.text = noteCount.text.Substring(0, 7) + notes;
-
-        if (Input.GetKeyDown(KeyCode.Keypad0)) {
+        if (Input.GetKeyDown(KeyCode.Keypad0))
             Save();
-        }
 
-        if (Input.GetKeyDown(KeyCode.Keypad7)) {
+        if (Input.GetKeyDown(KeyCode.Keypad7))
             Load();
-        }
     }
 
     void Save()
     {
-        Debug.Log("Saving the game...");
-
         //Tehään playerdata
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         PlayerData data = new PlayerData(
@@ -62,52 +57,56 @@ public class GameManager : MonoBehaviour
         jeissoni = JsonMapper.ToJson(data);
         File.WriteAllText(Application.dataPath + "/Saves/Player.json", jeissoni.ToString());
 
-        //Tallennetaan levelstate
-        SaveLevel();
-
-        Debug.Log("Saving complete!");
-    }
-
-    public void SaveLevel()
-    {
-        Debug.Log("Saving level...");
-
-        //Jos on vanha lista niin se haetaan
-        List<ObjectData> objects = new List<ObjectData>();
-        if (File.Exists(Application.dataPath + "/Saves/" + SceneManager.GetActiveScene().name + ".json")) {
-            string stringi = File.ReadAllText(Application.dataPath + "/Saves/" + SceneManager.GetActiveScene().name + ".json");
-            LevelState level = JsonUtility.FromJson<LevelState>(stringi);
-            if (level.objects.Length > 0) {
-                objects.AddRange(level.objects);
-            }
+        //Tallennetaan kaikki levelstatet
+        foreach (LevelState ls in leveltemps) {
+            jeissoni = JsonMapper.ToJson(ls);
+            File.WriteAllText(Application.dataPath + "/Saves/" + SceneManager.GetActiveScene().name + ".json", jeissoni.ToString());
         }
 
-        //Haetaan kaikki gameobjectit jokka pitää tallentaa
-        List<GameObject> temps = new List<GameObject>();
-        foreach (Savable s in FindObjectsOfType<Savable>())
-            temps.Add(s.gameObject);
+        Debug.Log("Player saved!");
+    }
 
-        //Tehään lista gameobjectien tiedoista
-        foreach (GameObject go in temps) {
+    public void UpdateLevel()
+    {
+        List<ObjectData> objects = new List<ObjectData>();
 
-            //tehdään jäsen
-            ObjectData so = new ObjectData(
-                go.name,
-                new double[] { go.transform.position.x, go.transform.position.x, go.transform.position.x },
-                go.transform.rotation.eulerAngles.y,
-                go.GetComponent<Savable>().dormant,
-                go.GetComponent<Savable>().destroyOnLoad
-                );
-
-            //jos jäsen on jo listoilla niin edellinen entry korvataan
-            if(objects.Count > 0) {
-                for(int k = 0; k < objects.Count; k++)
-                    if(objects[k].name == so.name)
-                        objects[k] = so;
+        for (int k = 0; k < leveltemps.Count; k++)
+            if (leveltemps[k].levelName == SceneManager.GetActiveScene().name) {
+                objects.AddRange(leveltemps[k].objects);
+                foreach (Savable s in FindObjectsOfType<Savable>()) {
+                    GameObject go = s.gameObject;
+                    for (int t = 0; t < objects.Count; t++)
+                        if (objects[t].name == go.name) {
+                            ObjectData od = new ObjectData(
+                                go.name,
+                                new double[] { go.transform.position.x, go.transform.position.x, go.transform.position.x },
+                                go.transform.rotation.eulerAngles.y,
+                                go.GetComponent<Savable>().dormant,
+                                go.GetComponent<Savable>().destroyOnLoad
+                            );
+                            objects[t] = od;
+                        }
+                }
             }
-            //jos jäsentä ei vielä ole listoilla niin se lisätään sinne
-            else
-                objects.Add(so);
+
+        if (objects.Count == 0) {
+
+            //Haetaan kaikki gameobjectit jokka pitää tallentaa
+            List<GameObject> temps = new List<GameObject>();
+            foreach (Savable s in FindObjectsOfType<Savable>())
+                temps.Add(s.gameObject);
+
+            //Tehään lista gameobjectien tiedoista
+            foreach (GameObject go in temps) {
+                ObjectData od = new ObjectData(
+                    go.name,
+                    new double[] { go.transform.position.x, go.transform.position.x, go.transform.position.x },
+                    go.transform.rotation.eulerAngles.y,
+                    go.GetComponent<Savable>().dormant,
+                    go.GetComponent<Savable>().destroyOnLoad
+                    );
+                objects.Add(od);
+            }
         }
 
         //Tehdään levelstate
@@ -117,18 +116,22 @@ public class GameManager : MonoBehaviour
             objects.ToArray()
             );
 
-        //Tallennetaan levelstate
-        JsonData jeissoni;
-        jeissoni = JsonMapper.ToJson(state);
-        File.WriteAllText(Application.dataPath + "/Saves/" + SceneManager.GetActiveScene().name + ".json", jeissoni.ToString());
+        //tallennetaan tään hetkinen kenttä temppitaulukkoon
+        if (leveltemps.Count > 0)
+            for (int k = 0; k < leveltemps.Count; k++)
+                if (leveltemps[k].levelName == SceneManager.GetActiveScene().name)
+                    leveltemps[k] = state;
+                else
+                    leveltemps.Add(state);
+        else
+            leveltemps.Add(state);
 
-        Debug.Log("Saving complete!");
+        Debug.Log("Level saved!");
     }
 
     void Load()
     {
         if (File.Exists(Application.dataPath + "/Saves/Player.json")) {
-            Debug.Log("Loading the game...");
 
             //Haetaan pelaajan tiedot ja tallenetaan ne uuteen classiin
             string stringi = File.ReadAllText(Application.dataPath + "/Saves/Player.json");
@@ -139,6 +142,7 @@ public class GameManager : MonoBehaviour
             player.GetComponent<HPScript>().hitpoints = data.health;
             notes = data.notes;
             lastPos = new float[] { (float)data.pos[0], (float)data.pos[1], (float)data.pos[2], (float)data.rot };
+            leveltemps.Clear();
             Debug.Log("Loading Complete!");
 
             SceneManager.LoadScene(data.lastLevel);
@@ -147,27 +151,34 @@ public class GameManager : MonoBehaviour
 
     public ObjectData GetObjectData(string name)
     {
-        if (File.Exists(Application.dataPath + "/Saves/" + SceneManager.GetActiveScene().name + ".json")) {
-            Debug.Log("Loading object...");
+        ObjectData data = null;
+
+        //Kattoo jos temppilistasta löytyy kysytty objekti
+        for (int k = 0; k < leveltemps.Count; k++)
+            for (int t = 0; t < leveltemps[k].objects.Length; t++)
+                if (leveltemps[k].objects[t].name == name)
+                    data = leveltemps[k].objects[t];
+
+        //Jos ei löytyny tempistä niin katotaan jos löytys tallennusfilusta
+        if (File.Exists(Application.dataPath + "/Saves/" + SceneManager.GetActiveScene().name + ".json") && data == null) {
 
             //Haetaan kentän tiedot ja tallenetaan ne uuteen classiin
             string stringi = File.ReadAllText(Application.dataPath + "/Saves/" + SceneManager.GetActiveScene().name + ".json");
             LevelState level = JsonUtility.FromJson<LevelState>(stringi);
-            ObjectData data = null;
 
             //jos on olemassa taulukko niin sieltä haetaan oikea objekti
             if (level.objects.Length > 0)
                 foreach (ObjectData od in level.objects)
                     if (od.name.Contains(name))
                         data = od;
+        }
 
-            //Palautetaan dataa riippuen löydöistä
-            if (data != null)
-                return data;
-            else
-                return null;
-        } else
-            return null;
+        return data;
+    }
+
+    public bool GetLevelState()
+    {
+        return false;
     }
 }
 
@@ -227,53 +238,8 @@ class LevelState
 
 /*void getSceneNames()
 {
-
-    try {
         foreach (UnityEditor.EditorBuildSettingsScene S in UnityEditor.EditorBuildSettings.scenes) {
             string name = S.path.Substring(S.path.LastIndexOf('/') + 1);
             name = name.Substring(0, name.Length - 6);
             levels.Add(name, false);
-        }
-    } catch { }
-}
-
-public void Save()
-{
-    Debug.Log("Saving the game...");
-    BinaryFormatter bf = new BinaryFormatter();
-    FileStream file = File.Create(Application.persistentDataPath + "/playerInfo.dat");
-
-    Transform player = GameObject.FindGameObjectWithTag("Player").transform;
-    PlayerData data = new PlayerData();
-    data.health = health;
-    data.notes = notes;
-    data.xPos = player.position.x;
-    data.yPos = player.position.y;
-    data.zPos = player.position.z;
-    data.rot = player.rotation.y;
-    data.lastLevel = SceneManager.GetActiveScene().name;
-    data.levels = levels;
-
-    bf.Serialize(file, data);
-    file.Close();
-    Debug.Log("Saving complete!");
-}
-
-public void Load()
-{
-    Debug.Log("Loading the game...");
-    if (File.Exists(Application.persistentDataPath + "/playerInfo.dat")) {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Open(Application.persistentDataPath + "/playerInfo.dat", FileMode.Open);
-        PlayerData data = (PlayerData)bf.Deserialize(file);
-        file.Close();
-
-        health = data.health;
-        notes = data.notes;
-        lastPos = transform;
-        lastPos.position = new Vector3(data.xPos, data.yPos, data.zPos);
-        lastPos.eulerAngles = new Vector3(0, data.rot, 0);
-        Debug.Log("Loading Complete!");
-        SceneManager.LoadScene(data.lastLevel);
-    }
 }*/

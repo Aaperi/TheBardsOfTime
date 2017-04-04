@@ -9,16 +9,11 @@ public class AppearingPortal : MonoBehaviour {
     void Start()
     {
         OGpos = transform.position;
+        transform.position = new Vector3(OGpos.x, OGpos.y + 60, OGpos.z);
     }
 
 	void Update () {
         if (FindObjectOfType<StatePatternBoss>() != null)
-            transform.position = new Vector3(OGpos.x, OGpos.y - 30, OGpos.z);
-        else {
-            transform.position = OGpos;
-            GameManager gm = FindObjectOfType<GameManager>();
-            gm.levels[SceneManager.GetActiveScene().name] = true;
-            Debug.Log(gm.levels[SceneManager.GetActiveScene().name]);
-        }
+            transform.position = new Vector3(OGpos.x, OGpos.y - 60, OGpos.z);
 	}
 }

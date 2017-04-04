@@ -40,7 +40,7 @@ public class ItemScript : MonoBehaviour
             pickd = true;
             if (gameObject.GetComponent<Savable>())
                 GetComponent<Savable>().destroyOnLoad = true;
-            GM.SaveLevel();
+            GM.UpdateLevel();
             gameObject.SetActive(false);
         }
     }
