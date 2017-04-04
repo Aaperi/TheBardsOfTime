@@ -44,7 +44,7 @@ public class PatrolState : IEnemyState {
 
     private void Look() {
         RaycastHit hit;
-        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange, enemy.mask) && hit.collider.CompareTag("Player") && enemy.withinRange) {
+        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.enemyStats.search.SightRange, enemy.mask) && hit.collider.CompareTag("Player") && enemy.withinRange) {
             enemy.chaseTarget = hit.transform;
             ToChaseState();
         }

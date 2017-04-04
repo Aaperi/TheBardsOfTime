@@ -42,14 +42,14 @@ public class CombatState : IEnemyState {
 
     private void Look() {
         RaycastHit hit;
-        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange, enemy.mask) && hit.collider.CompareTag("Player")) {
+        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.enemyStats.search.SightRange, enemy.mask) && hit.collider.CompareTag("Player")) {
             enemy.chaseTarget = hit.transform;
             ToChaseState();
         }
          else
          {
              Vector3 targetDir = player.position - enemy.transform.position;
-             Vector3 newDir = Vector3.RotateTowards(enemy.transform.forward, targetDir, enemy.searchingTurnSpeed * Time.deltaTime, 0.0f);
+             Vector3 newDir = Vector3.RotateTowards(enemy.transform.forward, targetDir, enemy.enemyStats.search.SearchSpeed * Time.deltaTime, 0.0f);
              enemy.transform.rotation = Quaternion.LookRotation(newDir);
          }
 
@@ -58,14 +58,14 @@ public class CombatState : IEnemyState {
     void Attack() {
         enemy.cd -= Time.deltaTime;
         RaycastHit hit;
-        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.sightRange, enemy.mask) && hit.collider.CompareTag("Player")) {
+        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.enemyStats.search.SightRange, enemy.mask) && hit.collider.CompareTag("Player")) {
             if (enemy.cd <= 0) {
-                hp.TakeDamage(enemy.attackDamage);
-                enemy.cd = enemy.attackCoolDown;
+                hp.TakeDamage(enemy.enemyStats.attack.Damage);
+                enemy.cd = enemy.enemyStats.attack.Cooldown;
             }
         }
 
-        if (enemy.navMeshAgent.destination != enemy.chaseTarget.position || enemy.navMeshAgent.remainingDistance > 4f) {
+        if (enemy.navMeshAgent.destination != enemy.chaseTarget.position || enemy.navMeshAgent.remainingDistance > enemy.enemyStats.attack.AttackRange + 0.2f || enemy.navMeshAgent.remainingDistance < enemy.enemyStats.attack.AttackRange - 0.2f) {
             ToChaseState();
         }
 

@@ -42,21 +42,20 @@ public class ChaseState : IEnemyState {
     private void Look() {
         RaycastHit hit;
         Vector3 enemyToTarget = (enemy.chaseTarget.position + enemy.offset) - enemy.eyes.transform.position;
-        if (Physics.Raycast(enemy.eyes.transform.position, enemyToTarget, out hit, enemy.sightRange, enemy.mask) && hit.collider.CompareTag("Player")) {
+        if (Physics.Raycast(enemy.eyes.transform.position, enemyToTarget, out hit, enemy.enemyStats.search.SightRange, enemy.mask) && hit.collider.CompareTag("Player")) {
             enemy.chaseTarget = hit.transform;
-        } else {
+        } else 
             ToAlertState();
-        }
+        
     }
 
     private void Chase() {
         enemy.meshRendererFlag.material.color = Color.red;
         enemy.navMeshAgent.destination = enemy.chaseTarget.position;
-        if (enemy.navMeshAgent.remainingDistance < 4.1f) {
+        if (enemy.navMeshAgent.remainingDistance < (enemy.enemyStats.attack.AttackRange)) {
             enemy.navMeshAgent.Stop();
             ToAttackState();
         } else
             enemy.navMeshAgent.Resume();
-
     }
 }

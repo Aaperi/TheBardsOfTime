@@ -3,11 +3,11 @@ using System.Collections;
 
 public class StatePatternEnemy : MonoBehaviour {
 
-    public float searchingTurnSpeed, 
+    /*public float searchingTurnSpeed, 
                  searchingDuration, 
                  sightRange;
     public int attackDamage;
-    public float attackCoolDown;
+    public float attackCoolDown;*/
     //public Transform[] wayPoints;
     public Transform eyes;
     public Vector3 offset = new Vector3(0, .5f, 0);
@@ -15,6 +15,7 @@ public class StatePatternEnemy : MonoBehaviour {
     public LayerMask mask;
     public PathScript script;
     public CC player;
+    public EnemyData enemyStats;
 
     [HideInInspector]
     public Transform chaseTarget;
@@ -33,9 +34,11 @@ public class StatePatternEnemy : MonoBehaviour {
     [HideInInspector]
     public bool withinRange = false;
     [HideInInspector]
-    private HPScript hps;
-    [HideInInspector]
     public float cd;
+    [HideInInspector]
+    public LastPlayerSighting playerPos;
+
+    private HPScript hps;
 
     private void Awake() {
         combatState = new CombatState(this);
@@ -44,9 +47,10 @@ public class StatePatternEnemy : MonoBehaviour {
         patrolState = new PatrolState(this);
         player = FindObjectOfType<CC>();
         hps = GetComponent<HPScript>();
+        playerPos = FindObjectOfType<LastPlayerSighting>();
 
         navMeshAgent = GetComponent<NavMeshAgent>();
-        cd = attackCoolDown;
+        cd = enemyStats.attack.Cooldown;
     }
 
     // Use this for initialization
@@ -56,7 +60,7 @@ public class StatePatternEnemy : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        Debug.DrawRay(eyes.position, eyes.forward * sightRange, Color.red);
+        Debug.DrawRay(eyes.position, eyes.forward * enemyStats.search.SightRange, Color.red);
         currentState.UpdateState();
     }
 
