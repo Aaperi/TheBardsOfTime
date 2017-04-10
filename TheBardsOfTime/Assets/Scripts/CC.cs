@@ -12,6 +12,7 @@ public class CC : MonoBehaviour
     private SoundScript SC;
     private TargetManager tam;
     private DialogueScript dia;
+	private UIActions uiAction;
     public GameObject target;
     public List<GameObject> Instruments = new List<GameObject>();
 
@@ -74,6 +75,7 @@ public class CC : MonoBehaviour
 
     void Start()
     {
+		uiAction = GameObject.Find("TESTERI").GetComponent<UIActions> ();
         targetRotation = transform.rotation;
         rb = GetComponent<Rigidbody>();
         dia = FindObjectOfType<DialogueScript>();
@@ -194,6 +196,7 @@ public class CC : MonoBehaviour
     void Jump()
     {
         if (jumpInput && Grounded()) {
+			uiAction.Pause ();
             velocity.y = moveSetting.jumpVel;
             canDoubleJump = true;
         } else if (!jumpInput && Grounded()) {
