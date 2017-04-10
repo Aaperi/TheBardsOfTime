@@ -7,6 +7,7 @@ public class ItemScript : MonoBehaviour
     Vector3 Opos;
     Transform CT;
     GameManager GM;
+    SoundScript SC;
     bool goingUP = true;
     bool pickd = false;
 
@@ -14,6 +15,7 @@ public class ItemScript : MonoBehaviour
     {
         CT = gameObject.transform.GetChild(0).transform;
         GM = FindObjectOfType<GameManager>();
+        SC = GM.GetComponent<SoundScript>();
     }
 
     void Update()
@@ -36,6 +38,8 @@ public class ItemScript : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag.Equals("Player") && !pickd) {
+            SC.StopSound("potion_placeholder");
+            SC.PlaySound("potion_placeholder", SC.foleyGroup[3], false);
             GM.notes++;
             pickd = true;
             if (gameObject.GetComponent<Savable>())

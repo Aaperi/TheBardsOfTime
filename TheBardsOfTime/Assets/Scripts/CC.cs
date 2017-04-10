@@ -9,6 +9,7 @@ public class CC : MonoBehaviour
     private bool canDoubleJump = false;
     public bool targetIsLocked = false;
     private MenuScript MSref;
+    private SoundScript SC;
     private TargetManager tam;
     private DialogueScript dia;
     public GameObject target;
@@ -78,6 +79,7 @@ public class CC : MonoBehaviour
         dia = FindObjectOfType<DialogueScript>();
         MSref = FindObjectOfType<MenuScript>();
         tam = GetComponent<TargetManager>();
+        SC = FindObjectOfType<SoundScript>();
 
         forwardInput = sideInput = 0;
         attackInput = skillInput = spellInput = swapInput = targetLock = jumpInput = false;
@@ -139,10 +141,12 @@ public class CC : MonoBehaviour
         if (Grounded()) {
             if (Mathf.Abs(forwardInput) > inputSetting.inputDelay) {
                 //move
+                SC.PlaySound("askeleita_placeholder", SC.foleyGroup[1], true);
                 velocity.z = moveSetting.forwardVel * forwardInput;
 
             } else {
                 //no velocity
+                SC.StopSound("askeleita_placeholder");
                 velocity.z = 0;
             }
 
@@ -183,7 +187,6 @@ public class CC : MonoBehaviour
     void DoubleJump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && canDoubleJump) {
-            //velocity.y = moveSetting.jumpVel;
             velocity.y = moveSetting.doubleJumpVel;
             canDoubleJump = false;
         }
