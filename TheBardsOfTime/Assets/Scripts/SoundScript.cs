@@ -11,7 +11,9 @@ public class SoundScript : MonoBehaviour
     List<AudioMixerGroup> masterGroup;
     List<AudioSource> foley = new List<AudioSource>();
     List<AudioSource> music = new List<AudioSource>();
+    [HideInInspector]
     public List<AudioMixerGroup> foleyGroup;
+    [HideInInspector]
     public List<AudioMixerGroup> musicGroup;
 
     void Start()
