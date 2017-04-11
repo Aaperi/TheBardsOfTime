@@ -13,6 +13,8 @@ public class CC : MonoBehaviour
     private TargetManager tam;
     private DialogueScript dia;
 	private UIActions uiAction;
+    private UIPanel uiPanel;
+
     public GameObject target;
     public List<GameObject> Instruments = new List<GameObject>();
 
@@ -75,7 +77,8 @@ public class CC : MonoBehaviour
 
     void Start()
     {
-		uiAction = GameObject.Find("TESTERI").GetComponent<UIActions> ();
+        uiPanel = FindObjectOfType<UIPanel>();
+		uiAction = GameObject.Find("UIManager").GetComponent<UIActions> ();
         targetRotation = transform.rotation;
         rb = GetComponent<Rigidbody>();
         dia = FindObjectOfType<DialogueScript>();
@@ -264,13 +267,13 @@ public class CC : MonoBehaviour
 
         try {
             if (hit.collider.gameObject.GetComponent<Mouth>() != null) {
-                if (!MSref.actionGuide.activeSelf)
-                    MSref.ShowGuide("speak with " + hit.collider.name);
+                if (!uiPanel.actionGuide.gameObject.activeSelf)
+                    uiAction.ShowGuide("speak with " + hit.collider.name);
                 if (intAction)
                     StartCoroutine(dia.dialogFromXml(hit.collider.gameObject.GetComponent<Mouth>().dialogID));
             } else {
-                if (MSref.actionGuide.activeSelf)
-                    MSref.HideGuide();
+                if (uiPanel.actionGuide.gameObject.activeSelf)
+                    uiAction.HideGuide();
             }
         } catch {
             /*if (MSref.actionGuide.activeSelf)

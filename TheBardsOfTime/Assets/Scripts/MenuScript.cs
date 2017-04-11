@@ -88,8 +88,8 @@ public class MenuScript : MonoBehaviour {
     }
 
     void init() {
-        actionGuide = GameObject.Find("actionGuide");
-        aText = GameObject.Find("aText").GetComponent<Text>();
+        //actionGuide = GameObject.Find("actionGuide");
+        aText = GameObject.Find("actionGuide").GetComponent<Text>();
         actionGuide.SetActive(false);
     }
 
@@ -204,13 +204,13 @@ public class MenuScript : MonoBehaviour {
     }
 
     public void ShowGuide(string message) {
-        actionGuide.SetActive(true);
+        aText.gameObject.SetActive(true);
         aText.text += message;
     }
 
     public void HideGuide() {
         aText.text = aText.text.Substring(0, 13);
-        actionGuide.SetActive(false);
+        aText.gameObject.SetActive(false);
     }
 
     #region "Button clicks"

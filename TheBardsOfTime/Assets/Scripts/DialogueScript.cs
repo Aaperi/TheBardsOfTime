@@ -8,7 +8,7 @@ using DialogClass;
 
 public class DialogueScript : MonoBehaviour {
     [HideInInspector]
-    public Canvas chat;
+    //public Canvas chat;
     public Sprite speaker1, speaker2;
     public Image dialogImage;
     public float dialogueSpeed = 0f;
@@ -16,8 +16,8 @@ public class DialogueScript : MonoBehaviour {
     public Image portrait;
 
     private Text text;
-    private MenuScript menu;
     private Dialogue dia;
+    private UIPanel uiPanel;
 
     [HideInInspector]
     public bool dialogueActive;
@@ -25,12 +25,12 @@ public class DialogueScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         LoadDialogues();
+        uiPanel = FindObjectOfType<UIPanel>();
         dialogueActive = false;
-        chat = GameObject.Find("chat").GetComponent<Canvas>();
-        text = chat.GetComponentInChildren<Text>();
-        menu = FindObjectOfType<MenuScript>();
-        portrait = chat.GetComponentInChildren<Image>();
-        chat.enabled = false;
+        //chat = GameObject.Find("chat").GetComponent<Canvas>();
+        text = uiPanel.diaText;
+        portrait = uiPanel.diaImage;
+        //chat.enabled = false;
 	}
 
     void Speaker1(string dialogue) {
@@ -52,7 +52,7 @@ public class DialogueScript : MonoBehaviour {
 
     public IEnumerator dialogFromXml(int sceneID)
     {
-        chat.enabled = true;
+        //chat.enabled = true;
         if (!dialogueActive) {
             dialogueActive = true;
             foreach (Line ln in dia.Scenes[sceneID].Lines) {
@@ -64,7 +64,7 @@ public class DialogueScript : MonoBehaviour {
             }
         }
         dialogueActive = false;
-        chat.enabled = false;
+        //chat.enabled = false;
     }
 
     IEnumerator WaitForTime(float time)

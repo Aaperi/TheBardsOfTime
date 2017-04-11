@@ -5,10 +5,11 @@ using System.Collections;
 
 public class UIPanel : MonoBehaviour {
 
-	public Text text;
+	public Text text, diaText, actionGuide;
+    public Image diaImage;
 	public Button 
 	continueButton, optionsButton, quitButton,
-	backButton, CameraControlButton, InvertButton;
+	backButton, CameraControlButton, InvertButton, saveButton, loadButton;
 	public Toggle CameraControlToggle, InvertToggle;
 	public GameObject 
 	uiPanelObject;
@@ -26,11 +27,22 @@ public class UIPanel : MonoBehaviour {
 			uiPanel;
 	}
 
-	public void PauseChoice(string text, UnityAction continueEvent, UnityAction optionsEvent, UnityAction quitEvent){
+    private void Awake() {
+        HideAll();
+    }
+
+    public void PauseChoice(string text, UnityAction continueEvent, UnityAction optionsEvent, UnityAction quitEvent, UnityAction saveEvent, UnityAction loadEvent){
 		HideAll ();
 		continueButton.onClick.RemoveAllListeners ();
 		continueButton.onClick.AddListener (continueEvent);
 		continueButton.onClick.AddListener (HideAll);
+
+        saveButton.onClick.RemoveAllListeners();
+        saveButton.onClick.AddListener(saveEvent);
+
+        loadButton.onClick.RemoveAllListeners();
+        loadButton.onClick.AddListener(loadEvent);
+        loadButton.onClick.AddListener(HideAll);
 
 		optionsButton.onClick.RemoveAllListeners ();
 		optionsButton.onClick.AddListener (optionsEvent);
@@ -42,6 +54,8 @@ public class UIPanel : MonoBehaviour {
 
 		this.text.text = text;
 		continueButton.gameObject.SetActive (true);
+        saveButton.gameObject.SetActive(true);
+        loadButton.gameObject.SetActive(true);
 		optionsButton.gameObject.SetActive (true);
 		quitButton.gameObject.SetActive (true);
 	}
@@ -72,6 +86,8 @@ public class UIPanel : MonoBehaviour {
 		quitButton.gameObject.SetActive (false);
 
 		backButton.gameObject.SetActive (false);
+        saveButton.gameObject.SetActive(false);
+        loadButton.gameObject.SetActive(false);
 		CameraControlButton.gameObject.SetActive (false);
 		InvertButton.gameObject.SetActive (false);
 

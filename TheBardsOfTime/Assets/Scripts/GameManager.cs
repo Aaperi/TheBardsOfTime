@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
             Load();
     }
 
-    void Save()
+    public void Save()
     {
         //Tehään playerdata
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Level saved!");
     }
 
-    void Load()
+    public void Load()
     {
         if (File.Exists(Application.dataPath + "/Saves/Player.json")) {
 
