@@ -47,12 +47,14 @@ public class SoundScript : MonoBehaviour
         AudioSource temp = null;
 
         if (foleyGroup.Contains(Channel))
-            if (!foley.Find(item => item.clip.name == Name).isPlaying)
-                temp = foley.Find(item => item.clip.name == Name);
+            if (foley.Find(item => item.clip.name == Name))
+                if (!foley.Find(item => item.clip.name == Name).isPlaying)
+                    temp = foley.Find(item => item.clip.name == Name);
 
         if (musicGroup.Contains(Channel))
-            if (!music.Find(item => item.clip.name == Name).isPlaying)
-                temp = music.Find(item => item.clip.name == Name);
+            if (music.Find(item => item.clip.name == Name))
+                if (!music.Find(item => item.clip.name == Name).isPlaying)
+                    temp = music.Find(item => item.clip.name == Name);
 
         if (temp != null) {
             StopSound(Name);
@@ -66,7 +68,9 @@ public class SoundScript : MonoBehaviour
     public void StopSound(string Name)
     {
         AudioSource temp = null;
-        temp = allClips.Find(item => item.clip.name == Name);
+
+        if (allClips.Find(item => item.clip.name == Name))
+            temp = allClips.Find(item => item.clip.name == Name);
 
         if (temp != null) {
             temp.Stop();

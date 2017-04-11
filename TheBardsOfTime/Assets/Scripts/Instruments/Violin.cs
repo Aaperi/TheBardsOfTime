@@ -5,6 +5,7 @@ public class Violin : MonoBehaviour
 {
     private Instrument ins;
     private Transform player;
+    private SoundScript SSref;
     private bool isProcessing = false;
     private bool isChanneling = false;
     public ParticleSystem psys;
@@ -24,6 +25,7 @@ public class Violin : MonoBehaviour
     {
         ins = Resources.Load("Data/ViolinSO") as Instrument;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        SSref = FindObjectOfType<SoundScript>();
         sh = psys.shape;
     }
 
@@ -98,6 +100,7 @@ public class Violin : MonoBehaviour
             isProcessing = true;
             Debug.Log("Violin Attack");
             yield return new WaitForSeconds(ins.attack.CastTime);
+            SSref.PlaySound("lyönti_placeholder", SSref.foleyGroup[3], false);
             psys.Play();
             Debug.Log("Viulu isku, hijaaa!");
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
