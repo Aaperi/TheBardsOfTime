@@ -3,13 +3,12 @@ using System.Collections;
 
 public class Violin : MonoBehaviour
 {
-    Instrument ins;
-    Transform player;
-    SoundScript SC;
-    bool isProcessing = false;
-    bool isChanneling = false;
+    private Instrument ins;
+    private Transform player;
+    private bool isProcessing = false;
+    private bool isChanneling = false;
     public ParticleSystem psys;
-    ParticleSystem.ShapeModule sh;
+    private ParticleSystem.ShapeModule sh;
 
     void OnDisable() {
         psys.Stop();
@@ -25,7 +24,6 @@ public class Violin : MonoBehaviour
     {
         ins = Resources.Load("Data/ViolinSO") as Instrument;
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        SC = FindObjectOfType<SoundScript>();
         sh = psys.shape;
     }
 
@@ -100,7 +98,6 @@ public class Violin : MonoBehaviour
             isProcessing = true;
             Debug.Log("Violin Attack");
             yield return new WaitForSeconds(ins.attack.CastTime);
-            SC.PlaySound("lyönti_placeholder", SC.foleyGroup[3], false);
             psys.Play();
             Debug.Log("Viulu isku, hijaaa!");
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
