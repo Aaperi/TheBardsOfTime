@@ -32,6 +32,7 @@ public class MainMenuActions : MonoBehaviour {
 	}
 
 	public void Play(){
+        ss.StopSound("tbotti_karvalakki");
         SceneManager.LoadScene ("uusiLevelStart");
 	}
 

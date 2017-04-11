@@ -81,6 +81,7 @@ public class CC : MonoBehaviour {
         MSref = FindObjectOfType<MenuScript>();
         tam = GetComponent<TargetManager>();
         SC = FindObjectOfType<SoundScript>();
+        uiAction = FindObjectOfType<UIActions>();
 
         forwardInput = sideInput = 0;
         attackInput = skillInput = spellInput = swapInput = targetLock = jumpInput = false;
@@ -117,7 +118,7 @@ public class CC : MonoBehaviour {
 
         Debug.DrawRay(transform.position, Vector3.down, Color.red);
         if (Input.GetKeyDown(KeyCode.Escape))
-            game.PauseGame();
+            uiAction.PauseGame();
     }
 
     void FixedUpdate() {
@@ -140,12 +141,12 @@ public class CC : MonoBehaviour {
         if (Grounded()) {
             if (Mathf.Abs(forwardInput) > inputSetting.inputDelay) {
                 //move
-                SC.PlaySound("askeleita_placeholder", SC.foleyGroup[1], true);
+                //SC.PlaySound("askeleita_placeholder", SC.foleyGroup[1], true);
                 velocity.z = moveSetting.forwardVel * forwardInput;
 
             } else {
                 //no velocity
-                SC.StopSound("askeleita_placeholder");
+                //SC.StopSound("askeleita_placeholder");
                 velocity.z = 0;
             }
 

@@ -64,6 +64,7 @@ public class UIActions : MonoBehaviour {
 
 
     public void Pause() {
+        paused = true;
         uiPanel.PauseChoice("PAUSE \n", continueAction, optionsAction, quitAction, saveAction, loadAction);
     }
 
@@ -138,6 +139,6 @@ public class UIActions : MonoBehaviour {
     }
 
     public void PauseGame() {
-        paused = true;
+        Pause();
     }
 }
