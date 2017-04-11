@@ -41,7 +41,7 @@ public class SoundScript : MonoBehaviour
         allClips.AddRange(foley);
         allClips.AddRange(music);
 
-        PlaySound("luonto_ambienssi_placeholder", musicGroup[1], true);
+       // PlaySound("luonto_ambienssi_placeholder", musicGroup[1], true);
     }
 
     public void PlaySound(string Name, AudioMixerGroup Channel, bool Loopit)

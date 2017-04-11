@@ -45,13 +45,21 @@ public class UIActions : MonoBehaviour {
     }
 
     void Update() {
+        if (paused)
+            canvasOn = true;
+        else
+            canvasOn = false;
+
         if (!dia.dialogueActive)
             uiPanel.diaImage.enabled = false;
         else
             uiPanel.diaImage.enabled = true;
 
-        if (game.paused)
-            Pause();
+        if (canvasOn || dia.dialogueActive) {
+            Time.timeScale = .000000001f;
+        } else {
+            Time.timeScale = 1f;
+        }
     }
 
 
@@ -60,7 +68,7 @@ public class UIActions : MonoBehaviour {
     }
 
     public void UnPause() {
-        game.paused = false;
+        paused = false;
     }
 
     public void SaveGame() {
@@ -69,7 +77,7 @@ public class UIActions : MonoBehaviour {
 
     public void LoadGame() {
         uiPanel.HideAll();
-        game.paused = false;
+        paused = false;
         game.Load();
     }
 
@@ -127,5 +135,9 @@ public class UIActions : MonoBehaviour {
 
     void InvertToggle() {
         game.invertEnabled = uiPanel.InvertToggle.isOn;
+    }
+
+    public void PauseGame() {
+        paused = true;
     }
 }

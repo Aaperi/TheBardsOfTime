@@ -43,14 +43,7 @@ public class GameManager : MonoBehaviour
             Save();
 
         if (Input.GetKeyDown(KeyCode.Keypad7))
-            Load();
-
-        if(paused || dia.dialogueActive) {
-            Time.timeScale = .000000001f;
-            } else {
-                Time.timeScale = 1f;
-            }
-        
+            Load();        
     }
 
     public void Save()

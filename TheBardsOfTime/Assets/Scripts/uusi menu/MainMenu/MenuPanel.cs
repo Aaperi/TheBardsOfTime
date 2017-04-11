@@ -11,7 +11,8 @@ public class MenuPanel : MonoBehaviour {
 	public GameObject 
 		menuPanelObject;
 
-	private static MenuPanel menuPanel;
+    SoundScript ss;
+    private static MenuPanel menuPanel;
 
 	public static MenuPanel Instance(){
 		if (!menuPanel) {
@@ -24,13 +25,9 @@ public class MenuPanel : MonoBehaviour {
 			menuPanel;
 	}
 
-    private void Start() {
-        SoundScript ss = FindObjectOfType<SoundScript>();
-        ss.PlaySound("tbotti_karvalakki", ss.musicGroup[1], true);
-    }
-
-	public void MenuChoice(string text, UnityAction playEvent, UnityAction optionEvent, UnityAction exitEvent){
+    public void MenuChoice(string text, UnityAction playEvent, UnityAction optionEvent, UnityAction exitEvent){
 		playButton.onClick.RemoveAllListeners ();
+      //  playButton.onClick.AddListener(StopSong);
 		playButton.onClick.AddListener (playEvent);
         playButton.onClick.AddListener (closePanel);
 
@@ -51,5 +48,9 @@ public class MenuPanel : MonoBehaviour {
 	void closePanel(){
 		menuPanelObject.SetActive (false);
 	}
+
+    /*void StopSong() {
+        ss.StopSound("tbotti_karvalakki");
+    }*/
 
 }
