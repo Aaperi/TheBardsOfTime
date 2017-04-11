@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Flute : MonoBehaviour
 {
+    SoundScript SC;
     private CC CCref;
     private Instrument ins;
     private Transform player;
@@ -24,6 +25,7 @@ public class Flute : MonoBehaviour
         CCref = FindObjectOfType<CC>();
         ins = Resources.Load("Data/FluteSO") as Instrument;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        SC = FindObjectOfType<SoundScript>();
         sh = psys.shape;
     }
 

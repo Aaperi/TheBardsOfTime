@@ -8,16 +8,22 @@ using LitJson;
 
 public class GameManager : MonoBehaviour
 {
-    Text noteCount;
+    public Text noteCount;
     List<LevelState> leveltemps = new List<LevelState>();
     static GameManager GM;
+    UIPanel uiPanel;
+    CC cc;
+    DialogueScript dia;
     public int notes = 0;
     public float[] lastPos;
-    public bool invertEnabled = false, freeCamEnabled = false;
+    public bool invertEnabled = false, freeCamEnabled = false, paused = false;
 
     //Singleton
     void Awake()
     {
+        uiPanel = FindObjectOfType<UIPanel>();
+        cc = FindObjectOfType<CC>();
+        dia = FindObjectOfType<DialogueScript>();
         if (GM == null) {
             GM = this;
             DontDestroyOnLoad(gameObject);
@@ -38,6 +44,13 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Keypad7))
             Load();
+
+        if(paused || dia.dialogueActive) {
+            Time.timeScale = .000000001f;
+            } else {
+                Time.timeScale = 1f;
+            }
+        
     }
 
     public void Save()
@@ -179,6 +192,10 @@ public class GameManager : MonoBehaviour
     public bool GetLevelState()
     {
         return false;
+    }
+
+    public void PauseGame() {
+        paused = true;
     }
 }
 

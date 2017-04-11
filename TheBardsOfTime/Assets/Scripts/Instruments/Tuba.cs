@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Tuba : MonoBehaviour
 {
+    SoundScript SC;
     private Instrument ins;
     private Transform player;
     private bool isProcessing = false;
@@ -12,6 +13,7 @@ public class Tuba : MonoBehaviour
     {
         ins = Resources.Load("Data/TubaSO") as Instrument;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        SC = FindObjectOfType<SoundScript>();
     }
 
     void OnDisable()
@@ -64,6 +66,7 @@ public class Tuba : MonoBehaviour
             isProcessing = true;
             Debug.Log("Tuba Attack");
             yield return new WaitForSeconds(ins.attack.CastTime);
+            SC.PlaySound("lyönti_placeholder", SC.foleyGroup[3], false);
             Debug.Log("Täältä pesee senkin vatipää!");
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (GameObject go in enemies)

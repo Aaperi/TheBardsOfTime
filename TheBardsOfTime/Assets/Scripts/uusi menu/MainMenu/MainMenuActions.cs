@@ -8,6 +8,7 @@ public class MainMenuActions : MonoBehaviour {
 
 	private MenuPanel menuPanel;
 	private DisplayManager displayManager;
+    private GameManager gm;
 
 	private UnityAction playAction;
 	private UnityAction optionAction;
@@ -16,6 +17,7 @@ public class MainMenuActions : MonoBehaviour {
 	void Awake() {
 		menuPanel = MenuPanel.Instance ();
 		displayManager = DisplayManager.Instance ();
+        gm = FindObjectOfType<GameManager>();
 
 		playAction = new UnityAction (Play);
 		optionAction = new UnityAction (Options);
@@ -28,7 +30,8 @@ public class MainMenuActions : MonoBehaviour {
 	}
 
 	public void Play(){
-		SceneManager.LoadScene ("uusiLevelStart");
+        StopSong();
+        SceneManager.LoadScene ("uusiLevelStart");
 	}
 
 	public void Options(){
@@ -38,4 +41,10 @@ public class MainMenuActions : MonoBehaviour {
 	public void Exit(){
 		Application.Quit ();
 	}
+
+
+    void StopSong() {
+        SoundScript ss = FindObjectOfType<SoundScript>();
+        ss.StopSound("tbotti_karvalakki");
+    }
 }
