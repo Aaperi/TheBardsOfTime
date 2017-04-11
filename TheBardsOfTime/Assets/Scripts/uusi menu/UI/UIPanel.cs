@@ -9,10 +9,14 @@ public class UIPanel : MonoBehaviour {
     public Image diaImage;
 	public Button 
 	continueButton, optionsButton, quitButton,
-	backButton, CameraControlButton, InvertButton, saveButton, loadButton;
+	backButton, CameraControlButton, InvertButton, saveButton, loadButton,
+    yesButton, noButton;
 	public Toggle CameraControlToggle, InvertToggle;
 	public GameObject 
 	uiPanelObject;
+
+    [HideInInspector]
+    public Text noteCount;
 
 	private static UIPanel uiPanel;
 
@@ -50,7 +54,7 @@ public class UIPanel : MonoBehaviour {
 
 		quitButton.onClick.RemoveAllListeners ();
 		quitButton.onClick.AddListener (quitEvent);
-		//quitButton.onClick.AddListener ();
+		quitButton.onClick.AddListener (HideAll);
 
 		this.text.text = text;
 		continueButton.gameObject.SetActive (true);
@@ -80,6 +84,21 @@ public class UIPanel : MonoBehaviour {
 		InvertToggle.gameObject.SetActive (true);
 	}
 
+    public void QuitChoice(string text, UnityAction yesEvent, UnityAction noEvent) {
+        HideAll();
+        
+        yesButton.onClick.RemoveAllListeners();
+        yesButton.onClick.AddListener(yesEvent);
+        yesButton.onClick.AddListener(HideAll);
+
+        noButton.onClick.RemoveAllListeners();
+        noButton.onClick.AddListener(noEvent);
+
+        this.text.text = text;
+        yesButton.gameObject.SetActive(true);
+        noButton.gameObject.SetActive(true);
+    }
+
 	public void HideAll(){
 		continueButton.gameObject.SetActive (false);
 		optionsButton.gameObject.SetActive (false);
@@ -90,10 +109,13 @@ public class UIPanel : MonoBehaviour {
         loadButton.gameObject.SetActive(false);
 		CameraControlButton.gameObject.SetActive (false);
 		InvertButton.gameObject.SetActive (false);
+        yesButton.gameObject.SetActive(false);
+        noButton.gameObject.SetActive(false);
 
-		CameraControlToggle.gameObject.SetActive (false);
+        CameraControlToggle.gameObject.SetActive (false);
 		InvertToggle.gameObject.SetActive (false);
 
+        diaImage.gameObject.SetActive(false);
 		this.text.text = "";
 	}
 }

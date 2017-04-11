@@ -8,49 +8,63 @@ public class UIActions : MonoBehaviour {
 
     private UIPanel uiPanel;
     private DisplayManager displayManager;
+    private CC cc;
 
     private UnityAction 
         continueAction, optionsAction, quitAction, saveAction, loadAction,
-        backAction, cameraControlAction, invertAction;
+        backAction, cameraControlAction, invertAction,
+        yesAction, noAction;
 
     private GameManager game;
     private DialogueScript dia;
 
-    private bool canvasOn, paused = false;
+    private bool canvasOn, paused;
 
     void Awake() {
         uiPanel = UIPanel.Instance();
         displayManager = DisplayManager.Instance();
         game = FindObjectOfType<GameManager>();
         dia = FindObjectOfType<DialogueScript>();
+        cc = FindObjectOfType<CC>();
+
+        uiPanel.CameraControlToggle.isOn = game.freeCamEnabled;
+        uiPanel.InvertToggle.isOn = game.invertEnabled;
+        canvasOn = false;
+        paused = false;
 
         continueAction = new UnityAction(UnPause);
         optionsAction = new UnityAction(Options);
-        quitAction = new UnityAction(UnPause);
+        quitAction = new UnityAction(Quit);
         backAction = new UnityAction(Back);
         cameraControlAction = new UnityAction(CameraControl);
         invertAction = new UnityAction(Invert);
         saveAction = new UnityAction(SaveGame);
         loadAction = new UnityAction(LoadGame);
+        yesAction = new UnityAction(Yes);
+        noAction = new UnityAction(No);
     }
 
-    void Update() {        
-        if (paused || dia.dialogueActive) {
-            Time.timeScale = .000000001f;
-        } else {
-            Time.timeScale = 1f;
-        }
+    void Update() {
+        if (paused)
+            canvasOn = true;
+        else
+            canvasOn = false;
 
         if (!dia.dialogueActive)
             uiPanel.diaImage.enabled = false;
         else
             uiPanel.diaImage.enabled = true;
 
+        if (canvasOn || dia.dialogueActive) {
+            Time.timeScale = .000000001f;
+        } else {
+            Time.timeScale = 1f;
+        }
     }
 
+
     public void Pause() {
-        paused = true;
-        uiPanel.PauseChoice("Toimi nyt saatana \n", continueAction, optionsAction, quitAction, saveAction, loadAction);
+        uiPanel.PauseChoice("PAUSE \n", continueAction, optionsAction, quitAction, saveAction, loadAction);
     }
 
     public void UnPause() {
@@ -62,19 +76,29 @@ public class UIActions : MonoBehaviour {
     }
 
     public void LoadGame() {
+        uiPanel.HideAll();
+        paused = false;
         game.Load();
     }
 
     public void Options() {
-        uiPanel.OptionsChoice("Testaillaan nyt tätä \n", backAction, cameraControlAction, invertAction);
+        uiPanel.OptionsChoice("OPTIONS \n", backAction, cameraControlAction, invertAction);
     }
 
     public void Quit() {
+        uiPanel.QuitChoice("HALUATKO POISTUA PELISTÄ? \n", yesAction, noAction);
+    }
 
+    public void Yes() {
+        SceneManager.LoadScene(0);
+    }
+
+    public void No() {
+        uiPanel.PauseChoice("PAUSE \n", continueAction, optionsAction, quitAction, saveAction, loadAction);
     }
 
     public void Back() {
-        uiPanel.PauseChoice("Toimi nyt saatana \n", continueAction, optionsAction, quitAction, saveAction, loadAction);
+        uiPanel.PauseChoice("PAUSE \n", continueAction, optionsAction, quitAction, saveAction, loadAction);
     }
 
     public void CameraControl() {
@@ -111,5 +135,9 @@ public class UIActions : MonoBehaviour {
 
     void InvertToggle() {
         game.invertEnabled = uiPanel.InvertToggle.isOn;
+    }
+
+    public void PauseGame() {
+        paused = true;
     }
 }

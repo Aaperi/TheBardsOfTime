@@ -8,6 +8,8 @@ public class MainMenuActions : MonoBehaviour {
 
 	private MenuPanel menuPanel;
 	private DisplayManager displayManager;
+    private GameManager gm;
+    private SoundScript ss;
 
 	private UnityAction playAction;
 	private UnityAction optionAction;
@@ -16,6 +18,8 @@ public class MainMenuActions : MonoBehaviour {
 	void Awake() {
 		menuPanel = MenuPanel.Instance ();
 		displayManager = DisplayManager.Instance ();
+        gm = FindObjectOfType<GameManager>();
+        ss = FindObjectOfType<SoundScript>();
 
 		playAction = new UnityAction (Play);
 		optionAction = new UnityAction (Options);
@@ -23,12 +27,12 @@ public class MainMenuActions : MonoBehaviour {
 	}
 
 	public void Menu(){
-		menuPanel.MenuChoice ("Testaa toimiiko napit \n", playAction, optionAction, exitAction);
+        menuPanel.MenuChoice ("Testaa toimiiko napit \n", playAction, optionAction, exitAction);
 
 	}
 
 	public void Play(){
-		SceneManager.LoadScene ("uusiLevelStart");
+        SceneManager.LoadScene ("uusiLevelStart");
 	}
 
 	public void Options(){
@@ -38,4 +42,5 @@ public class MainMenuActions : MonoBehaviour {
 	public void Exit(){
 		Application.Quit ();
 	}
+
 }
