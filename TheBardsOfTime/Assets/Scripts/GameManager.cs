@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     UIPanel uiPanel;
     CC cc;
     DialogueScript dia;
+    public int playerHp;
     public int notes = 0;
     public float[] lastPos;
     public bool invertEnabled = false, freeCamEnabled = false, paused = false;

@@ -15,6 +15,7 @@ public class HPScript : MonoBehaviour
     public float regenSpeed = 2;
     public float amp = 1;
     MenuScript menu;
+    GameManager gm;
     CC player;
     MeshRenderer mesh;
 
@@ -28,9 +29,16 @@ public class HPScript : MonoBehaviour
         menu = FindObjectOfType<MenuScript>();
         player = FindObjectOfType<CC>();
         mesh = GetComponent<MeshRenderer>();
-        UpdateHealthbar();
+        gm = FindObjectOfType<GameManager>();
 
         vilkkumisAika = .75f;
+
+        if (iNeedUI && gm.playerHp > 0) {
+            hitpoints = gm.playerHp;
+            UpdateHealthbar();
+        }
+
+        UpdateHealthbar();
     }
 
     void Update()
@@ -69,6 +77,10 @@ public class HPScript : MonoBehaviour
             else
                 mesh.material.color = Color.red;
         }
+
+        if (Input.GetKeyDown(KeyCode.Keypad5)) {
+            TakeDamage(10);
+        }
     }
 
     void Death()
@@ -83,8 +95,10 @@ public class HPScript : MonoBehaviour
 
     private void UpdateHealthbar()
     {
-        if (iNeedUI)
+        if (iNeedUI) {
             HPSlider.value = hitpoints;
+            gm.playerHp = hitpoints;
+        }
     }
 
     private void RegenHP(int regenAmount)
@@ -98,9 +112,7 @@ public class HPScript : MonoBehaviour
         Debug.Log(gameObject.name + " took: " + (int)(damage * amp) + "damage");
         hitpoints -= (int)(damage * amp);
         vilkkuminen = true;
-        if (iNeedUI) {
-            UpdateHealthbar();
-        }
+        UpdateHealthbar();
     }
 
     public IEnumerator Slow(float duration, float percentage)
