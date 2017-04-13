@@ -14,7 +14,7 @@ public class CC : MonoBehaviour {
     private DialogueScript dia;
     private UIActions uiAction;
     private UIPanel uiPanel;
-    private GameManager game;
+    private GameManager gm;
 
     public GameObject target;
     public List<GameObject> Instruments = new List<GameObject>();
@@ -73,7 +73,7 @@ public class CC : MonoBehaviour {
     }
 
     void Start() {
-        game = FindObjectOfType<GameManager>();
+        gm = FindObjectOfType<GameManager>();
         uiPanel = FindObjectOfType<UIPanel>();
         targetRotation = transform.rotation;
         rb = GetComponent<Rigidbody>();
@@ -90,12 +90,7 @@ public class CC : MonoBehaviour {
             Instruments.Add(child.gameObject);
         EquipByID(0);
 
-        if (FindObjectOfType<GameManager>().lastPos.Length > 0) {
-            GameManager GM = FindObjectOfType<GameManager>();
-            transform.position = new Vector3(GM.lastPos[0], GM.lastPos[1], GM.lastPos[2]);
-            transform.eulerAngles = new Vector3(0, GM.lastPos[3], 0);
-            GM.lastPos = null;
-        }
+        MoveToStart();
     }
 
     void GetInput() {
@@ -212,6 +207,18 @@ public class CC : MonoBehaviour {
                 go.SetActive(true);
             else
                 go.SetActive(false);
+        }
+    }
+
+    void MoveToStart()
+    {
+        if (gm.lastPos.Length > 0) {
+            transform.position = new Vector3(gm.lastPos[0], gm.lastPos[1], gm.lastPos[2]);
+            transform.eulerAngles = new Vector3(0, gm.lastPos[3], 0);
+            gm.lastPos = null;
+        } else if (gm.lastLevelID > 0) {
+            List<LevelLoader> temp = new List<LevelLoader>(FindObjectsOfType<LevelLoader>());
+            transform.position = temp.Find(port => port.lvlID == gm.lastLevelID).gameObject.transform.position + transform.forward;
         }
     }
 

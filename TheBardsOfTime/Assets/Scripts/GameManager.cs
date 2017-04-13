@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     DialogueScript dia;
     public int playerHp;
     public int notes = 0;
+    public int lastLevelID;
     public float[] lastPos;
     public bool invertEnabled = false, freeCamEnabled = false, paused = false;
 
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour
     {
         List<ObjectData> objects = new List<ObjectData>();
 
+        //Katotaan jos kyseisestä kentästä on jo tietoja tallella ja ladataan ne
         for (int k = 0; k < leveltemps.Count; k++)
             if (leveltemps[k].levelName == SceneManager.GetActiveScene().name) {
                 objects.AddRange(leveltemps[k].objects);
@@ -133,7 +135,7 @@ public class GameManager : MonoBehaviour
         else
             leveltemps.Add(state);
 
-        Debug.Log("Level saved!");
+        Debug.Log("Level Updated!");
     }
 
     public void Load()
@@ -150,6 +152,7 @@ public class GameManager : MonoBehaviour
             notes = data.notes;
             lastPos = new float[] { (float)data.pos[0], (float)data.pos[1], (float)data.pos[2], (float)data.rot };
             leveltemps.Clear();
+            lastLevelID = 0;
             Debug.Log("Loading Complete!");
 
             SceneManager.LoadScene(data.lastLevel);
