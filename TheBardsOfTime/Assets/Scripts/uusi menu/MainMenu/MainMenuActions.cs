@@ -27,7 +27,7 @@ public class MainMenuActions : MonoBehaviour {
 	}
 
 	public void Menu(){
-        menuPanel.MenuChoice ("Testaa toimiiko napit \n", playAction, optionAction, exitAction);
+        menuPanel.MenuChoice (playAction, optionAction, exitAction);
 
 	}
 

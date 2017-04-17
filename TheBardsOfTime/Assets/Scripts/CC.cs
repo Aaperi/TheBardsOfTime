@@ -112,7 +112,7 @@ public class CC : MonoBehaviour {
         Turn();
 
         Debug.DrawRay(transform.position, Vector3.down, Color.red);
-        if (Input.GetKeyDown(KeyCode.Escape))
+		if (Input.GetKeyDown(KeyCode.Escape) && !dia.dialogueActive)
             uiAction.PauseGame();
     }
 
@@ -262,7 +262,7 @@ public class CC : MonoBehaviour {
         try {
             if (hit.collider.gameObject.GetComponent<Mouth>() != null) {
                 if (!uiPanel.actionGuide.gameObject.activeSelf)
-                    uiAction.ShowGuide("speak with " + hit.collider.name);
+                    uiAction.ShowGuide("Speak with " + hit.collider.name);
                 if (intAction)
                     StartCoroutine(dia.dialogFromXml(hit.collider.gameObject.GetComponent<Mouth>().dialogID));
             } else {
@@ -272,6 +272,8 @@ public class CC : MonoBehaviour {
         } catch {
             /*if (MSref.actionGuide.activeSelf)
                 MSref.HideGuide();*/
+			if (uiPanel.actionGuide.gameObject.activeSelf)
+				uiAction.HideGuide();
         }
     }
 
