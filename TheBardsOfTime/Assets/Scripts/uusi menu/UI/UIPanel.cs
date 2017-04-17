@@ -9,7 +9,7 @@ public class UIPanel : MonoBehaviour {
     public Image diaImage;
 	public Button 
 	continueButton, optionsButton, quitButton,
-	backButton, CameraControlButton, InvertButton, saveButton, loadButton,
+	backButton, saveButton, loadButton,
     yesButton, noButton;
 	public Toggle CameraControlToggle, InvertToggle;
 	public GameObject 
@@ -51,11 +51,9 @@ public class UIPanel : MonoBehaviour {
 
 		optionsButton.onClick.RemoveAllListeners ();
 		optionsButton.onClick.AddListener (optionsEvent);
-		//optionsButton.onClick.AddListener ();
 
 		quitButton.onClick.RemoveAllListeners ();
 		quitButton.onClick.AddListener (quitEvent);
-		quitButton.onClick.AddListener (HideAll);
 
 		this.text.text = text;
 		continueButton.gameObject.SetActive (true);
@@ -65,22 +63,14 @@ public class UIPanel : MonoBehaviour {
 		quitButton.gameObject.SetActive (true);
 	}
 
-	public void OptionsChoice(string text, UnityAction backEvent, UnityAction controlEvent, UnityAction invertEvent){
+	public void OptionsChoice(string text, UnityAction backEvent){
 		Debug.Log ("Options");
 		HideAll ();
 		backButton.onClick.RemoveAllListeners ();
 		backButton.onClick.AddListener (backEvent);
 
-		CameraControlButton.onClick.RemoveAllListeners ();
-		CameraControlButton.onClick.AddListener (controlEvent);
-
-		InvertButton.onClick.RemoveAllListeners ();
-		InvertButton.onClick.AddListener (invertEvent);
-
 		this.text.text = text;
 		backButton.gameObject.SetActive (true);
-		CameraControlButton.gameObject.SetActive (true);
-		InvertButton.gameObject.SetActive (true);
 		CameraControlToggle.gameObject.SetActive (true);
 		InvertToggle.gameObject.SetActive (true);
 	}
@@ -107,8 +97,6 @@ public class UIPanel : MonoBehaviour {
 		backButton.gameObject.SetActive (false);
         saveButton.gameObject.SetActive(false);
         loadButton.gameObject.SetActive(false);
-		CameraControlButton.gameObject.SetActive (false);
-		InvertButton.gameObject.SetActive (false);
         yesButton.gameObject.SetActive(false);
         noButton.gameObject.SetActive(false);
 

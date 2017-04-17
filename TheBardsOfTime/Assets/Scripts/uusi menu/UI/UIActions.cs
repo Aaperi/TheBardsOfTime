@@ -18,7 +18,7 @@ public class UIActions : MonoBehaviour {
     private GameManager game;
     private DialogueScript dia;
 
-    private bool canvasOn, paused;
+	public bool canvasOn, paused, inv, cam;
 
     void Awake() {
         uiPanel = UIPanel.Instance();
@@ -26,20 +26,20 @@ public class UIActions : MonoBehaviour {
         game = FindObjectOfType<GameManager>();
         dia = FindObjectOfType<DialogueScript>();
         cc = FindObjectOfType<CC>();
+		canvasOn = false;
+		paused = false;
 
-        uiPanel.CameraControlToggle.isOn = game.freeCamEnabled;
-        uiPanel.InvertToggle.isOn = game.invertEnabled;
+		uiPanel.CameraControlToggle.isOn = game.freeCamEnabled;
+		uiPanel.InvertToggle.isOn = game.invertEnabled;
 		uiPanel.noteCount = game.noteCount;
 		uiPanel.actionGuide.gameObject.SetActive (false);
-        canvasOn = false;
-        paused = false;
+		inv = uiPanel.InvertToggle.isOn;
+		cam = uiPanel.CameraControlToggle.isOn;
 
         continueAction = new UnityAction(UnPause);
         optionsAction = new UnityAction(Options);
         quitAction = new UnityAction(Quit);
         backAction = new UnityAction(Back);
-        cameraControlAction = new UnityAction(CameraControl);
-        invertAction = new UnityAction(Invert);
         saveAction = new UnityAction(SaveGame);
         loadAction = new UnityAction(LoadGame);
         yesAction = new UnityAction(Yes);
@@ -64,8 +64,6 @@ public class UIActions : MonoBehaviour {
         } else {
             Time.timeScale = 1f;
         }
-
-		Debug.Log (uiPanel.actionGuide.gameObject.activeSelf);
     }
 
     public void Pause() {
@@ -88,7 +86,7 @@ public class UIActions : MonoBehaviour {
     }
 
     public void Options() {
-        uiPanel.OptionsChoice("OPTIONS \n", backAction, cameraControlAction, invertAction);
+        uiPanel.OptionsChoice("OPTIONS \n", backAction);
     }
 
     public void Quit() {
@@ -108,21 +106,13 @@ public class UIActions : MonoBehaviour {
     }
 
     public void CameraControl() {
-		if (!uiPanel.CameraControlToggle.isOn)
-			uiPanel.CameraControlToggle.isOn = true;
-		else
-			uiPanel.CameraControlToggle.isOn = false;
-		
-        CameraToggle();
+		game.freeCamEnabled = uiPanel.CameraControlToggle.isOn;
+
+
     }
 
     public void Invert() {
-        if (!uiPanel.InvertToggle.isOn)
-            uiPanel.InvertToggle.isOn = true;
-        else
-            uiPanel.InvertToggle.isOn = false;
-
-        InvertToggle();
+		game.invertEnabled = uiPanel.InvertToggle.isOn;
     }
 
     public void ShowGuide(string message) {
@@ -133,15 +123,6 @@ public class UIActions : MonoBehaviour {
     public void HideGuide() {
 		uiPanel.actionGuide.text = uiPanel.actionGuide.text.Substring(0, 13);
 		uiPanel.actionGuide.gameObject.SetActive(false);
-    }
-
-    void CameraToggle() {		
-        game.freeCamEnabled = uiPanel.CameraControlToggle.isOn;
-		Debug.Log (game.freeCamEnabled);
-    }
-
-    void InvertToggle() {
-        game.invertEnabled = uiPanel.InvertToggle.isOn;
     }
 
     public void PauseGame() {
