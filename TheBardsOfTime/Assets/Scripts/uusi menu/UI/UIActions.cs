@@ -29,6 +29,8 @@ public class UIActions : MonoBehaviour {
 
         uiPanel.CameraControlToggle.isOn = game.freeCamEnabled;
         uiPanel.InvertToggle.isOn = game.invertEnabled;
+		uiPanel.noteCount = game.noteCount;
+		uiPanel.actionGuide.gameObject.SetActive (false);
         canvasOn = false;
         paused = false;
 
@@ -50,8 +52,10 @@ public class UIActions : MonoBehaviour {
         else
             canvasOn = false;
 
-        if (!dia.dialogueActive)
-            uiPanel.diaImage.enabled = false;
+		if (!dia.dialogueActive) {
+			uiPanel.diaImage.enabled = false;
+			uiPanel.diaText.text = "";
+		}
         else
             uiPanel.diaImage.enabled = true;
 
@@ -60,8 +64,9 @@ public class UIActions : MonoBehaviour {
         } else {
             Time.timeScale = 1f;
         }
-    }
 
+		Debug.Log (uiPanel.actionGuide.gameObject.activeSelf);
+    }
 
     public void Pause() {
         paused = true;
@@ -103,35 +108,36 @@ public class UIActions : MonoBehaviour {
     }
 
     public void CameraControl() {
-        if (uiPanel.CameraControlToggle.isOn)
-            uiPanel.CameraControlToggle.isOn = false;
-        else
-            uiPanel.CameraControlToggle.isOn = true;
-
+		if (!uiPanel.CameraControlToggle.isOn)
+			uiPanel.CameraControlToggle.isOn = true;
+		else
+			uiPanel.CameraControlToggle.isOn = false;
+		
         CameraToggle();
     }
 
     public void Invert() {
-        if (uiPanel.InvertToggle.isOn)
-            uiPanel.InvertToggle.isOn = false;
-        else
+        if (!uiPanel.InvertToggle.isOn)
             uiPanel.InvertToggle.isOn = true;
+        else
+            uiPanel.InvertToggle.isOn = false;
 
         InvertToggle();
     }
 
     public void ShowGuide(string message) {
-        uiPanel.diaText.gameObject.SetActive(true);
-        uiPanel.diaText.text = message;
+        uiPanel.actionGuide.gameObject.SetActive(true);
+		uiPanel.actionGuide.text += message;
     }
 
     public void HideGuide() {
-        uiPanel.diaText.text = uiPanel.diaText.text.Substring(0, 13);
-        uiPanel.diaText.gameObject.SetActive(false);
+		uiPanel.actionGuide.text = uiPanel.actionGuide.text.Substring(0, 13);
+		uiPanel.actionGuide.gameObject.SetActive(false);
     }
 
-    void CameraToggle() {
+    void CameraToggle() {		
         game.freeCamEnabled = uiPanel.CameraControlToggle.isOn;
+		Debug.Log (game.freeCamEnabled);
     }
 
     void InvertToggle() {

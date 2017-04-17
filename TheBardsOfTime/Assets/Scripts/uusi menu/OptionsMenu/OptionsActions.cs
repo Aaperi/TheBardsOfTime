@@ -26,7 +26,7 @@ public class OptionsActions : MonoBehaviour {
 	}
 
 	public void Menu(){
-		optionsPanel.OptionsChoice ("Toimisko tää nyt \n", backAction, cameraControlAction, invertAction);
+		optionsPanel.OptionsChoice ("OPTIONS \n", backAction, cameraControlAction, invertAction);
 
 	}
 

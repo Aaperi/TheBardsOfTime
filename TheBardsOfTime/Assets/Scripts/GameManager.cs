@@ -38,9 +38,22 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         try {
+<<<<<<< HEAD
             Text noteCount = GameObject.Find("noteCount").GetComponent<Text>();
             noteCount.text = noteCount.text.Substring(0, 7) + notes;
         } catch { }  
+=======
+            noteCount = GameObject.Find("noteCount").GetComponent<Text>();
+            //noteCount.text = noteCount.text.Substring(0, 7) + notes;
+			noteCount.text = notes.ToString();
+        } catch { }
+
+        if (Input.GetKeyDown(KeyCode.Keypad0))
+            Save();
+
+        if (Input.GetKeyDown(KeyCode.Keypad7))
+            Load();        
+>>>>>>> origin/master
     }
 
     public void Save()

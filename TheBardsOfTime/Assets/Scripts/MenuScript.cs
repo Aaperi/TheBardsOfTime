@@ -11,8 +11,8 @@ public class MenuScript : MonoBehaviour {
         exitYes, exitNo, // exitGameMenu
         cont, quit, // pauseMenu
         quitYes, quitNo, // quitToMenu
-        restart, quitToMenu,
-        actionGuide; // is displayed when player is next to an item or npc; // gameoverMenu
+		restart, quitToMenu,	// gameoverMenu
+        actionGuide; // is displayed when player is next to an item or npc; 
 
     public bool
     paused, canvasOn,

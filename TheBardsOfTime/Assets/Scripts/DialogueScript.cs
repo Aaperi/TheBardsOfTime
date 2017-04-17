@@ -19,7 +19,7 @@ public class DialogueScript : MonoBehaviour {
     private Dialogue dia;
     private UIPanel uiPanel;
 
-    [HideInInspector]
+	[HideInInspector]
     public bool dialogueActive;
 
 	// Use this for initialization

@@ -36,6 +36,7 @@ public class UIPanel : MonoBehaviour {
     }
 
     public void PauseChoice(string text, UnityAction continueEvent, UnityAction optionsEvent, UnityAction quitEvent, UnityAction saveEvent, UnityAction loadEvent){
+		Debug.Log ("Pause");
 		HideAll ();
 		continueButton.onClick.RemoveAllListeners ();
 		continueButton.onClick.AddListener (continueEvent);
@@ -65,10 +66,10 @@ public class UIPanel : MonoBehaviour {
 	}
 
 	public void OptionsChoice(string text, UnityAction backEvent, UnityAction controlEvent, UnityAction invertEvent){
+		Debug.Log ("Options");
 		HideAll ();
 		backButton.onClick.RemoveAllListeners ();
 		backButton.onClick.AddListener (backEvent);
-		//backButton.onClick.AddListener (DisableButtons);
 
 		CameraControlButton.onClick.RemoveAllListeners ();
 		CameraControlButton.onClick.AddListener (controlEvent);
@@ -85,11 +86,10 @@ public class UIPanel : MonoBehaviour {
 	}
 
     public void QuitChoice(string text, UnityAction yesEvent, UnityAction noEvent) {
+		Debug.Log ("Quit");
         HideAll();
-        
         yesButton.onClick.RemoveAllListeners();
         yesButton.onClick.AddListener(yesEvent);
-        yesButton.onClick.AddListener(HideAll);
 
         noButton.onClick.RemoveAllListeners();
         noButton.onClick.AddListener(noEvent);
@@ -115,7 +115,6 @@ public class UIPanel : MonoBehaviour {
         CameraControlToggle.gameObject.SetActive (false);
 		InvertToggle.gameObject.SetActive (false);
 
-        diaImage.gameObject.SetActive(false);
 		this.text.text = "";
 	}
 }
