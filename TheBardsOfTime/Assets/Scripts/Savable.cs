@@ -21,7 +21,7 @@ public class Savable : MonoBehaviour
             }
             if (data.destroyOnLoad)
                 Destroy(gameObject);
-        } else
-            Debug.Log("Data is null");
+        } /*else
+            Debug.Log("Data is null");*/
     }
 }
