@@ -10,25 +10,12 @@ public class CC : MonoBehaviour
     public bool targetIsLocked = false;
     public bool paused = false;
     private MenuScript MSref;
-    private SoundScript SC;
+    private SoundScript SS;
     private TargetManager tam;
     private DialogueScript dia;
     private UIActions uiAction;
     private UIPanel uiPanel;
     private GameManager gm;
-
-    static GameManager _instance;
-    public static GameManager instance {
-        get {
-            if (_instance == null) {
-                GameObject manager = new GameObject("[GameManager]");
-                _instance = manager.AddComponent<GameManager>();
-                DontDestroyOnLoad(manager);
-            }
-            return _instance;
-        }
-    }
-
     public GameObject target;
     public List<GameObject> Instruments = new List<GameObject>();
 
@@ -98,7 +85,7 @@ public class CC : MonoBehaviour
         dia = FindObjectOfType<DialogueScript>();
         MSref = FindObjectOfType<MenuScript>();
         tam = GetComponent<TargetManager>();
-        SC = FindObjectOfType<SoundScript>();
+        SS = FindObjectOfType<SoundScript>();
         uiAction = FindObjectOfType<UIActions>();
 
         forwardInput = sideInput = 0;
@@ -159,12 +146,12 @@ public class CC : MonoBehaviour
         if (Grounded()) {
             if (Mathf.Abs(forwardInput) > inputSetting.inputDelay) {
                 //move
-                //SC.PlaySound("askeleita_placeholder", SC.foleyGroup[1], true);
+                SS.PlaySound("askeleita_placeholder", SS.foleyGroup[1], true);
                 velocity.z = moveSetting.forwardVel * forwardInput;
 
             } else {
                 //no velocity
-                //SC.StopSound("askeleita_placeholder");
+                SS.StopSound("askeleita_placeholder");
                 velocity.z = 0;
             }
 
