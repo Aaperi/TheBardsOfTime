@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using LitJson;
+using System.IO;
 
 public class UIActions : MonoBehaviour {
 
@@ -39,7 +41,7 @@ public class UIActions : MonoBehaviour {
         continueAction = new UnityAction(UnPause);
         optionsAction = new UnityAction(Options);
         quitAction = new UnityAction(Quit);
-		restartAction = new UnityAction (LoadGame);
+		restartAction = new UnityAction (Restart);
         backAction = new UnityAction(Back);
         saveAction = new UnityAction(SaveGame);
         loadAction = new UnityAction(LoadGame);
@@ -127,6 +129,14 @@ public class UIActions : MonoBehaviour {
     public void PauseGame() {
         Pause();
     }
+
+	public void Restart(){
+		if (File.Exists (Application.dataPath + "/Saves/Player.json")) 
+			game.Load ();
+		else
+			SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+		
+	}
 
 	public void GameOver(){
 		uiPanel.GameOverChoice ("YOU DIED \n", restartAction, quitAction);

@@ -48,14 +48,10 @@ public class StatePatternEnemy : MonoBehaviour {
         player = FindObjectOfType<CC>();
         hps = GetComponent<HPScript>();
         playerPos = FindObjectOfType<LastPlayerSighting>();
+		currentState = patrolState;
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         cd = enemyStats.attack.Cooldown;
-    }
-
-    // Use this for initialization
-    void Start() {
-        currentState = patrolState;
     }
 
     // Update is called once per frame
