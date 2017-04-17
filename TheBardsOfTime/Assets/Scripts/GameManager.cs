@@ -197,32 +197,7 @@ public class GameManager : MonoBehaviour
 }
 
 
-class PlayerData
-{
-    public int health;
-    public int notes;
-    public double[] pos;
-    public double rot;
-    public string lastLevel;
 
-    public PlayerData(int h, int n, double[] p, double r, string ll)
-    {
-        health = h; notes = n; pos = p;
-        rot = r; lastLevel = ll;
-    }
-}
-
-class LevelState
-{
-    public string levelName;
-    public bool completed;
-    public ObjectData[] objects;
-
-    public LevelState(string n, bool c, ObjectData[] o)
-    {
-        levelName = n; completed = c; objects = o;
-    }
-}
 
 
 
