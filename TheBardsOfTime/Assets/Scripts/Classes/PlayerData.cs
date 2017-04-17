@@ -1,4 +1,5 @@
-﻿class PlayerData
+﻿[System.Serializable]
+class PlayerData
 {
     public int health;
     public int notes;

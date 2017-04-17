@@ -1,4 +1,5 @@
-﻿class LevelState
+﻿[System.Serializable]
+class LevelState
 {
     public string levelName;
     public bool completed;
