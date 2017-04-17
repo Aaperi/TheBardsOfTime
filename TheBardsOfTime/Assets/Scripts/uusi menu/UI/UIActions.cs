@@ -12,7 +12,7 @@ public class UIActions : MonoBehaviour {
 
     private UnityAction 
         continueAction, optionsAction, quitAction, saveAction, loadAction,
-        backAction, cameraControlAction, invertAction,
+        restartAction, backAction, cameraControlAction, invertAction,
         yesAction, noAction;
 
     private GameManager game;
@@ -39,6 +39,7 @@ public class UIActions : MonoBehaviour {
         continueAction = new UnityAction(UnPause);
         optionsAction = new UnityAction(Options);
         quitAction = new UnityAction(Quit);
+		restartAction = new UnityAction (LoadGame);
         backAction = new UnityAction(Back);
         saveAction = new UnityAction(SaveGame);
         loadAction = new UnityAction(LoadGame);
@@ -90,7 +91,7 @@ public class UIActions : MonoBehaviour {
     }
 
     public void Quit() {
-        uiPanel.QuitChoice("HALUATKO POISTUA PELISTÄ? \n", yesAction, noAction);
+        uiPanel.QuitChoice("QUIT GAME? \n", yesAction, noAction);
     }
 
     public void Yes() {
@@ -107,8 +108,6 @@ public class UIActions : MonoBehaviour {
 
     public void CameraControl() {
 		game.freeCamEnabled = uiPanel.CameraControlToggle.isOn;
-
-
     }
 
     public void Invert() {
@@ -128,4 +127,8 @@ public class UIActions : MonoBehaviour {
     public void PauseGame() {
         Pause();
     }
+
+	public void GameOver(){
+		uiPanel.GameOverChoice ("YOU DIED \n", restartAction, quitAction);
+	}
 }

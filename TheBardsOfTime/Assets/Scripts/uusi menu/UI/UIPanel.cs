@@ -9,7 +9,7 @@ public class UIPanel : MonoBehaviour {
     public Image diaImage;
 	public Button 
 	continueButton, optionsButton, quitButton,
-	backButton, saveButton, loadButton,
+	restartButton, backButton, saveButton, loadButton,
     yesButton, noButton;
 	public Toggle CameraControlToggle, InvertToggle;
 	public GameObject 
@@ -89,10 +89,26 @@ public class UIPanel : MonoBehaviour {
         noButton.gameObject.SetActive(true);
     }
 
+	public void GameOverChoice(string text, UnityAction restartEvent, UnityAction quitEvent){
+		Debug.Log ("GameOver");
+		HideAll();
+		restartButton.onClick.RemoveAllListeners();
+		restartButton.onClick.AddListener(restartEvent);
+		restartButton.onClick.AddListener(HideAll);
+
+		quitButton.onClick.RemoveAllListeners ();
+		quitButton.onClick.AddListener (quitEvent);
+
+		this.text.text = text;
+		restartButton.gameObject.SetActive(true);
+		quitButton.gameObject.SetActive(true);
+	}
+
 	public void HideAll(){
 		continueButton.gameObject.SetActive (false);
 		optionsButton.gameObject.SetActive (false);
 		quitButton.gameObject.SetActive (false);
+		restartButton.gameObject.SetActive (false);
 
 		backButton.gameObject.SetActive (false);
         saveButton.gameObject.SetActive(false);

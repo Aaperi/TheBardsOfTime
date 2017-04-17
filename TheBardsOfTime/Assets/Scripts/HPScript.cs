@@ -18,6 +18,7 @@ public class HPScript : MonoBehaviour
     GameManager gm;
     CC player;
     MeshRenderer mesh;
+	UIActions uia;
 
     bool statusEffect = false;
     bool vilkkuminen = false;
@@ -30,6 +31,7 @@ public class HPScript : MonoBehaviour
         player = FindObjectOfType<CC>();
         mesh = GetComponent<MeshRenderer>();
         gm = FindObjectOfType<GameManager>();
+		uia = FindObjectOfType<UIActions> ();
 
         vilkkumisAika = .75f;
 
@@ -45,9 +47,6 @@ public class HPScript : MonoBehaviour
     {
         if (gameObject.transform.position.y < -50 || hitpoints <= 0) {
             Death();
-            if (iNeedUI) {
-                menu.ShowGameOver();
-            }
         }
 
         if (iNeedUI && !player.inCombat && hitpoints < 100) {
@@ -88,6 +87,10 @@ public class HPScript : MonoBehaviour
         Debug.Log(gameObject.name + " has died. lol!");
 
         hitpoints = 0;
+		if (iNeedUI) {
+			uia.GameOver();
+		}
+
         gameObject.SetActive(false);
 
         player.inCombat = false;
