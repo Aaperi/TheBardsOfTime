@@ -19,10 +19,12 @@ public class UIActions : MonoBehaviour {
 
     private GameManager game;
     private DialogueScript dia;
+	public PlayerData data;
 
 	private bool canvasOn, paused, inv, cam;
 
-    void Awake() {
+    void Start() {
+		data = game.GetPlayerData ();
         uiPanel = UIPanel.Instance();
         displayManager = DisplayManager.Instance();
         game = FindObjectOfType<GameManager>();
@@ -131,11 +133,12 @@ public class UIActions : MonoBehaviour {
     }
 
 	public void Restart(){
-		if (File.Exists (Application.dataPath + "/Saves/Player.json")) 
+		PlayerData data;
+		data = game.GetPlayerData ();
+		if (data != null)
 			game.Load ();
 		else
 			SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
-		
 	}
 
 	public void GameOver(){

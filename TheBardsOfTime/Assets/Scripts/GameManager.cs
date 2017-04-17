@@ -186,6 +186,16 @@ public class GameManager : MonoBehaviour
         return data;
     }
 
+	public PlayerData GetPlayerData(){
+		PlayerData data = null;
+
+		if (File.Exists (Application.dataPath + "/Saves/Player.json")) {
+			string stringi = File.ReadAllText(Application.dataPath + "/Saves/Player.json");
+			data = JsonUtility.FromJson<PlayerData>(stringi);
+		}
+		return data;
+	}
+
     public bool GetLevelState()
     {
         return false;
