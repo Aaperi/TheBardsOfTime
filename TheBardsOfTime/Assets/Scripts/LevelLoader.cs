@@ -4,6 +4,7 @@ using System.Collections;
 
 public class LevelLoader : MonoBehaviour {
 
+    bool doNotTriggerMultipleTimesPlz = true;
     Object player;
     GameManager gm;
     public int lvlID;
@@ -16,9 +17,12 @@ public class LevelLoader : MonoBehaviour {
 
     void OnTriggerEnter (Collider col)
     {
-        if(col.gameObject.name == player.name) {
+        if(col.gameObject.name == player.name && doNotTriggerMultipleTimesPlz) {
             gm.UpdateLevel();
+            doNotTriggerMultipleTimesPlz = false;
             gm.lastLevelID = SceneManager.GetActiveScene().buildIndex;
+            Debug.Log(gm.lastLevelID + " ID ennen telee, manager");
+            Debug.Log(SceneManager.GetActiveScene().buildIndex + " ID ennen telee, buildindex");
             SceneManager.LoadScene(lvlID);
         }
     }

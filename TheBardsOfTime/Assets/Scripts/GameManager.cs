@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
         uiPanel = FindObjectOfType<UIPanel>();
         cc = FindObjectOfType<CC>();
         dia = FindObjectOfType<DialogueScript>();
+
         if (GM == null) {
             GM = this;
             DontDestroyOnLoad(gameObject);
@@ -37,6 +38,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         try {
+<<<<<<< HEAD
+            Text noteCount = GameObject.Find("noteCount").GetComponent<Text>();
+            noteCount.text = noteCount.text.Substring(0, 7) + notes;
+        } catch { }  
+=======
             noteCount = GameObject.Find("noteCount").GetComponent<Text>();
             //noteCount.text = noteCount.text.Substring(0, 7) + notes;
 			noteCount.text = notes.ToString();
@@ -47,6 +53,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Keypad7))
             Load();        
+>>>>>>> origin/master
     }
 
     public void Save()

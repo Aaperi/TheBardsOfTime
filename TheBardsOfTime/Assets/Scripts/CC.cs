@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CC : MonoBehaviour {
+public class CC : MonoBehaviour
+{
     private int insID = 0;
     private float maxDist = 20f;
     private bool canDoubleJump = false;
@@ -16,6 +17,18 @@ public class CC : MonoBehaviour {
     private UIPanel uiPanel;
     private GameManager gm;
 
+    static GameManager _instance;
+    public static GameManager instance {
+        get {
+            if (_instance == null) {
+                GameObject manager = new GameObject("[GameManager]");
+                _instance = manager.AddComponent<GameManager>();
+                DontDestroyOnLoad(manager);
+            }
+            return _instance;
+        }
+    }
+
     public GameObject target;
     public List<GameObject> Instruments = new List<GameObject>();
 
@@ -23,7 +36,8 @@ public class CC : MonoBehaviour {
     public bool inCombat = false;
 
     [System.Serializable]
-    public class MoveSettings {
+    public class MoveSettings
+    {
         public float forwardVel = 12;
         public float rotateVel = 100;
         public float jumpVel = 10;
@@ -33,12 +47,14 @@ public class CC : MonoBehaviour {
     }
 
     [System.Serializable]
-    public class PhysSettings {
+    public class PhysSettings
+    {
         public float downAccel = .75f;
     }
 
     [System.Serializable]
-    public class InputSettings {
+    public class InputSettings
+    {
         public float inputDelay = 0.1f;
         public string FORWARD_AXIS = "Vertical";
         public string SIDE_AXIS = "Horizontal";
@@ -68,11 +84,13 @@ public class CC : MonoBehaviour {
         get { return targetRotation; }
     }
 
-    bool Grounded() {
+    bool Grounded()
+    {
         return Physics.Raycast(transform.position, Vector3.down, moveSetting.distToGrounded, moveSetting.ground);
     }
 
-    void Start() {
+    void Start()
+    {
         gm = FindObjectOfType<GameManager>();
         uiPanel = FindObjectOfType<UIPanel>();
         targetRotation = transform.rotation;
@@ -90,10 +108,12 @@ public class CC : MonoBehaviour {
             Instruments.Add(child.gameObject);
         EquipByID(0);
 
+        
         MoveToStart();
     }
 
-    void GetInput() {
+    void GetInput()
+    {
         forwardInput = Input.GetAxis(inputSetting.FORWARD_AXIS);
         sideInput = Input.GetAxis(inputSetting.SIDE_AXIS);
         jumpInput = Input.GetButtonDown(inputSetting.JUMP_AXIS);
@@ -107,16 +127,18 @@ public class CC : MonoBehaviour {
     }
 
 
-    void Update() {
+    void Update()
+    {
         GetInput();
         Turn();
-
+        Debug.Log("Viime kentän ID: " + gm.lastLevelID + "\nmanagerin nimi: " + gm.name);
         Debug.DrawRay(transform.position, Vector3.down, Color.red);
 		if (Input.GetKeyDown(KeyCode.Escape) && !dia.dialogueActive)
             uiAction.PauseGame();
     }
 
-    void FixedUpdate() {
+    void FixedUpdate()
+    {
         if (target != null)
             if (!target.activeSelf)
                 targetIsLocked = false;
@@ -132,7 +154,8 @@ public class CC : MonoBehaviour {
                 targetIsLocked = false;
     }
 
-    void Run() {
+    void Run()
+    {
         if (Grounded()) {
             if (Mathf.Abs(forwardInput) > inputSetting.inputDelay) {
                 //move
@@ -157,7 +180,8 @@ public class CC : MonoBehaviour {
     }
 
 
-    void Turn() {
+    void Turn()
+    {
         if (Grounded()) {
             if (Mathf.Abs(sideInput) > inputSetting.inputDelay && !targetIsLocked) {
                 float direction = forwardInput;
@@ -178,13 +202,15 @@ public class CC : MonoBehaviour {
 
     }
 
-    void DoubleJump() {
+    void DoubleJump()
+    {
         if (Input.GetKeyDown(KeyCode.Space) && canDoubleJump) {
             velocity.y = moveSetting.doubleJumpVel;
             canDoubleJump = false;
         }
     }
-    void Jump() {
+    void Jump()
+    {
         if (jumpInput && Grounded()) {
             velocity.y = moveSetting.jumpVel;
             canDoubleJump = true;
@@ -195,13 +221,15 @@ public class CC : MonoBehaviour {
         }
     }
 
-    void LockTarget() {
+    void LockTarget()
+    {
         target = tam.getTarget("First");
         if (target != null)
             targetIsLocked = true;
     }
 
-    void EquipByID(int ID) {
+    void EquipByID(int ID)
+    {
         foreach (GameObject go in Instruments) {
             if (go.name.Contains(Instruments[ID].name))
                 go.SetActive(true);
@@ -212,18 +240,22 @@ public class CC : MonoBehaviour {
 
     void MoveToStart()
     {
+        
         if (gm.lastPos.Length > 0) {
             transform.position = new Vector3(gm.lastPos[0], gm.lastPos[1], gm.lastPos[2]);
             transform.eulerAngles = new Vector3(0, gm.lastPos[3], 0);
             gm.lastPos = null;
         } else if (gm.lastLevelID > 0) {
             List<LevelLoader> temp = new List<LevelLoader>(FindObjectsOfType<LevelLoader>());
-            transform.position = temp.Find(port => port.lvlID == gm.lastLevelID).gameObject.transform.position + transform.forward;
+            foreach (LevelLoader ll in temp)
+                if (ll.lvlID == gm.lastLevelID)
+                    transform.position = ll.transform.position + transform.forward;
         }
     }
 
 
-    void Combat() {
+    void Combat()
+    {
         if (attackInput)
             Instruments[insID].SendMessage("Attack");
 
@@ -255,7 +287,8 @@ public class CC : MonoBehaviour {
         }
     }
 
-    void Interaction() {
+    void Interaction()
+    {
         RaycastHit hit;
         Physics.Raycast(transform.position, transform.forward, out hit, 4f);
 
