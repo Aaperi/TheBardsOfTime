@@ -8,6 +8,7 @@ public class LevelLoader : MonoBehaviour {
     Object player;
     GameManager gm;
     public int lvlID;
+    public bool Door;
 
     void Start()
     {
@@ -20,7 +21,7 @@ public class LevelLoader : MonoBehaviour {
         if(col.gameObject.name == player.name && doNotTriggerMultipleTimesPlz) {
             gm.UpdateLevel();
             doNotTriggerMultipleTimesPlz = false;
-            gm.lastLevelID = SceneManager.GetActiveScene().buildIndex;
+            gm.lastLevelID = Door ? SceneManager.GetActiveScene().buildIndex : 0;
             Debug.Log(gm.lastLevelID + " ID ennen telee, manager");
             Debug.Log(SceneManager.GetActiveScene().buildIndex + " ID ennen telee, buildindex");
             SceneManager.LoadScene(lvlID);

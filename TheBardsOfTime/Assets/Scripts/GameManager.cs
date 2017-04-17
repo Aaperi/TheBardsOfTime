@@ -40,9 +40,9 @@ public class GameManager : MonoBehaviour
         try {
             Text noteCount = GameObject.Find("noteCount").GetComponent<Text>();
             noteCount.text = noteCount.text.Substring(0, 7) + notes;
-		} catch { noteCount = GameObject.Find("noteCount").GetComponent<Text>();
+		} catch {/* noteCount = GameObject.Find("noteCount").GetComponent<Text>();
 			//noteCount.text = noteCount.text.Substring(0, 7) + notes;
-			noteCount.text = notes.ToString();}  
+			noteCount.text = notes.ToString();*/}  
             
         
 		      
