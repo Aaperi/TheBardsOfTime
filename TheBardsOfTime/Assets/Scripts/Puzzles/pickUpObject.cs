@@ -13,11 +13,13 @@ public class pickUpObject : MonoBehaviour
 
     List<GameObject> objects = new List<GameObject>();
     GameObject carriedObject;
-    MenuScript MSref;
+    UIActions UIAref;
+	UIPanel UIPref;
 
     void Start()
     {
-        MSref = FindObjectOfType<MenuScript>();
+		UIAref = FindObjectOfType<UIActions>();
+		UIPref = FindObjectOfType<UIPanel>();
         Pickupable[] temp = FindObjectsOfType<Pickupable>();
         foreach (Pickupable p in temp)
             objects.Add(p.gameObject);
@@ -38,10 +40,10 @@ public class pickUpObject : MonoBehaviour
         });
 
         //kattoo ettÃ¤ millonka pitÃ¤Ã¤ olla viesti ruudulla
-        if (temp.Count > 0 && !carrying && !carriedObject && !MSref.actionGuide.activeSelf)
-            MSref.SendMessage("ShowGuide", "pickup " + temp[0].name);
+		if (temp.Count > 0 && !carrying && !carriedObject && !UIPref.actionGuide.gameObject.activeSelf)
+			UIAref.SendMessage("ShowGuide", "pickup " + temp[0].name);
         else if (carrying)
-            MSref.SendMessage("HideGuide");
+			UIAref.SendMessage("HideGuide");
 
         if (Input.GetKeyDown(KeyCode.E)) {
             if (temp.Count > 0 && !carrying && carriedObject == null)

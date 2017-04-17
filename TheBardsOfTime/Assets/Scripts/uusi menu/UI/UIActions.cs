@@ -18,7 +18,7 @@ public class UIActions : MonoBehaviour {
     private GameManager game;
     private DialogueScript dia;
 
-	public bool canvasOn, paused, inv, cam;
+	private bool canvasOn, paused, inv, cam;
 
     void Awake() {
         uiPanel = UIPanel.Instance();

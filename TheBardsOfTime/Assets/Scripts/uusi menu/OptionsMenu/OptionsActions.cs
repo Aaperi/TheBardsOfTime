@@ -10,8 +10,6 @@ public class OptionsActions : MonoBehaviour {
 	private DisplayManager displayManager;
 
 	private UnityAction backAction;
-	private UnityAction cameraControlAction;
-	private UnityAction invertAction;
 
 	private GameManager game;
 
@@ -21,42 +19,22 @@ public class OptionsActions : MonoBehaviour {
 		game = FindObjectOfType<GameManager> ();
 
 		backAction = new UnityAction (Back);
-		cameraControlAction = new UnityAction (CameraControl);
-		invertAction = new UnityAction (Invert);
 	}
 
 	public void Menu(){
-		optionsPanel.OptionsChoice ("OPTIONS \n", backAction, cameraControlAction, invertAction);
+		optionsPanel.OptionsChoice ("OPTIONS \n", backAction);
 
 	}
 
 	public void CameraControl(){
-		if (optionsPanel.CameraControlToggle.isOn)
-			optionsPanel.CameraControlToggle.isOn = false;
-		else
-			optionsPanel.CameraControlToggle.isOn = true;
-
-		CameraToggle ();
+		game.freeCamEnabled = optionsPanel.CameraControlToggle.isOn;
 	}
 
 	public void Invert(){
-		if (optionsPanel.InvertToggle.isOn)
-			optionsPanel.InvertToggle.isOn = false;
-		else
-			optionsPanel.InvertToggle.isOn = true;
-
-		InvertToggle ();
+		game.invertEnabled = optionsPanel.InvertToggle.isOn;
 	}
 
 	public void Back(){
 		SceneManager.LoadScene ("uusiMenu");
-	}
-
-	void CameraToggle(){
-		game.freeCamEnabled = optionsPanel.CameraControlToggle.isOn;
-	}
-
-	void InvertToggle(){
-		game.invertEnabled = optionsPanel.InvertToggle.isOn;
 	}
 }

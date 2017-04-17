@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     UIPanel uiPanel;
     CC cc;
     DialogueScript dia;
+	GameObject player;
     public int playerHp;
     public int notes = 0;
     public int lastLevelID;
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
         uiPanel = FindObjectOfType<UIPanel>();
         cc = FindObjectOfType<CC>();
         dia = FindObjectOfType<DialogueScript>();
+		player = GameObject.FindGameObjectWithTag("Player");
 
         if (GM == null) {
             GM = this;
@@ -38,11 +40,10 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         try {
-            Text noteCount = GameObject.Find("noteCount").GetComponent<Text>();
-            noteCount.text = noteCount.text.Substring(0, 7) + notes;
-		} catch { noteCount = GameObject.Find("noteCount").GetComponent<Text>();
+			noteCount = GameObject.Find("noteCount").GetComponent<Text>();
 			//noteCount.text = noteCount.text.Substring(0, 7) + notes;
-			noteCount.text = notes.ToString();}  
+			noteCount.text = notes.ToString();
+		} catch { }  
             
         
 		      
@@ -51,7 +52,7 @@ public class GameManager : MonoBehaviour
     public void Save()
     {
         //Tehään playerdata
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        //GameObject player = GameObject.FindGameObjectWithTag("Player");
         PlayerData data = new PlayerData(
             player.GetComponent<HPScript>().hitpoints,
             notes,
@@ -145,7 +146,6 @@ public class GameManager : MonoBehaviour
             //Haetaan pelaajan tiedot ja tallenetaan ne uuteen classiin
             string stringi = File.ReadAllText(Application.dataPath + "/Saves/Player.json");
             PlayerData data = JsonUtility.FromJson<PlayerData>(stringi);
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
 
             //Tehdään tallennustiedoilla juttuja
             player.GetComponent<HPScript>().hitpoints = data.health;
