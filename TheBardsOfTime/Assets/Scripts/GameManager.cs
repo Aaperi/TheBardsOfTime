@@ -24,16 +24,13 @@ public class GameManager : MonoBehaviour
     //Singleton
     void Awake()
     {
-        uiPanel = FindObjectOfType<UIPanel>();
-        cc = FindObjectOfType<CC>();
-        dia = FindObjectOfType<DialogueScript>();
-
         if (GM == null) {
             GM = this;
             DontDestroyOnLoad(gameObject);
         } else {
             Destroy(gameObject);
         }
+        Init();
     }
 
     void Update()
@@ -48,6 +45,9 @@ public class GameManager : MonoBehaviour
 
     public void Init() {
         player = GameObject.FindGameObjectWithTag("Player");
+        uiPanel = FindObjectOfType<UIPanel>();
+        cc = FindObjectOfType<CC>();
+        dia = FindObjectOfType<DialogueScript>();
     }
 
     public void Save()

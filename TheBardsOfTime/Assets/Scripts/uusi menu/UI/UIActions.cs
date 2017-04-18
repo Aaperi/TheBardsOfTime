@@ -118,11 +118,11 @@ public class UIActions : MonoBehaviour {
 
     public void ShowGuide(string message) {
         uiPanel.actionGuide.gameObject.SetActive(true);
-        uiPanel.actionGuide.text += message;
+        uiPanel.actionGuide.text = message;
     }
 
     public void HideGuide() {
-        uiPanel.actionGuide.text = uiPanel.actionGuide.text.Substring(0, 13);
+        uiPanel.actionGuide.text = uiPanel.actionGuide.text.Substring(0, uiPanel.actionGuide.text.Length - 1);
         uiPanel.actionGuide.gameObject.SetActive(false);
     }
 

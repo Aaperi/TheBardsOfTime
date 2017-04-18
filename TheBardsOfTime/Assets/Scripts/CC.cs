@@ -18,6 +18,9 @@ public class CC : MonoBehaviour
     private GameManager gm;
     public GameObject target;
     public List<GameObject> Instruments = new List<GameObject>();
+        public float range = 6;
+    public float radius = 90;
+    public float strength = 200;
 
     [HideInInspector]
     public bool inCombat = false;
@@ -290,11 +293,20 @@ public class CC : MonoBehaviour
                     uiAction.HideGuide();
             }
         } catch {
-            /*if (MSref.actionGuide.activeSelf)
-                MSref.HideGuide();*/
 			if (uiPanel.actionGuide.gameObject.activeSelf)
 				uiAction.HideGuide();
         }
     }
+
+    /*bool HitCheck(GameObject target) {
+        if (Vector3.Distance(transform.position, target.transform.position) <= range) {
+            Vector3 targetDir = target.transform.position - transform.position;
+            if (Vector3.Angle(targetDir, transform.forward) <= radius / 2) {
+                return true;
+            } else
+                return false;
+        } else
+            return false;
+    }*/
 
 }

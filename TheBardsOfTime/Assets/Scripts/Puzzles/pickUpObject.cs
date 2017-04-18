@@ -27,7 +27,6 @@ public class pickUpObject : MonoBehaviour
 
     void Update()
     {
-
         //tekee listan jossa on kaikki rangella olevat kannettavat jutut
         List<GameObject> temp = new List<GameObject>();
         foreach (GameObject g in objects)
