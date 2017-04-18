@@ -52,8 +52,9 @@ public class GameManager : MonoBehaviour
 
     public void Save()
     {
+        UpdateLevel();
+
         //Tehään playerdata
-        //GameObject player = GameObject.FindGameObjectWithTag("Player");
         PlayerData data = new PlayerData(
             player.GetComponent<HPScript>().hitpoints,
             notes,

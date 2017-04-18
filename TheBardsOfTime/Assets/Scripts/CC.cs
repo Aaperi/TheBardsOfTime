@@ -15,7 +15,7 @@ public class CC : MonoBehaviour
     private DialogueScript dia;
     private UIActions uiAction;
     private UIPanel uiPanel;
-    private GameManager gm;
+    public GameManager gm;
     public GameObject target;
     public List<GameObject> Instruments = new List<GameObject>();
         public float range = 6;
@@ -121,8 +121,6 @@ public class CC : MonoBehaviour
     {
         GetInput();
         Turn();
-        Debug.Log("Viime kentän ID: " + gm.lastLevelID + "\nmanagerin nimi: " + gm.name);
-        Debug.DrawRay(transform.position, Vector3.down, Color.red);
 		if (Input.GetKeyDown(KeyCode.Escape) && !dia.dialogueActive)
             uiAction.PauseGame();
     }
@@ -230,9 +228,6 @@ public class CC : MonoBehaviour
 
     void MoveToStart()
     {
-        gm = FindObjectOfType<GameManager>();
-        Debug.Log(gm.lastLevelID + " LLID");
-        Debug.Log(gm.lastPos.Length + " Putkuus");
         if (gm.lastPos.Length > 0) {
             transform.position = new Vector3(gm.lastPos[0], gm.lastPos[1], gm.lastPos[2]);
             transform.eulerAngles = new Vector3(0, gm.lastPos[3], 0);
@@ -242,6 +237,7 @@ public class CC : MonoBehaviour
             foreach (LevelLoader ll in temp)
                 if (ll.lvlID == gm.lastLevelID)
                     transform.position = ll.transform.position + transform.forward;
+            gm.lastPos = null;
         }
     }
 
