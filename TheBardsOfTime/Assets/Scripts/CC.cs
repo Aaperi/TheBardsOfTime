@@ -95,7 +95,7 @@ public class CC : MonoBehaviour
             Instruments.Add(child.gameObject);
         EquipByID(0);
 
-        
+        gm.Init();
         MoveToStart();
     }
 
@@ -227,7 +227,7 @@ public class CC : MonoBehaviour
 
     void MoveToStart()
     {
-        
+        gm = FindObjectOfType<GameManager>();
         if (gm.lastPos.Length > 0) {
             transform.position = new Vector3(gm.lastPos[0], gm.lastPos[1], gm.lastPos[2]);
             transform.eulerAngles = new Vector3(0, gm.lastPos[3], 0);

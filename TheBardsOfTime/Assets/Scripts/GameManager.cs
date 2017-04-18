@@ -27,7 +27,6 @@ public class GameManager : MonoBehaviour
         uiPanel = FindObjectOfType<UIPanel>();
         cc = FindObjectOfType<CC>();
         dia = FindObjectOfType<DialogueScript>();
-		player = GameObject.FindGameObjectWithTag("Player");
 
         if (GM == null) {
             GM = this;
@@ -44,9 +43,11 @@ public class GameManager : MonoBehaviour
 			//noteCount.text = noteCount.text.Substring(0, 7) + notes;
 			noteCount.text = notes.ToString();
 		} catch { }  
-            
-        
-		      
+                  
+    }
+
+    public void Init() {
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     public void Save()
@@ -146,8 +147,9 @@ public class GameManager : MonoBehaviour
             //Haetaan pelaajan tiedot ja tallenetaan ne uuteen classiin
             string stringi = File.ReadAllText(Application.dataPath + "/Saves/Player.json");
             PlayerData data = JsonUtility.FromJson<PlayerData>(stringi);
-
+            
             //Tehdään tallennustiedoilla juttuja
+            player.SetActive(true);   
             player.GetComponent<HPScript>().hitpoints = data.health;
             notes = data.notes;
             lastPos = new float[] { (float)data.pos[0], (float)data.pos[1], (float)data.pos[2], (float)data.rot };

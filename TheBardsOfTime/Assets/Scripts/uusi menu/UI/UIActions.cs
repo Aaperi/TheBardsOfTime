@@ -12,38 +12,37 @@ public class UIActions : MonoBehaviour {
     private DisplayManager displayManager;
     private CC cc;
 
-    private UnityAction 
+    private UnityAction
         continueAction, optionsAction, quitAction, saveAction, loadAction,
         restartAction, backAction, cameraControlAction, invertAction,
         yesAction, noAction;
 
     private GameManager game;
     private DialogueScript dia;
-	public PlayerData data;
+    private PlayerData data;
 
-	private bool canvasOn, paused, inv, cam;
+    private bool canvasOn, paused, inv, cam;
 
     void Start() {
-		data = game.GetPlayerData ();
         uiPanel = UIPanel.Instance();
         displayManager = DisplayManager.Instance();
         game = FindObjectOfType<GameManager>();
         dia = FindObjectOfType<DialogueScript>();
         cc = FindObjectOfType<CC>();
-		canvasOn = false;
-		paused = false;
+        canvasOn = false;
+        paused = false;
 
-		uiPanel.CameraControlToggle.isOn = game.freeCamEnabled;
-		uiPanel.InvertToggle.isOn = game.invertEnabled;
-		uiPanel.noteCount = game.noteCount;
-		uiPanel.actionGuide.gameObject.SetActive (false);
-		inv = uiPanel.InvertToggle.isOn;
-		cam = uiPanel.CameraControlToggle.isOn;
+        uiPanel.CameraControlToggle.isOn = game.freeCamEnabled;
+        uiPanel.InvertToggle.isOn = game.invertEnabled;
+        uiPanel.noteCount = game.noteCount;
+        uiPanel.actionGuide.gameObject.SetActive(false);
+        inv = uiPanel.InvertToggle.isOn;
+        cam = uiPanel.CameraControlToggle.isOn;
 
         continueAction = new UnityAction(UnPause);
         optionsAction = new UnityAction(Options);
         quitAction = new UnityAction(Quit);
-		restartAction = new UnityAction (Restart);
+        restartAction = new UnityAction(Restart);
         backAction = new UnityAction(Back);
         saveAction = new UnityAction(SaveGame);
         loadAction = new UnityAction(LoadGame);
@@ -57,11 +56,10 @@ public class UIActions : MonoBehaviour {
         else
             canvasOn = false;
 
-		if (!dia.dialogueActive) {
-			uiPanel.diaImage.enabled = false;
-			uiPanel.diaText.text = "";
-		}
-        else
+        if (!dia.dialogueActive) {
+            uiPanel.diaImage.enabled = false;
+            uiPanel.diaText.text = "";
+        } else
             uiPanel.diaImage.enabled = true;
 
         if (canvasOn || dia.dialogueActive) {
@@ -111,37 +109,40 @@ public class UIActions : MonoBehaviour {
     }
 
     public void CameraControl() {
-		game.freeCamEnabled = uiPanel.CameraControlToggle.isOn;
+        game.freeCamEnabled = uiPanel.CameraControlToggle.isOn;
     }
 
     public void Invert() {
-		game.invertEnabled = uiPanel.InvertToggle.isOn;
+        game.invertEnabled = uiPanel.InvertToggle.isOn;
     }
 
     public void ShowGuide(string message) {
         uiPanel.actionGuide.gameObject.SetActive(true);
-		uiPanel.actionGuide.text += message;
+        uiPanel.actionGuide.text += message;
     }
 
     public void HideGuide() {
-		uiPanel.actionGuide.text = uiPanel.actionGuide.text.Substring(0, 13);
-		uiPanel.actionGuide.gameObject.SetActive(false);
+        uiPanel.actionGuide.text = uiPanel.actionGuide.text.Substring(0, 13);
+        uiPanel.actionGuide.gameObject.SetActive(false);
     }
 
     public void PauseGame() {
         Pause();
     }
 
-	public void Restart(){
-		PlayerData data;
-		data = game.GetPlayerData ();
-		if (data != null)
-			game.Load ();
-		else
-			SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
-	}
+    public void Restart() {
+        PlayerData data;
+        data = game.GetPlayerData();
+        if (data != null) {
+            if (data.lastLevel == SceneManager.GetActiveScene().name)
+                game.Load();
+            else
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        } else
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
-	public void GameOver(){
-		uiPanel.GameOverChoice ("YOU DIED \n", restartAction, quitAction);
-	}
+    public void GameOver() {
+        uiPanel.GameOverChoice("YOU DIED \n", restartAction, quitAction);
+    }
 }
