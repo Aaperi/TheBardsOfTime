@@ -69,8 +69,12 @@ public class SoundScript : MonoBehaviour
     {
         AudioSource temp = null;
 
-        if (allClips.Find(item => item.clip.name == Name))
-            temp = allClips.Find(item => item.clip.name == Name);
+        //if (allClips.Find(item => item.clip.name == Name))
+        //    temp = allClips.Find(item => item.clip.name == Name);
+
+        for (int k = 0; k < allClips.Count; k++)
+            if (allClips[k].clip.name == Name)
+                temp = allClips[k];
 
         if (temp != null) {
             temp.Stop();

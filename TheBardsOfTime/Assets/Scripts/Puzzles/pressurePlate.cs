@@ -43,6 +43,6 @@ public class pressurePlate : MonoBehaviour {
     {
         Obstacle.SetActive(false);
         GameManager gm = FindObjectOfType<GameManager>();
-        //gm.levels[SceneManager.GetActiveScene().name] = true;
+        gm.CompleteLevel();
     }
 }

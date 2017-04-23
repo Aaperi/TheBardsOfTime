@@ -233,8 +233,8 @@ public class CC : MonoBehaviour
             transform.eulerAngles = new Vector3(0, gm.lastPos[3], 0);
             gm.lastPos = null;
         } else if (gm.lastLevelID > 0) {
-            List<LevelLoader> temp = new List<LevelLoader>(FindObjectsOfType<LevelLoader>());
-            foreach (LevelLoader ll in temp)
+            List<PortalScript> temp = new List<PortalScript>(FindObjectsOfType<PortalScript>());
+            foreach (PortalScript ll in temp)
                 if (ll.lvlID == gm.lastLevelID)
                     transform.position = ll.transform.position + transform.forward;
             gm.lastPos = null;

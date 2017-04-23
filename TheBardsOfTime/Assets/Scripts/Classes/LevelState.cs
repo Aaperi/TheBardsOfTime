@@ -1,12 +1,13 @@
 ﻿[System.Serializable]
-class LevelState
+public class LevelState
 {
+    public int buildID;
     public string levelName;
     public bool completed;
     public ObjectData[] objects;
 
-    public LevelState(string n, bool c, ObjectData[] o)
+    public LevelState(int bi, string n, bool c, ObjectData[] o)
     {
-        levelName = n; completed = c; objects = o;
+        buildID = bi;  levelName = n; completed = c; objects = o;
     }
 }
