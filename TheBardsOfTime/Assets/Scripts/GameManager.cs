@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     UIPanel uiPanel;
     CC cc;
     DialogueScript dia;
-	GameObject player;
+    GameObject player;
     public int playerHp;
     public int notes = 0;
     public int lastLevelID;
@@ -36,14 +36,15 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         try {
-			noteCount = GameObject.Find("noteCount").GetComponent<Text>();
-			//noteCount.text = noteCount.text.Substring(0, 7) + notes;
-			noteCount.text = notes.ToString();
-		} catch { }  
-                  
+            noteCount = GameObject.Find("noteCount").GetComponent<Text>();
+            //noteCount.text = noteCount.text.Substring(0, 7) + notes;
+            noteCount.text = notes.ToString();
+        } catch { }
+
     }
 
-    public void Init() {
+    public void Init()
+    {
         player = GameObject.FindGameObjectWithTag("Player");
         uiPanel = FindObjectOfType<UIPanel>();
         cc = FindObjectOfType<CC>();
@@ -81,7 +82,7 @@ public class GameManager : MonoBehaviour
     {
         List<ObjectData> objects = new List<ObjectData>();
 
-        //Katotaan jos kyseisestä kentästä on jo tietoja tallella ja ladataan ne
+        //Katotaan jos kyseisestä kentästä on objektien tiedot tallella ja ladataan ne
         for (int k = 0; k < leveltemps.Count; k++)
             if (leveltemps[k].levelName == SceneManager.GetActiveScene().name) {
                 objects.AddRange(leveltemps[k].objects);
@@ -121,14 +122,22 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        //Katotaan jos kenttä on menty läpi
+        bool done = false;
+        if (leveltemps.Count > 0)
+            for (int k = 0; k < leveltemps.Count; k++)
+                if (leveltemps[k].levelName == SceneManager.GetActiveScene().name)
+                    done = leveltemps[k].completed ? true : false;
+
         //Tehdään levelstate
         LevelState state = new LevelState(
+            SceneManager.GetActiveScene().buildIndex,
             SceneManager.GetActiveScene().name,
-            false,
+            done,
             objects.ToArray()
             );
 
-        //tallennetaan tään hetkinen kenttä temppitaulukkoon
+        //tallennetaan tämän scenen levelstate temppitaulukkoon
         if (leveltemps.Count > 0)
             for (int k = 0; k < leveltemps.Count; k++)
                 if (leveltemps[k].levelName == SceneManager.GetActiveScene().name)
@@ -148,9 +157,9 @@ public class GameManager : MonoBehaviour
             //Haetaan pelaajan tiedot ja tallenetaan ne uuteen classiin
             string stringi = File.ReadAllText(Application.dataPath + "/Saves/Player.json");
             PlayerData data = JsonUtility.FromJson<PlayerData>(stringi);
-            
+
             //Tehdään tallennustiedoilla juttuja
-            player.SetActive(true);   
+            player.SetActive(true);
             player.GetComponent<HPScript>().hitpoints = data.health;
             notes = data.notes;
             lastPos = new float[] { (float)data.pos[0], (float)data.pos[1], (float)data.pos[2], (float)data.rot };
@@ -189,22 +198,41 @@ public class GameManager : MonoBehaviour
         return data;
     }
 
-	public PlayerData GetPlayerData(){
-		PlayerData data = null;
-
-		if (File.Exists (Application.dataPath + "/Saves/Player.json")) {
-			string stringi = File.ReadAllText(Application.dataPath + "/Saves/Player.json");
-			data = JsonUtility.FromJson<PlayerData>(stringi);
-		}
-		return data;
-	}
-
-    public bool GetLevelState()
+    public PlayerData GetPlayerData()
     {
-        return false;
+        PlayerData data = null;
+
+        //katotaan jos pelaajalla on tallennus tehtynä
+        if (File.Exists(Application.dataPath + "/Saves/Player.json")) {
+            string stringi = File.ReadAllText(Application.dataPath + "/Saves/Player.json");
+            data = JsonUtility.FromJson<PlayerData>(stringi);
+        }
+
+        return data;
     }
 
-    public void PauseGame() {
+    public LevelState GetLevelState()
+    {
+        LevelState state = null;
+
+        if (leveltemps.Count > 0)
+            for (int k = 0; k < leveltemps.Count; k++)
+                if (leveltemps[k].levelName == SceneManager.GetActiveScene().name)
+                    state = leveltemps[k];
+
+        return state;
+    }
+
+    public void CompleteLevel()
+    {
+        if (leveltemps.Count > 0)
+            for (int k = 0; k < leveltemps.Count; k++)
+                if (leveltemps[k].levelName == SceneManager.GetActiveScene().name)
+                    leveltemps[k].completed = true;
+    }
+
+    public void PauseGame()
+    {
         paused = true;
     }
 }

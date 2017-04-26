@@ -2,12 +2,13 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class LevelLoader : MonoBehaviour
+public class PortalScript : MonoBehaviour
 {
     Object player;
     GameManager gm;
     public int lvlID;
     public bool Door;
+    public string[] Requirements;
     bool stop = false;
 
     void OnTriggerEnter(Collider col)
