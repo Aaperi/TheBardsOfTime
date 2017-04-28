@@ -123,9 +123,9 @@ public class HPScript : MonoBehaviour
         statusEffect = true;
         if (GetComponent<StatePatternEnemy>()) {
             Debug.Log(name + " slowed down by " + percentage + "%");
-            GetComponent<NavMeshAgent>().speed *= (100 - percentage) / 100;
+            GetComponent<UnityEngine.AI.NavMeshAgent>().speed *= (100 - percentage) / 100;
             yield return new WaitForSeconds(duration);
-            GetComponent<NavMeshAgent>().speed /= (100 - percentage) / 100;
+            GetComponent<UnityEngine.AI.NavMeshAgent>().speed /= (100 - percentage) / 100;
         } else if (tag.Contains("Player")) {
             Debug.Log("You are being slowed by " + percentage + "%");
             GetComponent<CC>().moveSetting.forwardVel *= (100 - percentage) / 100;
@@ -140,10 +140,10 @@ public class HPScript : MonoBehaviour
         statusEffect = true;
         if (GetComponent<StatePatternEnemy>()) {
             Debug.Log(name + " became rooted in place");
-            float temp = GetComponent<NavMeshAgent>().speed;
-            GetComponent<NavMeshAgent>().speed = 0f;
+            float temp = GetComponent<UnityEngine.AI.NavMeshAgent>().speed;
+            GetComponent<UnityEngine.AI.NavMeshAgent>().speed = 0f;
             yield return new WaitForSeconds(duration);
-            GetComponent<NavMeshAgent>().speed = temp;
+            GetComponent<UnityEngine.AI.NavMeshAgent>().speed = temp;
         } else if (tag.Contains("Player")) {
             Debug.Log("You became rooted in place for " + duration + "s");
             float temp = GetComponent<CC>().moveSetting.forwardVel;

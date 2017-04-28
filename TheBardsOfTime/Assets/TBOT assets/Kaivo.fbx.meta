@@ -1,0 +1,124 @@
+fileFormatVersion: 2
+guid: fc7510bbe04c0ae4d9b0a92806044981
+timeCreated: 1492594189
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: "Kahvanp\xE4\xE4"
+    100002: //RootNode
+    100004: Kaivo
+    100006: Kanki
+    100008: Katto
+    100010: Koukku
+    100012: Lankut
+    100014: Naru
+    100016: Puut
+    100018: Tuet
+    400000: "Kahvanp\xE4\xE4"
+    400002: //RootNode
+    400004: Kaivo
+    400006: Kanki
+    400008: Katto
+    400010: Koukku
+    400012: Lankut
+    400014: Naru
+    400016: Puut
+    400018: Tuet
+    2300000: "Kahvanp\xE4\xE4"
+    2300002: Kaivo
+    2300004: Kanki
+    2300006: Katto
+    2300008: Koukku
+    2300010: Lankut
+    2300012: Naru
+    2300014: Puut
+    2300016: Tuet
+    3300000: "Kahvanp\xE4\xE4"
+    3300002: Kaivo
+    3300004: Kanki
+    3300006: Katto
+    3300008: Koukku
+    3300010: Lankut
+    3300012: Naru
+    3300014: Puut
+    3300016: Tuet
+    4300000: Naru
+    4300002: "Kahvanp\xE4\xE4"
+    4300004: Kanki
+    4300006: Lankut
+    4300008: Katto
+    4300010: Kaivo
+    4300012: Tuet
+    4300014: Koukku
+    4300016: Puut
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

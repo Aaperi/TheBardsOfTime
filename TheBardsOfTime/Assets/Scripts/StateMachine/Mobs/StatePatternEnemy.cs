@@ -30,7 +30,7 @@ public class StatePatternEnemy : MonoBehaviour {
     [HideInInspector]
     public CombatState combatState;
     [HideInInspector]
-    public NavMeshAgent navMeshAgent;
+    public UnityEngine.AI.NavMeshAgent navMeshAgent;
     [HideInInspector]
     public bool withinRange = false;
     [HideInInspector]
@@ -50,7 +50,7 @@ public class StatePatternEnemy : MonoBehaviour {
         playerPos = FindObjectOfType<LastPlayerSighting>();
 		currentState = patrolState;
 
-        navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         cd = enemyStats.attack.Cooldown;
     }
 
