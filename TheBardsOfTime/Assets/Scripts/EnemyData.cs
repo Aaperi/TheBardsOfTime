@@ -17,6 +17,7 @@ public class EnemyData : ScriptableObject {
         public float SearchSpeed;
         public float SearchDuration;
         public float SightRange;
+        public float SphereRadius;
     }
 
     public AttackSettings attack = new AttackSettings();
