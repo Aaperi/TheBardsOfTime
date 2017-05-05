@@ -17,7 +17,7 @@ public class LookDecision : Decision {
         RaycastHit hit;
         Debug.DrawRay(controller.eyes.position, controller.eyes.forward.normalized * controller.enemyStats.search.SightRange, Color.green);
 
-        if (Physics.SphereCast(controller.eyes.position, controller.enemyStats.search.SphereRadius, controller.eyes.forward, out hit, controller.enemyStats.search.SightRange)
+        if (Physics.SphereCast(controller.eyes.position, controller.enemyStats.search.SphereRadius, controller.eyes.forward, out hit, controller.enemyStats.search.SightRange, controller.whatEnemySees)
             && hit.collider.CompareTag("Player"))
         {
             controller.chaseTarget = hit.transform;

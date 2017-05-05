@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 using System.Collections;
 
 public class StatePatternEnemy : MonoBehaviour {
@@ -30,13 +31,13 @@ public class StatePatternEnemy : MonoBehaviour {
     [HideInInspector]
     public CombatState combatState;
     [HideInInspector]
-    public UnityEngine.AI.NavMeshAgent navMeshAgent;
+    public NavMeshAgent navMeshAgent;
     [HideInInspector]
     public bool withinRange = false;
     [HideInInspector]
     public float cd;
-    [HideInInspector]
-    public LastPlayerSighting playerPos;
+   /* [HideInInspector]
+    public LastPlayerSighting playerPos;*/
 
     private HPScript hps;
 
@@ -47,17 +48,20 @@ public class StatePatternEnemy : MonoBehaviour {
         patrolState = new PatrolState(this);
         player = FindObjectOfType<CC>();
         hps = GetComponent<HPScript>();
-        playerPos = FindObjectOfType<LastPlayerSighting>();
+        //playerPos = FindObjectOfType<LastPlayerSighting>();
 		currentState = patrolState;
 
-        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
         cd = enemyStats.attack.Cooldown;
     }
 
     // Update is called once per frame
     void Update() {
         Debug.DrawRay(eyes.position, eyes.forward * enemyStats.search.SightRange, Color.red);
-        currentState.UpdateState();
+        if(hps.hitpoints > 0) {
+            currentState.UpdateState();
+        }
+
     }
 
     private void OnTriggerEnter(Collider other) {

@@ -11,6 +11,7 @@ public class StateController : MonoBehaviour
     public Transform eyes;
     public State remainState;
     public List<Transform> wayPointList;
+    public LayerMask whatEnemySees;
 
     [HideInInspector] public NavMeshAgent navMeshAgent;
     [HideInInspector] public int nextWayPoint;

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 using System.Collections;
 
 public class StatePatternBoss : MonoBehaviour
@@ -20,7 +21,7 @@ public class StatePatternBoss : MonoBehaviour
     [HideInInspector]
     public BossCombatState combatState;
     [HideInInspector]
-    public UnityEngine.AI.NavMeshAgent navMeshAgent;
+    public NavMeshAgent navMeshAgent;
     [HideInInspector]
     public CC player;
     [HideInInspector]
@@ -45,7 +46,7 @@ public class StatePatternBoss : MonoBehaviour
         player = FindObjectOfType<CC>();
         hps = GetComponent<HPScript>();
 
-        navMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
         ps = GetComponentInChildren<ParticleSystem>();
         ps.Stop();
     }

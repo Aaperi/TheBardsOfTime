@@ -44,7 +44,7 @@ public class PatrolState : IEnemyState {
 
     private void Look() {
         RaycastHit hit;
-        if (Physics.Raycast(enemy.eyes.transform.position, enemy.eyes.transform.forward, out hit, enemy.enemyStats.search.SightRange, enemy.mask) && hit.collider.CompareTag("Player") && enemy.withinRange) {
+        if (Physics.SphereCast(enemy.eyes.transform.position, enemy.enemyStats.search.SphereRadius, enemy.eyes.forward, out hit, enemy.mask) && hit.collider.CompareTag("Player") && enemy.withinRange) {
             enemy.chaseTarget = hit.transform;
             ToChaseState();
         }
@@ -53,10 +53,19 @@ public class PatrolState : IEnemyState {
     void Patrol() {
         enemy.meshRendererFlag.material.color = Color.green;
         enemy.navMeshAgent.destination = enemy.script.Path[nextWayPoint].transform.position;
-        enemy.navMeshAgent.Resume();
+        enemy.navMeshAgent.isStopped = false;
 
         if (enemy.navMeshAgent.remainingDistance <= enemy.navMeshAgent.stoppingDistance && !enemy.navMeshAgent.pathPending) {
             nextWayPoint = (nextWayPoint + 1) % enemy.script.Path.Count;
         }
     }
+
+    /*if(Physics.SphereCast(controller.eyes.position, controller.enemyStats.search.SphereRadius, controller.eyes.forward, out hit, controller.enemyStats.attack.AttackRange)
+           && hit.collider.CompareTag("Player"))
+        {
+            if (controller.CheckIfCountDownElapsed(controller.enemyStats.attack.Cooldown))
+            {
+                controller.hpScript.TakeDamage(controller.enemyStats.attack.Damage);
+            }
+        }*/
 }

@@ -6,15 +6,17 @@ using UnityEngine.SceneManagement;
 
 public class sortPlate : MonoBehaviour
 {
-    public GameObject Obstacle;
+    public GameObject Portal;
     public bool isComplete = false;
     private int succesrate = 0;
     private sortPlate[] otherPlates;
     private List<GameObject> stuff = new List<GameObject>();
+    private GameManager gm;
 
     void Start()
     {
         otherPlates = FindObjectsOfType<sortPlate>();
+        gm = FindObjectOfType<GameManager>();
     }
 
     void OnTriggerEnter(Collider col)
@@ -62,8 +64,9 @@ public class sortPlate : MonoBehaviour
 
     void puzzleCompleted()
     {
-        Obstacle.SetActive(false);
-        GameManager gm = FindObjectOfType<GameManager>();
+        Debug.Log("Puzzle done");
+        Portal.SetActive(true);
+        
         //gm.levels[SceneManager.GetActiveScene().name] = true;
         //Debug.Log(gm.levels[SceneManager.GetActiveScene().name]);
     }

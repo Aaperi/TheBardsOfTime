@@ -48,7 +48,7 @@ public class AlertState : IEnemyState {
     private void Look() {
         Vector3 targetDir = player.position - enemy.transform.position;
         enemy.meshRendererFlag.material.color = Color.yellow;
-        enemy.navMeshAgent.Stop();
+        enemy.navMeshAgent.isStopped = true;
         Vector3 newDir = Vector3.RotateTowards(enemy.transform.forward, targetDir, enemy.enemyStats.search.SearchSpeed * Time.deltaTime, 0.0f);
         enemy.transform.rotation = Quaternion.LookRotation(newDir);
 
@@ -62,8 +62,8 @@ public class AlertState : IEnemyState {
 
     private void Search() {
         enemy.meshRendererFlag.material.color = Color.yellow;
-        enemy.navMeshAgent.Stop();
-        enemy.transform.Rotate(0, enemy.enemyStats.search.SearchSpeed * (Time.deltaTime * enemy.enemyStats.search.SearchDuration) * 2, 0);
+        enemy.navMeshAgent.isStopped = true;
+        enemy.transform.Rotate(0, enemy.enemyStats.search.SearchSpeed * Time.deltaTime, 0); 
 
 
         searchTimer += Time.deltaTime;
