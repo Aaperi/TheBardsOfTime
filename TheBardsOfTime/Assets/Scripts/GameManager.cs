@@ -41,6 +41,9 @@ public class GameManager : MonoBehaviour
             noteCount.text = notes.ToString();
         } catch { }
 
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+            UpdateLevel();
+
     }
 
     public void Init()
@@ -211,13 +214,13 @@ public class GameManager : MonoBehaviour
         return data;
     }
 
-    public LevelState GetLevelState()
+    public LevelState GetLevelState(string name)
     {
         LevelState state = null;
 
         if (leveltemps.Count > 0)
             for (int k = 0; k < leveltemps.Count; k++)
-                if (leveltemps[k].levelName == SceneManager.GetActiveScene().name)
+                if (leveltemps[k].levelName == name)
                     state = leveltemps[k];
 
         return state;
@@ -225,10 +228,12 @@ public class GameManager : MonoBehaviour
 
     public void CompleteLevel()
     {
+        UpdateLevel();
         if (leveltemps.Count > 0)
             for (int k = 0; k < leveltemps.Count; k++)
                 if (leveltemps[k].levelName == SceneManager.GetActiveScene().name)
                     leveltemps[k].completed = true;
+        Debug.Log("taso on suoritettu");
     }
 
     public void PauseGame()
