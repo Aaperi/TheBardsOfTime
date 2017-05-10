@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
         } else {
             Destroy(gameObject);
         }
+        /*if (FindObjectsOfType<GameManager>().Length > 1)
+            Destroy(FindObjectsOfType<GameManager>()[1].gameObject);*/
         Init();
     }
 
