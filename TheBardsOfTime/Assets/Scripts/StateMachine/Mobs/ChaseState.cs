@@ -14,13 +14,13 @@ public class ChaseState : IEnemyState {
         Chase();
     }
 
-    public void OnTriggerEnter(Collider other) {
+   /* public void OnTriggerEnter(Collider other) {
 
     }
 
     public void OnTriggerExit(Collider other) {
         ToAlertState();
-    }
+    }*/
 
     public void ToPatrolState() {
         enemy.currentState = enemy.patrolState;
@@ -42,11 +42,14 @@ public class ChaseState : IEnemyState {
     private void Look() {
         RaycastHit hit;
         Vector3 enemyToTarget = (enemy.chaseTarget.position + enemy.offset) - enemy.eyes.transform.position;
-        if (Physics.Raycast(enemy.eyes.transform.position, enemyToTarget, out hit, enemy.enemyStats.search.SightRange, enemy.mask) && hit.collider.CompareTag("Player")) {
+        Debug.DrawRay(enemy.eyes.position, enemy.eyes.forward.normalized * enemy.enemyStats.search.SightRange, Color.red);
+
+        if (Physics.SphereCast(enemy.eyes.transform.position, enemy.enemyStats.search.SphereRadius, enemy.eyes.forward, out hit, enemy.mask) && hit.collider.CompareTag("Player"))
+        {
             enemy.chaseTarget = hit.transform;
-        } else 
+        }
+        else
             ToAlertState();
-        
     }
 
     private void Chase() {

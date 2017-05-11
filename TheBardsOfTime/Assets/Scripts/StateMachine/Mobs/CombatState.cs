@@ -16,13 +16,13 @@ public class CombatState : IEnemyState {
         Attack();
     }
 
-    public void OnTriggerEnter(Collider other) {
+   /* public void OnTriggerEnter(Collider other) {
 
     }
 
     public void OnTriggerExit(Collider other) {
 
-    }
+    }*/
 
     public void ToPatrolState() {
         enemy.currentState = enemy.patrolState;

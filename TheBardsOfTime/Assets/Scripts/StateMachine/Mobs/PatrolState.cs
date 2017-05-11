@@ -14,7 +14,7 @@ public class PatrolState : IEnemyState {
         Patrol();
     }
 
-    public void OnTriggerEnter(Collider other) {
+   /* public void OnTriggerEnter(Collider other) {
         if (other.gameObject.CompareTag("Player")) {
             enemy.withinRange = true;
             ToAlertState();
@@ -24,7 +24,7 @@ public class PatrolState : IEnemyState {
 
     public void OnTriggerExit(Collider other) {
         enemy.withinRange = false;
-    }
+    }*/
 
     public void ToPatrolState() {
         Debug.Log("Can't transition to same state");
@@ -44,7 +44,10 @@ public class PatrolState : IEnemyState {
 
     private void Look() {
         RaycastHit hit;
-        if (Physics.SphereCast(enemy.eyes.transform.position, enemy.enemyStats.search.SphereRadius, enemy.eyes.forward, out hit, enemy.mask) && hit.collider.CompareTag("Player") && enemy.withinRange) {
+        Debug.DrawRay(enemy.eyes.position, enemy.eyes.forward.normalized * enemy.enemyStats.search.SphereRadius, Color.green);
+
+        if (Physics.SphereCast(enemy.eyes.transform.position, enemy.enemyStats.search.SphereRadius, enemy.eyes.forward, out hit, enemy.mask) && hit.collider.CompareTag("Player"))
+        {
             enemy.chaseTarget = hit.transform;
             ToChaseState();
         }

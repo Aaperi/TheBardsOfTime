@@ -64,11 +64,11 @@ public class StatePatternEnemy : MonoBehaviour {
 
     }
 
-    private void OnTriggerEnter(Collider other) {
+    /*private void OnTriggerEnter(Collider other) {
         currentState.OnTriggerEnter(other);
     }
 
     private void OnTriggerExit(Collider other) {
         currentState.OnTriggerExit(other);
-    }
+    }*/
 }

@@ -5,9 +5,9 @@ public interface IEnemyState
 {
     void UpdateState();
 
-    void OnTriggerEnter(Collider other);
+    //void OnTriggerEnter(Collider other);
 
-    void OnTriggerExit(Collider other);
+    //void OnTriggerExit(Collider other);
 
     void ToPatrolState();
 
