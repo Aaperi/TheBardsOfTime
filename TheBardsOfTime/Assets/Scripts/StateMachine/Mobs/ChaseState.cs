@@ -42,23 +42,23 @@ public class ChaseState : IEnemyState {
     private void Look() {
         RaycastHit hit;
         Vector3 enemyToTarget = (enemy.chaseTarget.position + enemy.offset) - enemy.eyes.transform.position;
-        Debug.DrawRay(enemy.eyes.position, enemy.eyes.forward.normalized * enemy.enemyStats.search.SightRange, Color.red);
+        Debug.DrawRay(enemy.eyes.position, enemy.eyes.forward.normalized * enemy.enemyStats.SightRange, Color.red);
 
-        if (Physics.SphereCast(enemy.eyes.transform.position, enemy.enemyStats.search.SphereRadius, enemy.eyes.forward, out hit, enemy.mask) && hit.collider.CompareTag("Player"))
+        if (Physics.SphereCast(enemy.eyes.transform.position, enemy.enemyStats.SphereRadius, enemy.eyes.forward, out hit, enemy.mask) && hit.collider.CompareTag("Player"))
         {
             enemy.chaseTarget = hit.transform;
         }
-        else
-            ToAlertState();
     }
 
     private void Chase() {
+        enemy.stateGizmoColor = Color.red;
         enemy.meshRendererFlag.material.color = Color.red;
         enemy.navMeshAgent.destination = enemy.chaseTarget.position;
-        if (enemy.navMeshAgent.remainingDistance < (enemy.enemyStats.attack.AttackRange)) {
+        if (enemy.navMeshAgent.remainingDistance < (enemy.enemyStats.AttackRange)) {
             enemy.navMeshAgent.isStopped = true;
             ToAttackState();
         } else
             enemy.navMeshAgent.isStopped = false;
     }
+
 }

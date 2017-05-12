@@ -5,10 +5,6 @@ public interface IEnemyState
 {
     void UpdateState();
 
-    //void OnTriggerEnter(Collider other);
-
-    //void OnTriggerExit(Collider other);
-
     void ToPatrolState();
 
     void ToAlertState();
@@ -17,4 +13,7 @@ public interface IEnemyState
 
     void ToAttackState();
 
+    //void OnTriggerEnter(Collider other);
+
+    //void OnTriggerExit(Collider other);
 }

@@ -44,9 +44,9 @@ public class PatrolState : IEnemyState {
 
     private void Look() {
         RaycastHit hit;
-        Debug.DrawRay(enemy.eyes.position, enemy.eyes.forward.normalized * enemy.enemyStats.search.SphereRadius, Color.green);
+        Debug.DrawRay(enemy.eyes.position, enemy.eyes.forward.normalized * enemy.enemyStats.SphereRadius, Color.green);
 
-        if (Physics.SphereCast(enemy.eyes.transform.position, enemy.enemyStats.search.SphereRadius, enemy.eyes.forward, out hit, enemy.mask) && hit.collider.CompareTag("Player"))
+        if (Physics.SphereCast(enemy.eyes.transform.position, enemy.enemyStats.SphereRadius, enemy.eyes.forward, out hit, enemy.mask) && hit.collider.CompareTag("Player"))
         {
             enemy.chaseTarget = hit.transform;
             ToChaseState();
@@ -54,6 +54,7 @@ public class PatrolState : IEnemyState {
     }
 
     void Patrol() {
+        enemy.stateGizmoColor = Color.green;
         enemy.meshRendererFlag.material.color = Color.green;
         enemy.navMeshAgent.destination = enemy.script.Path[nextWayPoint].transform.position;
         enemy.navMeshAgent.isStopped = false;

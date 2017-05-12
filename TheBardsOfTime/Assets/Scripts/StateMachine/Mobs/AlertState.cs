@@ -11,10 +11,7 @@ public class AlertState : IEnemyState {
     }
 
     public void UpdateState() {
-        if (enemy.withinRange)
-            Look();
-        else
-            Search();
+        Search();
     }
 
     /*public void OnTriggerEnter(Collider other) {
@@ -49,27 +46,28 @@ public class AlertState : IEnemyState {
         Vector3 targetDir = player.position - enemy.transform.position;
         enemy.meshRendererFlag.material.color = Color.yellow;
         enemy.navMeshAgent.isStopped = true;
-        Vector3 newDir = Vector3.RotateTowards(enemy.transform.forward, targetDir, enemy.enemyStats.search.SearchSpeed * Time.deltaTime, 0.0f);
+        Vector3 newDir = Vector3.RotateTowards(enemy.transform.forward, targetDir, enemy.enemyStats.SearchSpeed * Time.deltaTime, 0.0f);
         enemy.transform.rotation = Quaternion.LookRotation(newDir);
 
-        Debug.DrawRay(enemy.eyes.position, enemy.eyes.forward.normalized * enemy.enemyStats.search.SphereRadius, Color.yellow);
+        Debug.DrawRay(enemy.eyes.position, enemy.eyes.forward.normalized * enemy.enemyStats.SphereRadius, Color.yellow);
 
         RaycastHit hit;
-        if (Physics.SphereCast(enemy.eyes.transform.position, enemy.enemyStats.search.SphereRadius, enemy.eyes.forward, out hit, enemy.mask) && hit.collider.CompareTag("Player")) {
+        if (Physics.SphereCast(enemy.eyes.transform.position, enemy.enemyStats.SphereRadius, enemy.eyes.forward, out hit, enemy.mask) && hit.collider.CompareTag("Player")) {
             enemy.chaseTarget = hit.transform;
             ToChaseState();
         }
     }
 
     private void Search() {
+        enemy.stateGizmoColor = Color.yellow;
         enemy.meshRendererFlag.material.color = Color.yellow;
         enemy.navMeshAgent.isStopped = true;
-        enemy.transform.Rotate(0, enemy.enemyStats.search.SearchSpeed * Time.deltaTime, 0); 
+        enemy.transform.Rotate(0, enemy.enemyStats.SearchSpeed * Time.deltaTime, 0); 
 
 
         searchTimer += Time.deltaTime;
 
-        if (searchTimer >= enemy.enemyStats.search.SearchDuration)
+        if (searchTimer >= enemy.enemyStats.SearchDuration)
             ToPatrolState();
     }
 

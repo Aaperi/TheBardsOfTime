@@ -15,7 +15,7 @@ public class FindDecision : Decision {
     private bool Find(StateController controller)
     {
         controller.navMeshAgent.isStopped = true;
-        controller.transform.Rotate(0, controller.enemyStats.search.SearchSpeed * Time.deltaTime, 0);
-        return controller.CheckIfCountDownElapsed(controller.enemyStats.search.SearchDuration);
+        controller.transform.Rotate(0, controller.enemyStats.SearchSpeed * Time.deltaTime, 0);
+        return controller.CheckIfCountDownElapsed(controller.enemyStats.SearchDuration);
     }
 }

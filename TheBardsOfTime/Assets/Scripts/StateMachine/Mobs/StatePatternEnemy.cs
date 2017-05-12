@@ -17,6 +17,7 @@ public class StatePatternEnemy : MonoBehaviour {
     public PathScript script;
     public CC player;
     public EnemyData enemyStats;
+    public Color stateGizmoColor;
 
     [HideInInspector]
     public Transform chaseTarget;
@@ -32,8 +33,6 @@ public class StatePatternEnemy : MonoBehaviour {
     public CombatState combatState;
     [HideInInspector]
     public NavMeshAgent navMeshAgent;
-    [HideInInspector]
-    public bool withinRange = false;
     [HideInInspector]
     public float cd;
    /* [HideInInspector]
@@ -52,16 +51,22 @@ public class StatePatternEnemy : MonoBehaviour {
 		currentState = patrolState;
 
         navMeshAgent = GetComponent<NavMeshAgent>();
-        cd = enemyStats.attack.Cooldown;
+        cd = enemyStats.Cooldown;
     }
 
     // Update is called once per frame
     void Update() {
-        Debug.DrawRay(eyes.position, eyes.forward * enemyStats.search.SightRange, Color.red);
-        if(hps.hitpoints > 0) {
+        Debug.DrawRay(eyes.position, eyes.forward * enemyStats.SightRange, Color.red);
+
+        if (hps.hitpoints > 0) {
             currentState.UpdateState();
         }
 
+    }
+
+    private void OnDrawGizmos() {
+        Gizmos.color = stateGizmoColor;
+        Gizmos.DrawWireSphere(eyes.position, enemyStats.SphereRadius);
     }
 
     /*private void OnTriggerEnter(Collider other) {

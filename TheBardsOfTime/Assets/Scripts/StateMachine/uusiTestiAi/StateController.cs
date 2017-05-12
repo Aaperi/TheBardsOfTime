@@ -50,7 +50,7 @@ public class StateController : MonoBehaviour
         if (currentState != null && eyes != null)
         {
             Gizmos.color = currentState.sceneGizmoColor;
-            Gizmos.DrawWireSphere(eyes.position, enemyStats.search.SphereRadius);
+            Gizmos.DrawWireSphere(eyes.position, enemyStats.SphereRadius);
         }
     }
 
