@@ -47,8 +47,8 @@ public class StatePatternEnemy : MonoBehaviour {
         patrolState = new PatrolState(this);
         player = FindObjectOfType<CC>();
         hps = GetComponent<HPScript>();
-        //playerPos = FindObjectOfType<LastPlayerSighting>();
 		currentState = patrolState;
+        //playerPos = FindObjectOfType<LastPlayerSighting>();
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         cd = enemyStats.Cooldown;
@@ -65,8 +65,10 @@ public class StatePatternEnemy : MonoBehaviour {
     }
 
     private void OnDrawGizmos() {
-        Gizmos.color = stateGizmoColor;
-        Gizmos.DrawWireSphere(eyes.position, enemyStats.SphereRadius);
+        if (eyes != null) {
+            Gizmos.color = stateGizmoColor;
+            Gizmos.DrawWireSphere(eyes.position, enemyStats.SphereRadius);
+        }
     }
 
     /*private void OnTriggerEnter(Collider other) {
