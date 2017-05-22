@@ -19,10 +19,7 @@ public class HPScript : MonoBehaviour
     CC player;
     MeshRenderer mesh;
 	UIActions uia;
-
-    bool statusEffect = false;
-    bool vilkkuminen = false;
-    float vilkkumisAika;
+    bool statusEffect;
 
     void Start()
     {
@@ -33,14 +30,10 @@ public class HPScript : MonoBehaviour
         gm = FindObjectOfType<GameManager>();
 		uia = FindObjectOfType<UIActions> ();
 
-        vilkkumisAika = .75f;
-
         if (iNeedUI && gm.playerHp > 0) {
             hitpoints = gm.playerHp;
             UpdateHealthbar();
         }
-
-        UpdateHealthbar();
     }
 
     void Update()
@@ -55,26 +48,6 @@ public class HPScript : MonoBehaviour
                 RegenHP(regenAmount);
                 regenSpeed = 2;
             }
-        }
-
-        if (vilkkuminen) {
-            vilkkumisAika -= Time.deltaTime;
-            mesh.material.color = Color.white;
-            if (vilkkumisAika <= 0) {
-                if (iNeedUI) {
-                    mesh.material.color = Color.blue;
-                } else
-                    mesh.material.color = Color.red;
-
-                vilkkuminen = false;
-                vilkkumisAika = .25f;
-            }
-        }
-        if (gameObject.tag == "Enemy") {
-            if (statusEffect)
-                mesh.material.color = Color.grey;
-            else
-                mesh.material.color = Color.red;
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad5)) {
@@ -114,7 +87,6 @@ public class HPScript : MonoBehaviour
     {
         Debug.Log(gameObject.name + " took: " + (int)(damage * amp) + "damage");
         hitpoints -= (int)(damage * amp);
-        vilkkuminen = true;
         UpdateHealthbar();
     }
 

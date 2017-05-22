@@ -18,9 +18,6 @@ public class CC : MonoBehaviour
     public GameManager gm;
     public GameObject target;
     public List<GameObject> Instruments = new List<GameObject>();
-        public float range = 6;
-    public float radius = 90;
-    public float strength = 200;
 
     [HideInInspector]
     public bool inCombat = false;

@@ -122,7 +122,7 @@ public class UIActions : MonoBehaviour {
     }
 
     public void HideGuide() {
-        uiPanel.actionGuide.text = uiPanel.actionGuide.text.Substring(0, uiPanel.actionGuide.text.Length - 1);
+        uiPanel.actionGuide.text = uiPanel.actionGuide.text.Substring(0, uiPanel.actionGuide.text.Length);
         uiPanel.actionGuide.gameObject.SetActive(false);
     }
 
